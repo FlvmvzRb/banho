@@ -1,0 +1,2179 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Welcome to Firebase Hosting</title>
+
+    <!-- update the version number as needed -->
+    <script defer src="/__/firebase/11.9.1/firebase-app-compat.js"></script>
+    <!-- include only the Firebase features as you need -->
+    <script defer src="/__/firebase/11.9.1/firebase-auth-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-database-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-firestore-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-functions-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-messaging-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-storage-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-analytics-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-remote-config-compat.js"></script>
+    <script defer src="/__/firebase/11.9.1/firebase-performance-compat.js"></script>
+    <!-- 
+      initialize the SDK after all desired features are loaded, set useEmulator to false
+      to avoid connecting the SDK to running emulators.
+    -->
+    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
+
+    <style media="screen">
+      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
+      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
+      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
+      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
+      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
+      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
+      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
+      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
+      @media (max-width: 600px) {
+        body, #message { margin-top: 0; background: white; box-shadow: none; }
+        body { border-top: 16px solid #ffa100; }
+      }
+    </style>
+  </head>
+  <body>
+    <div id="message">
+      <h2>Welcome</h2>
+      <h1>Firebase Hosting Setup Complete</h1>
+      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
+      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
+    </div>
+    <p id="load">Firebase SDK Loading&hellip;</p>
+
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        const loadEl = document.querySelector('#load');
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.firestore().doc('/foo/bar').get().then(() => { });
+        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        // firebase.analytics(); // call to activate
+        // firebase.analytics().logEvent('tutorial_completed');
+        // firebase.performance(); // call to activate
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = [
+            'auth', 
+            'database', 
+            'firestore',
+            'functions',
+            'messaging', 
+            'storage', 
+            'analytics', 
+            'remoteConfig',
+            'performance',
+          ].filter(feature => typeof app[feature] === 'function');
+          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+  </body>
+</html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda: Banho e Tosa</title>
+
+    <!-- Tailwind CSS via CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <!-- Google Fonts: Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    
+    <!-- Custom CSS for Theme and Scrollbars -->
+    <style>
+        /* Define custom color properties for easy theme management */
+        :root {
+            --color-primary-base: #14B8A6; /* Teal-500 */
+            --color-primary-light: #F0FDFA; /* Teal-50 */
+            --color-secondary-purple-start: #8B5CF6; /* Violet-500 */
+            --color-secondary-purple-end: #6D28D9; /* Violet-700 */
+            --color-primary-dark-text: #4A5568; /* Gray-700 */
+            --color-finalized-bg: #D1FAE5; /* Green-100 */
+            --color-finalized-border: #6EE7B7; /* Green-300 */
+            --color-arrived-bg: #E0F2FE; /* Sky-100 */
+            --color-arrived-border: #7DD3FC; /* Sky-300 */
+            --color-requested-bg: #FFF7ED; /* Orange-100 */
+            --color-requested-border: #FB923C; /* Orange-400 */
+        }
+
+        /* Apply the main font to the entire application */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F7FAFC; /* Gray-100 */
+        }
+        
+        /* Custom scrollbar styling for a more integrated look */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: var(--color-secondary-purple-start);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--color-secondary-purple-end);
+        }
+
+        /* Focus styles for better accessibility and user experience */
+        input:focus, select:focus, textarea:focus, button:focus {
+            outline: 2px solid var(--color-primary-base) !important;
+            outline-offset: 2px;
+        }
+
+        /* Gradient background classes */
+        .gradient-purple-to-dark-purple {
+            background-image: linear-gradient(to right, var(--color-secondary-purple-start), var(--color-secondary-purple-end));
+        }
+
+        /* Background for cards based on status */
+        .finalized-green-bg {
+            background-color: var(--color-finalized-bg);
+            border-color: var(--color-finalized-border);
+        }
+        .arrived-blue-bg {
+            background-color: var(--color-arrived-bg);
+            border-color: var(--color-arrived-border);
+        }
+        .requested-orange-bg {
+            background-color: var(--color-requested-bg);
+            border-color: var(--color-requested-border);
+        }
+        
+        /* Custom calendar styles */
+        .calendar-day {
+            transition: all 0.2s ease-in-out;
+        }
+        .calendar-day.selected {
+            background-color: var(--color-primary-base);
+            color: white;
+            border-radius: 50%;
+            font-weight: bold;
+        }
+        .calendar-day:not(.disabled):hover {
+             background-color: var(--color-secondary-purple-start);
+             color: white;
+             border-radius: 50%;
+        }
+        
+        /* Virtual Keyboard Styles */
+        #virtual-keyboard-container {
+            transition: transform 0.3s ease-in-out;
+            z-index: 10001; /* Ensure keyboard is on top of all modals */
+        }
+        .keyboard-key {
+            transition: background-color: 0.1s ease;
+        }
+        .keyboard-key:active {
+            background-color: var(--color-primary-base);
+            color: white;
+        }
+        .keyboard-key.active-special {
+            background-color: var(--color-secondary-purple-start);
+            color: white;
+        }
+        
+        /* Remessa (Batch) Selection Styles */
+        .selected-for-remessa {
+            border-color: var(--color-primary-base) !important;
+            background-color: var(--color-primary-light);
+            box-shadow: 0 0 0 2px var(--color-primary-base);
+        }
+        
+        /* Compact view card styling */
+        .compact-card {
+            cursor: pointer;
+        }
+        .compact-card:not(.expanded) {
+            height: 120px;
+            width: 120px; 
+        }
+        .compact-card.expanded {
+            grid-column: span 2;
+            z-index: 10;
+        }
+        @media (min-width: 640px) {
+             .compact-card.expanded { grid-column: span 2 / span 2; }
+        }
+        @media (min-width: 1024px) {
+            .compact-card.expanded { grid-column: span 3 / span 3; }
+        }
+
+        /* Styles for Info Modal Content */
+        .prose h4 { font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary-dark-text); border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; }
+        .prose h5 { font-size: 1.1rem; font-weight: bold; margin-top: 1.2rem; margin-bottom: 0.5rem; color: #4A5568; }
+        .prose p { margin-bottom: 1rem; line-height: 1.6; }
+        .prose ul { list-style-position: inside; list-style-type: disc; margin-left: 1rem; margin-bottom: 1rem; }
+        .prose li { margin-bottom: 0.5rem; }
+        .prose strong { color: #2D3748; }
+
+    </style>
+</head>
+<body class="bg-gray-50 pb-64">
+
+    <!-- Main Application Container -->
+    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+        
+        <!-- Header -->
+        <header class="text-center mb-6">
+            <h1 class="text-4xl font-extrabold text-gray-700">Agenda: Banho e Tosa</h1>
+            <p id="user-id-display" class="text-sm text-gray-500 mt-1"></p>
+        </header>
+
+        <!-- Tab Navigation -->
+        <nav class="flex justify-center gap-2 mb-6 no-print">
+            <button id="reception-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)]" data-tab="reception-tab-content">Recepção</button>
+            <button id="grooming-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="grooming-tab-content">Banho e Tosa</button>
+            <button id="taxi-dog-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="taxi-dog-monitoring-tab-content">Taxi Dog</button>
+        </nav>
+        
+        <!-- Main Content Area (Form + Lists) -->
+        <main class="flex flex-col lg:flex-row gap-6">
+
+            <!-- Left Sidebar: New Appointment Form -->
+            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] no-print transition-all duration-300">
+                <h2 class="text-2xl font-bold mb-4 border-b pb-2">Novo Agendamento</h2>
+                <form id="appointment-form" class="space-y-4">
+                    <!-- Tutor and Pet Info -->
+                    <div>
+                        <label for="tutor-name" class="block text-sm font-medium">Nome do Tutor</label>
+                        <input type="text" id="tutor-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 text-gray-900" required>
+                    </div>
+                    <div>
+                        <label for="pet-name" class="block text-sm font-medium">Nome do Pet</label>
+                        <input type="text" id="pet-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    <div>
+                        <label for="pet-breed" class="block text-sm font-medium">Raça do Pet</label>
+                        <input type="text" id="pet-breed" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    <div>
+                        <label for="appointment-datetime" class="block text-sm font-medium">Data e Hora (para 1º agendamento)</label>
+                        <input type="datetime-local" id="appointment-datetime" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    
+                    <!-- Services Section Wrapper (for cloning) -->
+                    <div id="main-form-services-wrapper">
+                        <div class="pt-2">
+                            <label class="block text-sm font-bold mb-2">Serviços Solicitados</label>
+                            <div id="services-checkboxes" class="grid grid-cols-2 gap-x-4 gap-y-2">
+                                <div class="flex items-center"><input type="checkbox" id="service-banho" value="Banho" class="h-4 w-4 rounded"><label for="service-banho" class="ml-2 whitespace-nowrap text-xs">Banho</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-tosa-higienica" value="Tosa Higiênica" class="h-4 w-4 rounded"><label for="service-tosa-higienica" class="ml-2 whitespace-nowrap text-xs">Tosa Higiênica</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-tosa-geral" value="Tosa" class="h-4 w-4 rounded"><label for="service-tosa-geral" class="ml-2 whitespace-nowrap text-xs">Tosa</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-hidratacao" value="Hidratação" class="h-4 w-4 rounded"><label for="service-hidratacao" class="ml-2 whitespace-nowrap text-xs">Hidratação</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-escovacao" value="Escov. Dente" class="h-4 w-4 rounded"><label for="service-escovacao" class="ml-2 whitespace-nowrap text-xs">Escov. Dente</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-combo" value="Combo" class="h-4 w-4 rounded"><label for="service-combo" class="ml-2 whitespace-nowrap text-xs">Combo</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-remocao" value="Remoção" class="h-4 w-4 rounded"><label for="service-remocao" class="ml-2 whitespace-nowrap text-xs">Remoção</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-pacote" value="Pacote de Banho" class="h-4 w-4 rounded"><label for="service-pacote" class="ml-2 whitespace-nowrap text-xs">Pacote de Banho</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-taxi" value="Taxi Dog" class="h-4 w-4 rounded"><label for="service-taxi" class="ml-2 whitespace-nowrap text-xs">Taxi Dog</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-creche" value="Creche/Hotel" class="h-4 w-4 rounded"><label for="service-creche" class="ml-2 whitespace-nowrap text-xs">Creche/Hotel</label></div>
+                            </div>
+                        </div>
+                        <!-- Conditional Sub-Services for Remoção -->
+                        <div id="remocao-sub-services" class="hidden pl-4 border-l-2 border-teal-300 ml-2 mt-2">
+                            <p class="text-sm font-semibold mb-1">Detalhes da Remoção:</p>
+                            <div class="grid grid-cols-2 gap-x-4 gap-y-1">
+                                <div class="flex items-center"><input type="checkbox" id="sub-service-no" value="Nó" class="h-4 w-4 rounded"><label for="sub-service-no" class="ml-2 text-sm whitespace-nowrap">Nó</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="sub-service-pelos" value="Pelos mortos" class="h-4 w-4 rounded"><label for="sub-service-pelos" class="ml-2 text-sm whitespace-nowrap">Pelos mortos</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="sub-service-subpelos" value="Subpelos" class="h-4 w-4 rounded"><label for="sub-service-subpelos" class="ml-2 text-sm whitespace-nowrap">Subpelos</label></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <!-- Conditional Calendar for Bath Package -->
+                    <div id="bath-package-calendar-container" class="hidden p-3 bg-violet-800 rounded-lg">
+                        <p class="text-sm font-semibold mb-1">Datas do Pacote:</p>
+                        <div id="calendar-for-package" class="calendar-container"></div>
+                        <div id="selected-dates-summary-package" class="mt-2 text-xs"></div>
+                    </div>
+                    
+                    <!-- Conditional Taxi Dog Details -->
+                    <div id="taxi-dog-details-container" class="hidden space-y-3 pt-2 pl-4 border-l-2 border-teal-300 ml-2">
+                        <p class="text-sm font-semibold mb-1">Detalhes do Taxi Dog:</p>
+                        <div>
+                            <label for="pickup-time" class="block text-xs font-medium">Horário de Busca</label>
+                            <input type="time" id="pickup-time" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
+                        </div>
+                        <div>
+                            <label for="return-time" class="block text-xs font-medium">Horário de Devolução</label>
+                            <input type="time" id="return-time" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
+                        </div>
+                        <div>
+                            <label for="client-route" class="block text-xs font-medium">Rota do Cliente</label>
+                            <select id="client-route" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
+                                <option value="">Selecione uma rota</option>
+                                <option value="Rota 1">Rota 1</option>
+                                <option value="Rota 2">Rota 2</option>
+                                <option value="Rota 3">Rota 3</option>
+                                <option value="Rota 4">Rota 4</option>
+                                <option value="Rota 5">Rota 5</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- General Observations -->
+                    <div>
+                        <label for="observations" class="block text-sm font-medium">Observações Gerais</label>
+                        <textarea id="observations" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900"></textarea>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" id="submit-appointment-btn" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg shadow-lg transform transition-transform duration-200 hover:scale-105">Agendar</button>
+                    <input type="hidden" id="editing-appointment-id">
+                </form>
+            </aside>
+            
+            <!-- Right Side: Main Content Display Area -->
+            <div id="main-content-area" class="flex-1 bg-white p-4 md:p-6 rounded-lg shadow-lg border-2 border-[var(--color-primary-base)]">
+
+                <!-- Reception Tab Content -->
+                <div id="reception-tab-content" class="tab-content-panel space-y-8">
+                    <!-- Daily Appointments Section -->
+                    <section>
+                        <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                            <div class="flex items-center gap-2">
+                                <button id="toggle-sidebar-btn" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 no-print" title="Ocultar/Mostrar formulário">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
+                                    </svg>
+                                </button>
+                                <h3 class="text-2xl font-bold text-gray-700">Agendamentos do Dia</h3>
+                            </div>
+                            <div class="flex items-center flex-wrap gap-4">
+                                <!-- Service Filter -->
+                                <div class="flex items-center gap-2">
+                                    <label for="reception-service-filter" class="text-sm font-medium">Filtrar por serviço:</label>
+                                    <select id="reception-service-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm">
+                                        <option value="">Todos os Serviços</option>
+                                    </select>
+                                </div>
+                                <!-- View Toggles -->
+                                <div class="flex items-center gap-1">
+                                    <button class="view-toggle-btn p-1.5 rounded-md" data-tab="reception" data-view="compact">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                          <path d="M4 3a1 1 0 100 2h12a1 1 0 100-2H4zM4 7a1 1 0 100 2h12a1 1 0 100-2H4zm0 4a1 1 0 100 2h12a1 1 0 100-2H4z" />
+                                        </svg>
+                                    </button>
+                                    <button class="view-toggle-btn p-1.5 rounded-md" data-tab="reception" data-view="grid">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                                    </button>
+                                    <button class="view-toggle-btn p-1.5 rounded-md" data-tab="reception" data-view="list">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                                    </button>
+                                </div>
+                                <!-- Date Filter -->
+                                <div class="flex items-center gap-2">
+                                    <label for="reception-date-filter" class="text-sm font-medium">Filtrar por data:</label>
+                                    <input type="date" id="reception-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                </div>
+                            </div>
+                        </div>
+                        <div id="reception-appointments-list">
+                            <!-- Appointment cards will be inserted here -->
+                        </div>
+                    </section>
+                    
+                    <!-- Separator -->
+                    <hr class="my-8 border-t-2 border-gray-200">
+
+                    <!-- History Section -->
+                    <section>
+                        <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                            <h3 class="text-2xl font-bold text-gray-700">Histórico de Serviços</h3>
+                            <div class="flex flex-wrap items-center gap-2">
+                                <input type="text" id="history-tutor-filter" placeholder="Buscar por Tutor..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <input type="text" id="history-pet-filter" placeholder="Buscar por Pet..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <input type="date" id="history-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <button id="clear-history-filters-btn" class="px-4 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600">Limpar</button>
+                            </div>
+                        </div>
+                        <div id="history-appointments-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                             <!-- History cards will be inserted here -->
+                        </div>
+                         <div id="container-politicas-recepcao" class="mt-6"></div>
+                    </section>
+                </div>
+                
+                <!-- Grooming Tab Content -->
+                <div id="grooming-tab-content" class="tab-content-panel hidden space-y-6">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h3 class="text-2xl font-bold text-gray-700">Agenda Banho e Tosa</h3>
+                        <div class="flex items-center gap-4">
+                             <!-- Service Filter -->
+                            <div class="flex items-center gap-2">
+                                <label for="grooming-service-filter" class="text-sm font-medium">Filtrar por serviço:</label>
+                                <select id="grooming-service-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm">
+                                    <option value="">Todos os Serviços</option>
+                                </select>
+                            </div>
+                            <!-- Route Filter -->
+                            <div class="flex items-center gap-2">
+                                <label for="grooming-route-filter" class="text-sm font-medium">Filtrar por Rota:</label>
+                                <select id="grooming-route-filter" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
+                                    <option value="">Todas as Rotas</option>
+                                    <option value="Rota 1">Rota 1</option>
+                                    <option value="Rota 2">Rota 2</option>
+                                    <option value="Rota 3">Rota 3</option>
+                                    <option value="Rota 4">Rota 4</option>
+                                    <option value="Rota 5">Rota 5</option>
+                                </select>
+                            </div>
+                            <!-- View Toggles -->
+                            <div class="flex items-center gap-1">
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="grooming" data-view="compact">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 3a1 1 0 100 2h12a1 1 0 100-2H4zM4 7a1 1 0 100 2h12a1 1 0 100-2H4zm0 4a1 1 0 100 2h12a1 1 0 100-2H4z" />
+                                    </svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="grooming" data-view="grid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="grooming" data-view="list">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
+                            <!-- Date Filter -->
+                            <div class="flex items-center gap-2">
+                                <label for="grooming-date-filter" class="text-sm font-medium">Filtrar por data:</label>
+                                <input type="date" id="grooming-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </div>
+                    </div>
+                     <!-- Remessa & Summary Section -->
+                    <div class="flex justify-between items-center mb-4">
+                        <div id="remessa-controls-wrapper" class="flex flex-wrap gap-2">
+                            <button id="show-pop-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Ver P.O.P</button>
+                            <button id="show-policy-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Ver Política</button>
+                            <button id="start-remessa-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Criar Remessa</button>
+                            <button id="remocao-control-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Controle de Remoção</button>
+                            <div id="active-remessa-controls" class="hidden flex items-center gap-2">
+                                <input type="text" id="remessa-name-input" placeholder="Nome da Remessa" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-gray-800">
+                                <button id="finalize-remessa-btn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Finalizar</button>
+                                <button id="cancel-remessa-btn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Cancelar</button>
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-2 gap-4">
+                            <div class="bg-blue-100 p-4 rounded-lg text-center">
+                                <p class="text-sm font-medium text-blue-800">Pets na Fila</p>
+                                <p id="pets-in-queue-count" class="text-3xl font-bold text-blue-600">0</p>
+                            </div>
+                            <div class="bg-green-100 p-4 rounded-lg text-center">
+                                <p class="text-sm font-medium text-green-800">Pets Finalizados</p>
+                                <p id="pets-finalized-count" class="text-3xl font-bold text-green-600">0</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="grooming-appointments-list">
+                        <!-- Grooming appointment cards will be inserted here -->
+                    </div>
+                     <div id="container-politicas-banhoetosa" class="mt-6"></div>
+                </div>
+
+                <!-- Taxi Dog Tab Content -->
+                <div id="taxi-dog-monitoring-tab-content" class="tab-content-panel hidden space-y-6">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h3 class="text-2xl font-bold text-gray-700">Monitoramento Taxi Dog</h3>
+                         <div class="flex items-center gap-4">
+                            <!-- View Toggles -->
+                            <div class="flex items-center gap-1">
+                                 <button class="view-toggle-btn p-1.5 rounded-md" data-tab="taxi-dog" data-view="compact">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 3a1 1 0 100 2h12a1 1 0 100-2H4zM4 7a1 1 0 100 2h12a1 1 0 100-2H4zm0 4a1 1 0 100 2h12a1 1 0 100-2H4z" />
+                                    </svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="taxi-dog" data-view="grid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="taxi-dog" data-view="list">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
+                            <!-- Route Filter -->
+                             <div class="flex items-center gap-2">
+                                <label for="taxidog-route-filter" class="text-sm font-medium">Filtrar por rota:</label>
+                                <select id="taxidog-route-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                    <option value="">Todas as Rotas</option>
+                                    <option value="Rota 1">Rota 1</option>
+                                    <option value="Rota 2">Rota 2</option>
+                                    <option value="Rota 3">Rota 3</option>
+                                    <option value="Rota 4">Rota 4</option>
+                                    <option value="Rota 5">Rota 5</option>
+                                </select>
+                            </div>
+                            <!-- Date Filter -->
+                            <div class="flex items-center gap-2">
+                                <label for="taxidog-date-filter" class="text-sm font-medium">Filtrar por data:</label>
+                                <input type="date" id="taxidog-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="taxi-dog-appointments-list">
+                         <!-- Taxi Dog appointment cards will be inserted here -->
+                    </div>
+                    <div id="container-politicas-taxidog" class="mt-6"></div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modals -->
+    <!-- Generic Feedback Modal -->
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
+            <p id="feedback-message" class="text-lg"></p>
+            <button onclick="document.getElementById('feedback-modal').classList.add('hidden')" class="mt-4 px-4 py-2 bg-teal-500 text-white rounded-md">Fechar</button>
+        </div>
+    </div>
+    
+    <!-- Edit Appointment Modal (re-uses form structure) -->
+    <div id="edit-appointment-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-2xl w-11/12 md:w-2/3 lg:w-1/2 max-h-[90vh] overflow-y-auto">
+             <!-- The form from the main page will be cloned and modified here by JS -->
+             <div id="edit-modal-content"></div>
+        </div>
+    </div>
+    
+    <!-- Service Request Modal -->
+    <div id="service-request-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 max-h-[90vh] overflow-y-auto">
+            <h3 class="text-xl font-bold mb-4">Solicitar Serviço Adicional</h3>
+            <form id="service-request-form" class="space-y-4">
+                <div id="service-request-container" class="text-gray-800"></div>
+                <div>
+                    <label for="service-request-observations" class="block text-sm font-medium text-gray-700">Observações Adicionais</label>
+                    <textarea id="service-request-observations" rows="3" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900"></textarea>
+                </div>
+                <div class="mt-6 flex justify-end gap-3">
+                    <button id="send-service-request-btn" type="submit" class="px-4 py-2 bg-orange-500 text-white rounded-md hover:bg-orange-600">Enviar Solicitação</button>
+                    <button type="button" id="cancel-service-request-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">Cancelar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
+    <!-- Edit Package Dates Only Modal -->
+    <div id="edit-package-dates-only-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-auto">
+             <h3 class="text-xl font-bold mb-4 text-center">Editar Datas do Pacote</h3>
+             <input type="hidden" id="edit-dates-appointment-id">
+             <div id="calendar-for-editing" class="calendar-container"></div>
+             <div id="selected-dates-summary-editing" class="mt-4 text-sm text-gray-600"></div>
+             <div class="mt-6 flex justify-end gap-3">
+                 <button id="save-package-dates-btn" class="px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Salvar Datas</button>
+                 <button type="button" onclick="document.getElementById('edit-package-dates-only-modal').classList.add('hidden')" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="confirmation-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
+            <h3 id="confirmation-title" class="text-xl font-bold mb-4">Confirmar Exclusão</h3>
+            <p id="confirmation-message" class="mb-6">Tem certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.</p>
+            <div class="flex justify-center gap-4">
+                <button id="confirm-delete-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Confirmar</button>
+                <button id="cancel-delete-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Removal Control Modal -->
+    <div id="remocao-control-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4">
+                <h3 class="text-xl font-bold text-gray-800">Controle de Remoção</h3>
+                <button id="close-remocao-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
+            </div>
+            <div class="space-y-6">
+                <!-- Registration Form -->
+                <form id="remocao-form" class="p-4 border rounded-lg space-y-4">
+                    <h4 class="font-semibold text-lg">Registar Novo Serviço</h4>
+                    <div>
+                        <label for="remocao-date" class="block text-sm font-medium">Data</label>
+                        <input type="date" id="remocao-date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    <div>
+                        <label for="remocao-handler-name" class="block text-sm font-medium">Executor</label>
+                        <input type="text" id="remocao-handler-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                     <div>
+                        <label for="remocao-pet-name" class="block text-sm font-medium">Nome do Pet</label>
+                        <input type="text" id="remocao-pet-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg">Salvar</button>
+                </form>
+
+                <!-- History Section -->
+                <div class="p-4 border rounded-lg">
+                    <h4 class="font-semibold text-lg mb-4">Histórico de Remoções</h4>
+                    <div class="flex gap-4 mb-4">
+                        <input type="date" id="remocao-day-filter" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <input type="month" id="remocao-month-filter" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                    </div>
+                    <div id="remocao-list" class="space-y-2 max-h-64 overflow-y-auto">
+                        <!-- History items will be injected here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div id="print-area" class="hidden"></div>
+    
+    <!-- Virtual Keyboard -->
+    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full no-print">
+        <div id="virtual-keyboard" class="space-y-1"></div>
+    </div>
+    
+    <!-- Password Modal -->
+    <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/4">
+            <h3 class="text-xl font-bold mb-4 text-center">Acesso Restrito</h3>
+            <p class="text-center text-sm mb-4 text-gray-600">Por favor, insira a senha para trocar de aba.</p>
+            <input type="password" id="password-input" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+            <p id="password-error" class="text-red-500 text-xs text-center mt-2 hidden">Senha incorreta!</p>
+            <div class="mt-6 flex justify-end gap-3">
+                <button id="confirm-password-btn" class="px-4 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Confirmar</button>
+                <button id="cancel-password-btn" class="px-4 py-2 bg-gray-300 text-gray-800 rounded-md">Cancelar</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Finalize Appointment Modal -->
+    <div id="finalize-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
+            <h3 class="text-xl font-bold mb-4">Identificar Executor</h3>
+            <p class="mb-6">Por favor, selecione quem finalizou o serviço.</p>
+            <div id="finalize-options" class="grid grid-cols-5 gap-2">
+                <!-- Executor buttons will be added here by JS -->
+            </div>
+            <button id="cancel-finalize-btn" class="mt-6 px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
+        </div>
+    </div>
+
+    <!-- P.O.P Modal -->
+    <div id="pop-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
+            <div class="flex justify-between items-center mb-4 border-b pb-2">
+                 <h3 id="info-modal-title" class="text-2xl font-bold text-gray-800">Procedimento Operacional Padrão</h3>
+                 <button id="close-pop-modal-btn" class="text-gray-500 hover:text-gray-800 text-3xl font-bold">&times;</button>
+            </div>
+            <div id="info-modal-content" class="prose max-w-none">
+                <!-- Content will be inserted by JS -->
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Firebase SDKs -->
+    <!-- Bloco de Configuração para Produção -->
+<script>
+    // COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
+    const firebaseConfig = {
+  apiKey: "AIzaSyAe12mlm0UHfi8S31XMrKCgfVhXhjJ_BQY",
+  authDomain: "banho-e6a59.firebaseapp.com",
+  projectId: "banho-e6a59",
+  storageBucket: "banho-e6a59.firebasestorage.app",
+  messagingSenderId: "588155731269",
+  appId: "1:588155731269:web:158811c35e4c20b2ddd22c",
+  measurementId: "G-29KE4608TF"
+};
+
+    // Defina um ID único para sua aplicação
+    const __app_id = 'meu-petshop-app-2025';
+
+    // Em produção, o token não existe, o login será anônimo
+    const __initial_auth_token = undefined; 
+</script>
+
+<!-- O seu script principal começa aqui -->
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+    // ... resto do seu código ...
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { 
+            getFirestore, doc, addDoc, updateDoc, deleteDoc, 
+            onSnapshot, collection, query, Timestamp, serverTimestamp
+        } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // --- GLOBAL VARIABLES & STATE ---
+        let db, auth, userId, appId;
+        let allAppointments = [];
+        let allRemovals = [];
+        let hasRealtimeListenersStarted = false;
+        let calendarState = {
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            selectedDates: new Set()
+        };
+        let editCalendarState = {
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            selectedDates: new Set()
+        };
+        const viewModes = {
+            reception: 'grid',
+            grooming: 'grid',
+            'taxi-dog': 'grid'
+        };
+        const gridLayouts = {
+            reception: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
+            compact_reception: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
+            history: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
+            grooming: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4',
+            compact_grooming: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
+            'taxi-dog': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
+            compact_taxidog: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2'
+        };
+        let activeTabId = 'reception-tab-content';
+        const TAB_SWITCH_PASSWORD = "1234"; 
+        let isRemessaModeActive = false;
+        let selectedForRemessa = [];
+        let currentRemessaId = null; 
+        
+        // --- INITIALIZATION ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeAppAndAuth();
+            setupEventListeners();
+            initDateFilters();
+            switchTab('reception-tab-content', true);
+        });
+
+        function initializeAppAndAuth() {
+            try {
+                appId = typeof __app_id !== 'undefined' ? __app_id : 'default-pet-shop-app-id';
+                const firebaseConfigString = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
+                const firebaseConfig = JSON.parse(firebaseConfigString);
+                if (!firebaseConfig.apiKey) throw new Error("A configuração do Firebase (API Key) não foi encontrada.");
+                
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                onAuthStateChanged(auth, async (user) => {
+                    if (user) {
+                        userId = user.uid;
+                        document.getElementById('user-id-display').textContent = `ID do Utilizador: ${userId}`;
+                        if (!hasRealtimeListenersStarted) {
+                            setupRealtimeListeners();
+                        }
+                    } else {
+                        try {
+                            const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+                            if (token) await signInWithCustomToken(auth, token);
+                            else await signInAnonymously(auth);
+                        } catch (error) {
+                            console.error("Authentication Error:", error);
+                            showFeedback(`Erro de autenticação: ${error.message}`, 'error');
+                        }
+                    }
+                });
+            } catch (error) {
+                console.error("Firebase Initialization Error:", error);
+                showFeedback(`Erro ao iniciar o sistema: ${error.message}`, 'error');
+            }
+        }
+
+        function setupEventListeners() {
+            document.querySelectorAll('.tab-button').forEach(b => b.addEventListener('click', () => handleTabClick(b.dataset.tab)));
+            document.getElementById('appointment-form').addEventListener('submit', handleFormSubmit);
+
+            document.body.addEventListener('change', (e) => {
+                const form = e.target.closest('form');
+                if (!form) return;
+                const getElem = (id) => form.querySelector(`[id^="${id}"]`);
+
+                if (e.target.matches('[id^="service-remocao"]')) getElem('remocao-sub-services')?.classList.toggle('hidden', !e.target.checked);
+                if (e.target.matches('[id^="service-pacote"]')) {
+                    const calendarWrapper = getElem('bath-package-calendar-container');
+                    if (calendarWrapper) {
+                        calendarWrapper.classList.toggle('hidden', !e.target.checked);
+                        if (e.target.checked) renderCalendar('calendar-for-package', calendarState, form);
+                    }
+                    const banhoCheckbox = getElem('service-banho');
+                    if(banhoCheckbox) { banhoCheckbox.checked = e.target.checked; banhoCheckbox.disabled = e.target.checked; }
+                }
+                if (e.target.matches('[id^="service-taxi"]')) {
+                    getElem('taxi-dog-details-container')?.classList.toggle('hidden', !e.target.checked);
+                    getElem('client-route')?.toggleAttribute('required', e.target.checked);
+                }
+            });
+
+            document.querySelectorAll('.view-toggle-btn').forEach(button => {
+                button.addEventListener('click', () => {
+                    const { tab, view } = button.dataset;
+                    viewModes[tab] = view;
+                    renderAllContent();
+                });
+            });
+            
+            document.getElementById('toggle-sidebar-btn').addEventListener('click', () => {
+                const sidebar = document.getElementById('appointment-aside');
+                sidebar.classList.toggle('hidden');
+                document.getElementById('toggle-sidebar-btn').querySelector('svg').classList.toggle('rotate-180');
+            });
+            
+            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'taxidog-route-filter', 'reception-service-filter', 'grooming-service-filter', 'grooming-route-filter'].forEach(id => {
+                const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('change', renderAllContent);
+                }
+            });
+            ['history-tutor-filter', 'history-pet-filter'].forEach(id => {
+                 const element = document.getElementById(id);
+                if (element) {
+                    element.addEventListener('input', renderAllContent);
+                }
+            });
+            document.getElementById('clear-history-filters-btn')?.addEventListener('click', clearHistoryFilters);
+            document.getElementById('main-content-area').addEventListener('click', handleCardActions);
+            document.getElementById('service-request-form').addEventListener('submit', handleSendServiceRequest);
+            document.getElementById('cancel-service-request-btn').addEventListener('click', () => document.getElementById('service-request-modal').classList.add('hidden'));
+            document.getElementById('save-package-dates-btn').addEventListener('click', handleSavePackageDatesOnly);
+            
+            // Removido listener do botão de impressão
+            
+            // Remessa Listeners
+            document.getElementById('start-remessa-btn').addEventListener('click', startRemessaMode);
+            document.getElementById('finalize-remessa-btn').addEventListener('click', finalizeRemessa);
+            document.getElementById('cancel-remessa-btn').addEventListener('click', exitRemessaMode);
+
+            // Info Modals Listeners
+            document.getElementById('show-pop-btn').addEventListener('click', showPopModal);
+            document.getElementById('show-policy-btn').addEventListener('click', showPolicyModal);
+            document.getElementById('close-pop-modal-btn').addEventListener('click', () => document.getElementById('pop-modal').classList.add('hidden'));
+
+            
+            // Password Modal Listeners
+            const passwordModal = document.getElementById('password-modal');
+            const confirmPasswordBtn = document.getElementById('confirm-password-btn');
+            const cancelPasswordBtn = document.getElementById('cancel-password-btn');
+            const passwordInput = document.getElementById('password-input');
+            const passwordError = document.getElementById('password-error');
+
+            cancelPasswordBtn.addEventListener('click', () => passwordModal.classList.add('hidden'));
+            
+            confirmPasswordBtn.addEventListener('click', () => {
+                if (passwordInput.value === TAB_SWITCH_PASSWORD) {
+                    const targetTab = confirmPasswordBtn.dataset.targetTab;
+                    switchTab(targetTab, true);
+                    passwordModal.classList.add('hidden');
+                    passwordInput.value = '';
+                    passwordError.classList.add('hidden');
+                } else {
+                    passwordError.classList.remove('hidden');
+                }
+            });
+
+            // Confirmation Modal Listeners
+            document.getElementById('cancel-delete-btn').addEventListener('click', () => document.getElementById('confirmation-modal').classList.add('hidden'));
+            document.getElementById('confirm-delete-btn').addEventListener('click', (e) => {
+                const id = e.target.dataset.id;
+                const type = e.target.dataset.type;
+                if (!id) return;
+                
+                if (type === 'remocao') {
+                    deleteRemocao(id);
+                } else if (type === 'remessa_undo') {
+                    undoRemessaAction(id);
+                }
+                else {
+                    deleteAppointment(id);
+                }
+                document.getElementById('confirmation-modal').classList.add('hidden');
+            });
+            
+            // Remoção Modal Listeners
+            document.getElementById('remocao-control-btn').addEventListener('click', openRemocaoModal);
+            document.getElementById('close-remocao-modal-btn').addEventListener('click', () => document.getElementById('remocao-control-modal').classList.add('hidden'));
+            document.getElementById('remocao-form').addEventListener('submit', handleRemocaoFormSubmit);
+            document.getElementById('remocao-day-filter').addEventListener('change', renderRemocaoHistory);
+            document.getElementById('remocao-month-filter').addEventListener('change', renderRemocaoHistory);
+            document.getElementById('remocao-control-modal').addEventListener('click', (e) => {
+                 if(e.target.matches('.delete-remocao-btn')) {
+                     openConfirmationModal(e.target.dataset.id, 'remocao');
+                 }
+            });
+            
+            // Finalize Modal Listener
+            document.getElementById('finalize-modal').addEventListener('click', (e) => {
+                if (e.target.matches('.executor-btn')) {
+                    const modal = document.getElementById('finalize-modal');
+                    const appointmentId = modal.dataset.appointmentId;
+                    const handlerId = e.target.dataset.handlerId;
+                    handleFinalize(appointmentId, handlerId);
+                    modal.classList.add('hidden');
+                }
+            });
+             document.getElementById('cancel-finalize-btn').addEventListener('click', () => {
+                document.getElementById('finalize-modal').classList.add('hidden');
+            });
+
+            setupVirtualKeyboard();
+        }
+        
+        function handleTabClick(targetTabId) {
+            if (targetTabId === activeTabId) return;
+            const passwordModal = document.getElementById('password-modal');
+            document.getElementById('confirm-password-btn').dataset.targetTab = targetTabId;
+            passwordModal.classList.remove('hidden');
+            document.getElementById('password-input').focus();
+        }
+
+        function setupRealtimeListeners() {
+             hasRealtimeListenersStarted = true;
+            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/appointments`)), (snapshot) => {
+                allAppointments = snapshot.docs.map(doc => {
+                    const data = doc.data();
+                    Object.keys(data).forEach(key => { if (data[key] instanceof Timestamp) data[key] = data[key].toDate(); });
+                    if (Array.isArray(data.bathPackageDates)) data.bathPackageDates = data.bathPackageDates.map(ts => ts.toDate());
+                    return { id: doc.id, ...data };
+                });
+                populateServiceFilters();
+                renderAllContent();
+            }, (error) => console.error("Error with appointments listener:", error));
+
+            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/removals`)), (snapshot) => {
+                 allRemovals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+                 renderRemocaoHistory();
+            }, (error) => console.error("Error with removals listener:", error));
+        }
+        
+        function switchTab(tabId, bypassPassword = false) {
+            if (!bypassPassword && tabId !== activeTabId) {
+                handleTabClick(tabId);
+                return;
+            }
+            
+            activeTabId = tabId;
+
+            document.querySelectorAll('.tab-content-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById(tabId).classList.remove('hidden');
+            document.querySelectorAll('.tab-button').forEach(b => {
+                b.classList.toggle('gradient-purple-to-dark-purple', b.dataset.tab === tabId);
+                b.classList.toggle('bg-gray-400', b.dataset.tab !== tabId);
+            });
+            const sidebar = document.getElementById('appointment-aside');
+            if (tabId !== 'reception-tab-content' && !sidebar.classList.contains('hidden')) {
+                 sidebar.classList.add('hidden');
+            }
+            document.getElementById('toggle-sidebar-btn').classList.toggle('hidden', tabId !== 'reception-tab-content');
+            renderAllContent(); 
+        }
+        
+        function initDateFilters() {
+            const today = new Date().toISOString().split('T')[0];
+            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'remocao-date'].forEach(id => {
+                const el = document.getElementById(id); if (el) el.value = today;
+            });
+        }
+        
+        function clearHistoryFilters() {
+            document.getElementById('history-tutor-filter').value = '';
+            document.getElementById('history-pet-filter').value = '';
+            document.getElementById('history-date-filter').value = '';
+            renderAllContent();
+        }
+
+        function renderAllContent() {
+            if (!hasRealtimeListenersStarted) return;
+            ['reception', 'history', 'grooming', 'taxi-dog'].forEach(renderAppointmentsList);
+        }
+        
+        function getVisibleAppointments(type) {
+            let filtered = allAppointments;
+
+            const dateFilterIds = { reception: 'reception-date-filter', history: 'history-date-filter', grooming: 'grooming-date-filter', 'taxi-dog': 'taxidog-date-filter' };
+            const dateFilterElement = document.getElementById(dateFilterIds[type]);
+            const filterDateStr = dateFilterElement ? dateFilterElement.value : '';
+
+            if (filterDateStr) {
+                filtered = filtered.filter(app => {
+                    if (!app.appointmentDatetime) return false;
+                    const appDate = new Date(app.appointmentDatetime).toISOString().split('T')[0];
+                    return appDate === filterDateStr;
+                });
+            }
+
+            if (type === 'history') {
+                const tutorFilter = document.getElementById('history-tutor-filter').value.toLowerCase();
+                const petFilter = document.getElementById('history-pet-filter').value.toLowerCase();
+                if (tutorFilter) filtered = filtered.filter(app => (app.tutorName || '').toLowerCase().includes(tutorFilter));
+                if (petFilter) filtered = filtered.filter(app => (app.petName || '').toLowerCase().includes(petFilter));
+            }
+            
+            if (type === 'reception' || type === 'grooming') {
+                const serviceFilter = document.getElementById(`${type}-service-filter`)?.value;
+                if(serviceFilter) filtered = filtered.filter(app => app.services.includes(serviceFilter));
+            }
+
+            if (type === 'grooming' || type === 'taxi-dog') {
+                const routeFilterId = type === 'grooming' ? 'grooming-route-filter' : 'taxidog-route-filter';
+                const routeFilter = document.getElementById(routeFilterId)?.value;
+                if(routeFilter) filtered = filtered.filter(app => app.clientRoute === routeFilter);
+            }
+            
+            if (type === 'taxi-dog') {
+                filtered = filtered.filter(app => app.services && app.services.includes('Taxi Dog'));
+            }
+
+            return filtered;
+        }
+
+        function renderAppointmentsList(type) {
+            const listContainerIds = { reception: 'reception-appointments-list', history: 'history-appointments-list', grooming: 'grooming-appointments-list', 'taxi-dog': 'taxi-dog-appointments-list' };
+            const listElement = document.getElementById(listContainerIds[type]);
+            if (!listElement) return;
+
+            updateViewToggleButtons(type);
+            
+            let filteredAppointments = getVisibleAppointments(type);
+
+            if (type === 'reception') {
+                 filteredAppointments.sort((a, b) => {
+                    const aPending = a.serviceRequest?.status === 'Pending';
+                    const bPending = b.serviceRequest?.status === 'Pending';
+                    if (aPending !== bPending) return aPending ? -1 : 1;
+                    return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
+                });
+            } else if (type === 'grooming') {
+                const inProgress = filteredAppointments.filter(a => a.status !== 'Finalizado');
+                const finalized = filteredAppointments.filter(a => a.status === 'Finalizado');
+                document.getElementById('pets-in-queue-count').textContent = inProgress.length;
+                document.getElementById('pets-finalized-count').textContent = finalized.length;
+                renderGroomingList([...inProgress, ...finalized]); 
+                return; 
+            } else {
+                filteredAppointments.sort((a, b) => new Date(b.appointmentDatetime) - new Date(a.appointmentDatetime));
+            }
+
+            const currentView = viewModes[type] || 'grid';
+            let containerClasses = '';
+            const compactGridClass = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2';
+            switch (currentView) {
+                case 'compact': containerClasses = (type === 'reception') ? compactGridClass : (gridLayouts[`compact_${type}`] || compactGridClass); break;
+                case 'grid': containerClasses = gridLayouts[type] || gridLayouts['reception']; break;
+                default: containerClasses = 'flex flex-col gap-3'; break;
+            }
+            listElement.className = containerClasses;
+
+            listElement.innerHTML = filteredAppointments.length > 0 
+                ? filteredAppointments.map(app => createAppointmentCardHTML(app, type)).join('') 
+                : '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento encontrado para os filtros selecionados.</p>';
+        }
+        
+        function renderGroomingList(filteredAppointments) {
+            const listElement = document.getElementById('grooming-appointments-list');
+            const type = 'grooming'; 
+
+            listElement.innerHTML = ''; 
+            listElement.className = ''; 
+
+            const remessas = {};
+            const noRemessa = [];
+            
+            let arrivalCount = 0;
+            filteredAppointments.forEach(app => { 
+                app.arrivalNumber = app.status === 'Chegou' ? ++arrivalCount : undefined;
+                if (app.remessaId) {
+                    if (!remessas[app.remessaId]) {
+                        remessas[app.remessaId] = { name: app.remessaName, apps: [], createdAt: app.remessaCreatedAt || app.createdAt, remessaId: app.remessaId, color: app.remessaColor, isFinalized: true };
+                    }
+                    if (app.status !== 'Finalizado') remessas[app.remessaId].isFinalized = false;
+                    remessas[app.remessaId].apps.push(app);
+                } else {
+                    noRemessa.push(app);
+                }
+            });
+
+            const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+            const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
+
+            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado');
+            const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado');
+
+            const mainContainer = document.createElement('div');
+            mainContainer.className = 'flex flex-wrap gap-4 items-start';
+
+            if ([...activeRemessas, ...activeNoRemessa, ...finalizedRemessas, ...finalizedNoRemessa].length === 0) {
+                listElement.innerHTML = '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento encontrado.</p>';
+                return;
+            }
+
+            const renderRemessa = (remessa, index) => {
+                const remessaContainer = document.createElement('div');
+                const borderColor = remessa.color || '#8B5CF6'; 
+                remessaContainer.className = `p-4 border-2 rounded-lg space-y-2 inline-flex flex-col ${remessa.isFinalized ? 'opacity-50' : ''}`;
+                remessaContainer.style.borderColor = borderColor;
+                
+                const header = document.createElement('div');
+                header.className = 'flex justify-between items-start mb-2';
+                header.innerHTML = `
+                    <div class="flex items-center gap-2">
+                         <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa #${index + 1}: ${remessa.name}</h3>
+                    </div>
+                    <div class="flex flex-col gap-1">
+                        <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}">Editar</button>
+                        <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
+                    </div>`;
+                
+                const cardsContainer = document.createElement('div');
+                const currentView = viewModes[type] || 'grid';
+                cardsContainer.className = currentView === 'grid' ? gridLayouts[type] : 'flex flex-col gap-3';
+                cardsContainer.innerHTML = remessa.apps.map(app => createAppointmentCardHTML(app, type)).join('');
+                
+                remessaContainer.appendChild(header);
+                remessaContainer.appendChild(cardsContainer);
+                mainContainer.appendChild(remessaContainer);
+            }
+            
+            activeRemessas.forEach(renderRemessa);
+            activeNoRemessa.forEach(app => {
+                 const cardWrapper = document.createElement('div');
+                 const currentView = viewModes[type] || 'grid';
+                 if (currentView === 'list') cardWrapper.className = 'w-full';
+                 cardWrapper.innerHTML = createAppointmentCardHTML(app, type);
+                 mainContainer.appendChild(cardWrapper.firstElementChild);
+            });
+            finalizedRemessas.forEach(renderRemessa);
+            finalizedNoRemessa.forEach(app => {
+                 const cardWrapper = document.createElement('div');
+                 const currentView = viewModes[type] || 'grid';
+                 if (currentView === 'list') cardWrapper.className = 'w-full';
+                 cardWrapper.innerHTML = createAppointmentCardHTML(app, type);
+                 mainContainer.appendChild(cardWrapper.firstElementChild);
+            });
+
+
+            listElement.appendChild(mainContainer);
+        }
+
+
+        function createAppointmentCardHTML(app, contextTab) {
+            const viewMode = viewModes[contextTab];
+            const isCompact = viewMode === 'compact';
+
+            // Determine background color class based on a priority of statuses
+            let cardBgClass = 'bg-white'; // Default
+            if (app.serviceRequest?.status === 'Pending') {
+                cardBgClass = 'requested-orange-bg'; // ORANGE for pending service request (highest priority)
+            } else if (app.status === 'Chegou') {
+                cardBgClass = 'arrived-blue-bg'; // BLUE for arrived pets
+            } else if (app.status === 'Finalizado') {
+                cardBgClass = 'finalized-green-bg'; // GREEN for finalized services
+            }
+
+            // Base classes, now including the dynamic background class
+            let cardClasses = `relative p-4 rounded-lg border shadow-md flex flex-col justify-between gap-2 card-servico transition-all duration-200 ${cardBgClass}`;
+
+            if (isCompact) {
+                cardClasses += ' compact-card flex-col justify-center items-center text-center';
+            }
+
+            // Apply opacity for "baixa" (discharged), which is a state on top of a color
+            if (app.isDischarged) {
+                cardClasses += ' opacity-50';
+            }
+            
+            const statusStyles = { 'Agendado': 'bg-gray-400 text-white', 'Chegou': 'bg-blue-500 text-white', 'Finalizado': 'bg-green-600 text-white' };
+            
+            // Show a specific status bubble for pending requests for better clarity
+            let statusBubbleHTML;
+            if (app.serviceRequest?.status === 'Pending') {
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-orange-500 text-white animate-pulse">Solicitado</span>`;
+            } else {
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'}">${app.status}</span>`;
+            }
+
+            let displayServices = app.services || [];
+            const hasSpecificRemoval = displayServices.some(s => s.startsWith('Remoção de'));
+
+            if (hasSpecificRemoval) {
+                displayServices = displayServices.filter(s => s !== 'Remoção');
+            }
+            
+            const servicesHTML = displayServices.map(s => {
+                const serviceName = s === 'Pacote de Banho' ? 'Pct' : s;
+                return `<strong class="text-violet-700">${serviceName}</strong>`;
+            }).join(', ');
+
+            let taxiInfoHTML = '';
+            if (app.services?.includes('Taxi Dog') && app.clientRoute) {
+                const details = [app.clientRoute, app.pickupTime && `Busca: ${app.pickupTime}`, app.returnTime && `Devolução: ${app.returnTime}`].filter(Boolean);
+                taxiInfoHTML = `<p class="text-xs mt-1 text-gray-600"><strong>Taxi Dog:</strong> ${details.join(' | ')}</p>`;
+            }
+            
+            const packageDatesHTML = (app.services?.includes('Pacote de Banho') && app.bathPackageDates?.length > 0)
+                ? `<details class="text-xs mt-1 text-gray-600"><summary class="cursor-pointer font-semibold">Datas do Pacote: (${app.bathPackageDates.length})</summary><ul class="pl-4 list-disc list-inside bg-gray-100 p-2 rounded-md mt-1">${app.bathPackageDates.map(d => `<li>${new Date(d).toLocaleDateString('pt-BR')}</li>`).join('')}</ul><div class="text-right mt-1"><button class="edit-package-dates-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded hover:bg-blue-600" data-id="${app.id}">Editar Datas</button></div></details>`
+                : (app.isPackage ? `<p class="text-xs mt-1 text-gray-600"><strong>Pacote:</strong> Sim</p>` : '');
+
+
+            let requestNotificationHTML = '';
+            if (app.serviceRequest?.status) {
+                if (contextTab === 'reception' && app.serviceRequest.status === 'Pending') {
+                    requestNotificationHTML = `<div class="mt-2 p-2 bg-orange-100 border-l-4 border-orange-500 text-orange-700 text-xs rounded">
+                        <p class="font-bold">Solicitação Pendente:</p>
+                        <p>${app.serviceRequest.requestedAdditions.join(', ')}</p>
+                        ${app.serviceRequest.newObservations ? `<p class="mt-1"><strong>Obs:</strong> ${app.serviceRequest.newObservations}</p>` : ''}
+                        <div class="flex justify-end gap-2 mt-2">
+                            <button class="approve-request-btn px-2 py-1 text-xs bg-green-500 text-white rounded" data-id="${app.id}">Liberar</button>
+                            <button class="deny-request-btn px-2 py-1 text-xs bg-red-500 text-white rounded" data-id="${app.id}">Negar</button>
+                        </div></div>`;
+                } else if (contextTab === 'grooming') {
+                     if (app.serviceRequest.status === 'Approved') requestNotificationHTML = `<p class="text-xs mt-2 font-bold text-green-600">Solicitação Aprovada</p>`;
+                    else if (app.serviceRequest.status === 'Denied') requestNotificationHTML = `<p class="text-xs mt-2 font-bold text-red-600">Solicitação Negada</p>`;
+                }
+            }
+            
+            let buttonsHTML = '';
+            if (contextTab === 'reception') {
+                buttonsHTML += `<button class="edit-btn px-1.5 py-0.5 text-xs bg-yellow-400 text-gray-800 rounded" data-id="${app.id}">Editar</button>`;
+                if (app.status === 'Agendado' && !app.isDischarged) buttonsHTML += `<button class="checkin-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Chegou</button>`;
+                if (app.status === 'Finalizado' && !app.isDischarged && !app.notifiedAt) buttonsHTML += `<button class="notify-btn px-1.5 py-0.5 text-xs bg-cyan-500 text-white rounded" data-id="${app.id}">Avisado</button>`;
+                if (app.status === 'Finalizado' && !app.isDischarged && app.notifiedAt) buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                buttonsHTML += `<button class="delete-btn px-1.5 py-0.5 text-xs bg-red-500 text-white rounded" data-id="${app.id}">Excluir</button>`;
+            }
+            if (contextTab === 'grooming') {
+                 if (app.status === 'Finalizado') {
+                     buttonsHTML += `<button class="revert-finalize-btn px-1.5 py-0.5 text-xs bg-gray-500 text-white rounded" data-id="${app.id}">Reverter</button>`;
+                 } else {
+                     buttonsHTML += `<button class="finalize-btn px-1.5 py-0.5 text-xs bg-green-500 text-white rounded" data-id="${app.id}">Finalizar</button>`;
+                 }
+                 if(!app.serviceRequest || app.serviceRequest.status !== 'Pending') buttonsHTML += `<button class="request-service-btn px-1.5 py-0.5 text-xs bg-orange-500 text-white rounded" data-id="${app.id}">Solicitar Serviço</button>`;
+            }
+            if (contextTab === 'taxi-dog') {
+                if (app.status === 'Agendado') {
+                     buttonsHTML += `<button class="checkin-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Chegou</button>`;
+                }
+            }
+            
+            const arrivalNumberHTML = app.arrivalNumber ? `<span class="absolute top-1 left-1 bg-violet-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">#${app.arrivalNumber}</span>` : '';
+            
+            let remessaButtonHTML = '';
+            if (isRemessaModeActive && (app.status === 'Chegou' || app.status === 'Agendado') && (!currentRemessaId || app.remessaId === currentRemessaId || !app.remessaId)) {
+                const isSelected = selectedForRemessa.includes(app.id);
+                if (isSelected) cardClasses += ' selected-for-remessa';
+                remessaButtonHTML = `
+                    <button class="remessa-select-btn absolute top-1 left-1 z-10 h-6 w-6 rounded-full border-2 ${isSelected ? 'bg-teal-500 border-teal-700' : 'bg-white border-gray-400'} flex items-center justify-center" data-id="${app.id}">
+                        ${isSelected ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>' : ''}
+                    </button>`;
+            }
+
+            const compactViewHTML = `
+                <div class="compact-summary flex flex-col justify-center items-center h-full text-center p-2 pt-8">
+                     <h4 class="text-lg font-bold text-gray-800 truncate card-nome-pet">${app.petName}</h4>
+                     <p class="text-sm font-medium text-gray-500 card-nome-tutor">(${app.tutorName})</p>
+                </div>`;
+            
+            const fullViewHTML = `
+                <div class="full-details ${isCompact ? 'hidden' : ''}">
+                     <div>
+                        <h4 class="text-lg font-bold text-gray-800 card-nome-pet">${app.petName} <span class="text-sm font-medium text-gray-500 card-nome-tutor">(${app.tutorName})</span></h4>
+                        <p class="text-sm text-gray-600"><strong>Raça:</strong> ${app.petBreed}</p>
+                        <p class="text-sm text-gray-600 card-horario"><strong>Agendado:</strong> ${app.appointmentDatetime ? new Date(app.appointmentDatetime).toLocaleString('pt-BR') : 'N/A'}</p>
+                        ${app.checkinTime ? `<p class="text-sm text-blue-600"><strong>Chegada:</strong> ${new Date(app.checkinTime).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</p>` : ''}
+                        ${app.finalizedAt ? `<p class="text-sm text-green-600"><strong>Finalizado:</strong> ${new Date(app.finalizedAt).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})} ${app.finalizedBy ? `<strong>(${app.finalizedBy})</strong>` : ''}</p>` : ''}
+                        ${app.notifiedAt ? `<p class="text-sm text-cyan-600"><strong>Avisado:</strong> ${new Date(app.notifiedAt).toLocaleTimeString('pt-BR', {hour: '2-digit', minute:'2-digit'})}</p>` : ''}
+                        <hr class="my-2">
+                        <p class="text-sm text-gray-800 card-servicos"><strong>Serviços:</strong> ${servicesHTML}</p>
+                        ${app.observations ? `<p class="text-xs mt-1 text-gray-600 bg-yellow-50 p-1 rounded"><strong>Obs:</strong> ${app.observations}</p>` : ''}
+                        ${packageDatesHTML} ${taxiInfoHTML} ${requestNotificationHTML}
+                    </div>
+                    <div class="flex flex-col sm:flex-row flex-wrap justify-end gap-0.5 mt-2">${buttonsHTML}</div>
+                </div>`;
+            
+            return `<div class="${cardClasses}" data-id="${app.id}" data-remessa-id="${app.remessaId || ''}" data-datetime="${app.appointmentDatetime}">
+                ${remessaButtonHTML || arrivalNumberHTML}
+                ${statusBubbleHTML}
+                ${isCompact ? compactViewHTML + fullViewHTML : fullViewHTML}
+            </div>`;
+        }
+        
+        async function handleFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target, id = form.querySelector('#editing-appointment-id').value;
+            const button = form.querySelector('button[type="submit"]');
+            button.disabled = true; button.textContent = id ? 'A guardar...' : 'A agendar...';
+            try {
+                const data = getAppointmentDataFromForm(form);
+                const isPackage = data.services.includes('Pacote de Banho');
+
+                // This condition checks if it's an EDIT modal.
+                if (id) { 
+                    await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { ...data, appointmentDatetime: Timestamp.fromDate(new Date(data.appointmentDatetime)), updatedAt: serverTimestamp() });
+                    showFeedback("Agendamento atualizado!");
+                    document.getElementById('edit-appointment-modal').classList.add('hidden');
+                } 
+                // This condition handles NEW appointments (package or standard) from the main form.
+                else { 
+                    if (isPackage && calendarState.selectedDates.size > 0) {
+                        const originalTime = new Date(data.appointmentDatetime).toTimeString().split(' ')[0];
+                        const baseData = { ...data, status: 'Agendado', isPackage: true, isDischarged: false, notifiedAt: null }; 
+                        delete baseData.bathPackageDates; 
+                        delete baseData.appointmentDatetime;
+
+                        for (const dateStr of calendarState.selectedDates) {
+                            const newDate = new Date(`${dateStr}T${originalTime}`);
+                            const packageAppointmentData = { ...baseData, appointmentDatetime: Timestamp.fromDate(newDate), createdAt: serverTimestamp() };
+                            await addDoc(collection(db, `artifacts/${appId}/public/data/appointments`), packageAppointmentData);
+                        }
+                        showFeedback(`${calendarState.selectedDates.size} agendamentos do pacote foram criados!`);
+                    } else {
+                        await addDoc(collection(db, `artifacts/${appId}/public/data/appointments`), { ...data, appointmentDatetime: Timestamp.fromDate(new Date(data.appointmentDatetime)), createdAt: serverTimestamp(), status: 'Agendado', isDischarged: false, notifiedAt: null });
+                        showFeedback("Agendamento criado!");
+                    }
+                    resetFormState(); // Reset the main form after any kind of new creation.
+                }
+            } catch (error) { showFeedback(`Erro: ${error.message}`, "error");
+            } finally { 
+                button.disabled = false; 
+                button.textContent = id ? 'Guardar Alterações' : 'Agendar'; 
+            }
+        }
+
+        function getAppointmentDataFromForm(form) {
+            const services = Array.from(form.querySelectorAll('[id^="service-"]:checked')).map(cb => cb.value);
+            if (services.includes('Remoção')) services.push(...Array.from(form.querySelectorAll('[id^="sub-service-"]:checked')).map(cb => `Remoção de ${cb.value}`));
+            return {
+                tutorName: form.querySelector('[id^="tutor-name"]').value, petName: form.querySelector('[id^="pet-name"]').value, petBreed: form.querySelector('[id^="pet-breed"]').value,
+                appointmentDatetime: form.querySelector('[id^="appointment-datetime"]').value, services: services,
+                bathPackageDates: services.includes('Pacote de Banho') ? Array.from(calendarState.selectedDates) : [],
+                pickupTime: form.querySelector('[id^="pickup-time"]').value || null, returnTime: form.querySelector('[id^="return-time"]').value || null,
+                clientRoute: form.querySelector('[id^="client-route"]').value || null, observations: form.querySelector('[id^="observations"]').value || null,
+            };
+        }
+
+        function resetFormState() {
+            const form = document.getElementById('appointment-form');
+            form.reset(); // Clears all standard input fields.
+
+            // Explicitly hide all conditional UI sections to ensure a clean state
+            form.querySelector('#remocao-sub-services').classList.add('hidden');
+            form.querySelector('#bath-package-calendar-container').classList.add('hidden');
+            form.querySelector('#taxi-dog-details-container').classList.add('hidden');
+
+            // Reset any programmatically changed states on checkboxes
+            const banhoCheckbox = form.querySelector('#service-banho');
+            if (banhoCheckbox) {
+                banhoCheckbox.disabled = false;
+            }
+            
+            // Clear and reset the package calendar state completely
+            calendarState.selectedDates.clear();
+            const packageSummary = form.querySelector('#selected-dates-summary-package');
+            if (packageSummary) {
+                packageSummary.innerHTML = '';
+            }
+            const packageCalendar = form.querySelector('#calendar-for-package');
+            if (packageCalendar) {
+                packageCalendar.innerHTML = ''; 
+            }
+            
+            // Ensure hidden editing ID is always cleared on reset
+            form.querySelector('#editing-appointment-id').value = '';
+        }
+
+        function handleCardActions(e) {
+            const target = e.target;
+            
+            // Handle remessa-level actions first, as they are not inside a card
+            if (target.matches('.edit-remessa-btn')) {
+                startEditRemessaMode(target.dataset.remessaId, target.dataset.remessaName);
+                return;
+            }
+            if (target.matches('.undo-remessa-btn')) {
+                handleUndoRemessa(target.dataset.remessaId);
+                return;
+            }
+
+            // Then handle card-level actions
+            const card = target.closest('.card-servico');
+            if (!card) return;
+            
+            const appointmentId = card.dataset.id;
+            
+            if (isRemessaModeActive && activeTabId === 'grooming-tab-content' && !target.closest('button')) {
+                toggleRemessaSelection(appointmentId);
+                return;
+            }
+
+            if (card.classList.contains('compact-card') && !target.closest('button')) {
+                card.classList.toggle('expanded');
+                card.querySelector('.full-details').classList.toggle('hidden');
+                card.querySelector('.compact-summary').classList.toggle('hidden');
+                return;
+            }
+
+            if (target.matches('.delete-btn')) openConfirmationModal(appointmentId);
+            else if (target.matches('.checkin-btn')) handleCheckIn(appointmentId);
+            else if (target.matches('.finalize-btn')) openFinalizeModal(appointmentId);
+            else if (target.matches('.revert-finalize-btn')) handleRevertFinalization(appointmentId);
+            else if (target.matches('.edit-btn')) openEditModal(appointmentId);
+            else if (target.matches('.request-service-btn')) openServiceRequestModal(appointmentId);
+            else if (target.matches('.edit-package-dates-btn')) openEditPackageDatesModal(appointmentId);
+            else if (target.matches('.approve-request-btn')) handleServiceRequestResponse(appointmentId, true);
+            else if (target.matches('.deny-request-btn')) handleServiceRequestResponse(appointmentId, false);
+            else if (target.matches('.discharge-btn')) handleDischarge(appointmentId);
+            else if (target.matches('.notify-btn')) handleNotifyClient(appointmentId);
+        }
+
+        function openConfirmationModal(id, type = 'appointment') {
+            const modal = document.getElementById('confirmation-modal');
+            const confirmBtn = modal.querySelector('#confirm-delete-btn');
+            const message = modal.querySelector('#confirmation-message');
+            const title = modal.querySelector('#confirmation-title');
+            confirmBtn.dataset.id = id;
+            confirmBtn.dataset.type = type;
+
+            switch (type) {
+                case 'remocao':
+                    title.textContent = 'Confirmar Exclusão';
+                    message.textContent = 'Tem a certeza que deseja excluir este registo de remoção?';
+                    break;
+                case 'remessa_undo':
+                    title.textContent = 'Confirmar Ação';
+                    message.textContent = 'Tem a certeza que deseja desfazer esta remessa? Todos os pets voltarão para a fila geral.';
+                    break;
+                default: // 'appointment'
+                    title.textContent = 'Confirmar Exclusão';
+                    message.textContent = 'Tem a certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.';
+                    break;
+            }
+            modal.classList.remove('hidden');
+        }
+
+        async function deleteAppointment(id) { try { await deleteDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id)); showFeedback("Excluído com sucesso."); } catch (e) { showFeedback(`Erro: ${e.message}`, "error"); } }
+        async function deleteRemocao(id) { try { await deleteDoc(doc(db, `artifacts/${appId}/public/data/removals`, id)); showFeedback("Registo de remoção excluído."); } catch (e) { showFeedback(`Erro ao excluir: ${e.message}`, "error"); } }
+
+        function handleUndoRemessa(remessaId) {
+            openConfirmationModal(remessaId, 'remessa_undo');
+        }
+
+        async function undoRemessaAction(remessaId) {
+            const appointmentsToUpdate = allAppointments.filter(app => app.remessaId === remessaId);
+
+            if (appointmentsToUpdate.length === 0) {
+                showFeedback("Nenhum agendamento encontrado para esta remessa.", "info");
+                return;
+            }
+            
+            const updates = appointmentsToUpdate.map(app => {
+                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, app.id);
+                return updateDoc(docRef, {
+                    remessaId: null,
+                    remessaName: null,
+                    remessaCreatedAt: null,
+                    remessaColor: null
+                });
+            });
+
+            try {
+                await Promise.all(updates);
+                showFeedback("Remessa desfeita com sucesso!");
+            } catch (error) {
+                showFeedback("Erro ao desfazer a remessa.", "error");
+                console.error("Error undoing remessa: ", error);
+            }
+        }
+
+
+        async function handleCheckIn(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { status: 'Chegou', checkinTime: serverTimestamp() }); showFeedback("Check-in realizado."); } catch (e) { showFeedback(`Erro: ${e.message}`, "error"); } }
+        
+        function openFinalizeModal(id) {
+            const modal = document.getElementById('finalize-modal');
+            modal.dataset.appointmentId = id;
+            
+            const optionsContainer = document.getElementById('finalize-options');
+            optionsContainer.innerHTML = ''; // Clear previous options
+            for (let i = 1; i <= 10; i++) {
+                const handlerId = String(i).padStart(2, '0');
+                const button = document.createElement('button');
+                button.className = 'executor-btn p-4 bg-teal-500 text-white font-bold rounded-md hover:bg-teal-600';
+                button.textContent = handlerId;
+                button.dataset.handlerId = handlerId;
+                optionsContainer.appendChild(button);
+            }
+            
+            modal.classList.remove('hidden');
+        }
+
+        async function handleFinalize(appointmentId, handlerId) {
+            try {
+                await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId), { 
+                    status: 'Finalizado', 
+                    finalizedAt: serverTimestamp(),
+                    finalizedBy: handlerId 
+                });
+                showFeedback("Serviço finalizado com sucesso.");
+            } catch (e) {
+                showFeedback(`Erro ao finalizar: ${e.message}`, "error");
+            }
+        }
+        
+        async function handleRevertFinalization(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { status: 'Chegou', finalizedAt: null, finalizedBy: null }); showFeedback("Status revertido para 'Chegou'."); } catch (e) { showFeedback(`Erro ao reverter: ${e.message}`, "error"); } }
+        async function handleDischarge(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { isDischarged: true }); showFeedback("Baixa realizada com sucesso."); } catch (e) { showFeedback(`Erro ao dar baixa: ${e.message}`, "error"); } }
+        async function handleNotifyClient(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { notifiedAt: serverTimestamp() }); showFeedback("Cliente notificado."); } catch (e) { showFeedback(`Erro ao notificar: ${e.message}`, "error"); } }
+        
+        function openEditModal(id) {
+            const appointment = allAppointments.find(app => app.id === id); if (!appointment) return;
+            const modalContent = document.getElementById('edit-modal-content');
+            const formClone = document.getElementById('appointment-form').cloneNode(true);
+            formClone.id = 'edit-form'; modalContent.innerHTML = ''; modalContent.appendChild(formClone);
+            formClone.querySelector('h2')?.remove(); formClone.querySelector('button[type="submit"]').textContent = 'Guardar Alterações';
+            populateFormForEditing(formClone, appointment);
+            const cancelButton = document.createElement('button');
+            cancelButton.type = 'button'; cancelButton.textContent = 'Cancelar'; cancelButton.className = 'w-full mt-2 bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded-lg';
+            cancelButton.onclick = () => document.getElementById('edit-appointment-modal').classList.add('hidden');
+            formClone.appendChild(cancelButton);
+            formClone.addEventListener('submit', handleFormSubmit);
+            document.getElementById('edit-appointment-modal').classList.remove('hidden');
+        }
+
+        function populateFormForEditing(form, data) {
+            form.querySelector('#editing-appointment-id').value = data.id; form.querySelector('#tutor-name').value = data.tutorName;
+            form.querySelector('#pet-name').value = data.petName; form.querySelector('#pet-breed').value = data.petBreed;
+            const dt = new Date(data.appointmentDatetime); dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
+            form.querySelector('#appointment-datetime').value = dt.toISOString().slice(0, 16);
+            form.querySelectorAll('[id^="service-"]').forEach(cb => {
+                cb.checked = data.services.some(s => s.startsWith(cb.value));
+                ['pacote', 'remocao', 'taxi'].forEach(type => { if (cb.id.includes(type)) cb.dispatchEvent(new Event('change', { bubbles: true }))});
+            });
+            if (data.services.includes('Remoção')) form.querySelectorAll('[id^="sub-service-"]').forEach(cb => { cb.checked = data.services.includes(`Remoção de ${cb.value}`); });
+            if (data.services.includes('Taxi Dog')) { form.querySelector('#pickup-time').value = data.pickupTime || ''; form.querySelector('#return-time').value = data.returnTime || ''; form.querySelector('#client-route').value = data.clientRoute || ''; }
+            if (data.services.includes('Pacote de Banho')) { calendarState.selectedDates = new Set((data.bathPackageDates || []).map(d => new Date(d).toISOString().split('T')[0])); renderCalendar('calendar-for-package', calendarState, form); }
+            form.querySelector('#observations').value = data.observations || '';
+        }
+        
+        function openServiceRequestModal(id) {
+            const modal = document.getElementById('service-request-modal');
+            const container = document.getElementById('service-request-container');
+            container.innerHTML = document.getElementById('main-form-services-wrapper').cloneNode(true).innerHTML;
+            container.querySelectorAll('[id^="service-"]').forEach(cb => {
+                cb.checked = false; 
+                if (cb.id.includes('pacote')) cb.parentElement.remove();
+            });
+            modal.querySelector('#service-request-observations').value = '';
+            modal.querySelector('#send-service-request-btn').dataset.id = id;
+            modal.classList.remove('hidden');
+        }
+
+        async function handleSendServiceRequest(e) {
+            e.preventDefault();
+            const form = e.target, button = form.querySelector('button[type="submit"]'), id = button.dataset.id;
+            const currentAppointment = allAppointments.find(app => app.id === id);
+            if (!currentAppointment) return;
+
+            button.disabled = true; button.textContent = 'A enviar...';
+            try {
+                const requestedAdditions = Array.from(form.querySelectorAll('[id^="service-"]:checked')).map(cb => cb.value);
+                if (requestedAdditions.includes('Remoção')) {
+                    requestedAdditions.push(...Array.from(form.querySelectorAll('[id^="sub-service-"]:checked')).map(cb => `Remoção de ${cb.value}`));
+                }
+                const finalServiceList = [...new Set([...currentAppointment.services, ...requestedAdditions])];
+                const serviceRequest = {
+                    requestedAdditions,
+                    finalServiceList,
+                    newObservations: form.querySelector('#service-request-observations').value, 
+                    status: 'Pending', 
+                    requestedAt: serverTimestamp()
+                };
+                await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { serviceRequest });
+                showFeedback("Solicitação de serviço enviada!");
+                document.getElementById('service-request-modal').classList.add('hidden');
+            } catch (error) {
+                showFeedback(`Erro ao enviar solicitação: ${error.message}`, "error");
+            } finally {
+                button.disabled = false; button.textContent = 'Enviar Solicitação';
+            }
+        }
+
+        async function handleServiceRequestResponse(id, isApproved) {
+            const appointment = allAppointments.find(app => app.id === id);
+            if (!appointment || !appointment.serviceRequest) return;
+            try {
+                const updateData = {
+                    'serviceRequest.status': isApproved ? 'Approved' : 'Denied',
+                    'serviceRequest.respondedAt': serverTimestamp()
+                };
+                if (isApproved) {
+                    updateData.services = appointment.serviceRequest.finalServiceList;
+                    updateData.observations = appointment.serviceRequest.newObservations;
+                }
+                await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), updateData);
+                showFeedback(`Solicitação ${isApproved ? 'aprovada' : 'negada'}!`);
+            } catch (error) {
+                showFeedback(`Erro ao responder à solicitação: ${error.message}`, "error");
+            }
+        }
+        
+        function renderCalendar(containerId, state, context) {
+            const container = context.querySelector(`#${containerId}`); if (!container) return;
+            const monthNames = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"], daysOfWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+            const firstDay = new Date(state.currentYear, state.currentMonth, 1).getDay(), daysInMonth = new Date(state.currentYear, state.currentMonth + 1, 0).getDate();
+            let html = `<div class="flex justify-between items-center mb-2 text-white"><button type="button" class="prev-month-btn p-1">&lt;</button><span class="font-bold">${monthNames[state.currentMonth]} ${state.currentYear}</span><button type="button" class="next-month-btn p-1">&gt;</button></div><div class="grid grid-cols-7 text-center text-xs font-medium text-gray-300">${daysOfWeek.map(d=>`<div>${d}</div>`).join('')}</div><div class="grid grid-cols-7 text-center text-sm gap-1 mt-2">`;
+            html += '<div></div>'.repeat(firstDay);
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateStr = `${state.currentYear}-${String(state.currentMonth+1).padStart(2,'0')}-${String(i).padStart(2,'0')}`;
+                html += `<div class="calendar-day p-1 cursor-pointer ${state.selectedDates.has(dateStr)?'selected':''}" data-date="${dateStr}">${i}</div>`;
+            }
+            container.innerHTML = html + '</div>';
+            updateSelectedDatesSummary(containerId, state, context);
+            container.querySelector('.prev-month-btn').onclick = () => changeMonth(-1, containerId, state, context);
+            container.querySelector('.next-month-btn').onclick = () => changeMonth(1, containerId, state, context);
+            container.querySelectorAll('.calendar-day').forEach(d => d.onclick = () => toggleDateSelection(d.dataset.date, containerId, state, context));
+        }
+        
+        function changeMonth(dir, id, state, context) { state.currentMonth += dir; if(state.currentMonth<0){state.currentMonth=11;state.currentYear--}else if(state.currentMonth>11){state.currentMonth=0;state.currentYear++} renderCalendar(id, state, context); }
+        
+        function toggleDateSelection(date, id, state, context) { if(!date)return; state.selectedDates.has(date)?state.selectedDates.delete(date):state.selectedDates.add(date); renderCalendar(id, state, context); }
+        
+        function updateSelectedDatesSummary(containerId, state, context) {
+            const summaryId = containerId === 'calendar-for-package' ? 'selected-dates-summary-package' : 'selected-dates-summary-editing';
+            const summaryEl = context.querySelector(`#${summaryId}`);
+            if (summaryEl) summaryEl.textContent = state.selectedDates.size > 0 ? `Datas: ${Array.from(state.selectedDates).sort().map(d=>new Date(d+'T12:00').toLocaleDateString('pt-BR')).join(', ')}` : '';
+        }
+        
+        function openEditPackageDatesModal(id) {
+            const app = allAppointments.find(a => a.id === id); if (!app) return;
+            const modal = document.getElementById('edit-package-dates-only-modal');
+            modal.querySelector('#edit-dates-appointment-id').value = id;
+            editCalendarState.selectedDates = new Set((app.bathPackageDates || []).map(d => new Date(d).toISOString().split('T')[0]));
+            const appDate = new Date(app.appointmentDatetime); editCalendarState.currentMonth = appDate.getMonth(); editCalendarState.currentYear = appDate.getFullYear();
+            renderCalendar('calendar-for-editing', editCalendarState, modal);
+            modal.classList.remove('hidden');
+        }
+        
+        async function handleSavePackageDatesOnly() {
+            const id = document.getElementById('edit-dates-appointment-id').value, btn = document.getElementById('save-package-dates-btn');
+            btn.disabled = true; btn.textContent = 'A guardar...';
+            try {
+                const newDates = Array.from(editCalendarState.selectedDates).map(d => Timestamp.fromDate(new Date(d+'T12:00')));
+                await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { bathPackageDates: newDates });
+                showFeedback("Datas do pacote atualizadas!");
+                document.getElementById('edit-package-dates-only-modal').classList.add('hidden');
+            } catch(e) { showFeedback(`Erro: ${e.message}`, "error"); } finally { btn.disabled = false; btn.textContent = 'Guardar Datas'; }
+        }
+        
+        function showFeedback(message, type = 'success') {
+            const modal = document.getElementById('feedback-modal'), p = document.getElementById('feedback-message');
+            p.textContent = message; p.className = type==='success'?'text-green-700':'text-red-700';
+            modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('hidden'), 3000);
+        }
+
+        function updateViewToggleButtons(activeTab) {
+            if (!activeTab || activeTab === 'history') return;
+
+            const currentView = viewModes[activeTab];
+            document.querySelectorAll(`.view-toggle-btn[data-tab="${activeTab}"]`).forEach(button => {
+                const isSelected = button.dataset.view === currentView;
+                button.classList.toggle('bg-teal-500', isSelected);
+                button.classList.toggle('text-white', isSelected);
+                button.classList.toggle('bg-gray-200', !isSelected);
+                button.classList.toggle('text-gray-600', !isSelected);
+            });
+        }
+        
+        function populateServiceFilters() {
+            const serviceCheckboxes = document.querySelectorAll('#services-checkboxes input[type="checkbox"]');
+            const serviceNames = Array.from(serviceCheckboxes).map(cb => cb.value);
+            
+            const receptionFilter = document.getElementById('reception-service-filter');
+            const groomingFilter = document.getElementById('grooming-service-filter');
+            
+            const currentReceptionValue = receptionFilter.value;
+            const currentGroomingValue = groomingFilter.value;
+            
+            receptionFilter.innerHTML = '<option value="">Todos os Serviços</option>';
+            groomingFilter.innerHTML = '<option value="">Todos os Serviços</option>';
+
+            serviceNames.forEach(name => {
+                receptionFilter.innerHTML += `<option value="${name}">${name}</option>`;
+                groomingFilter.innerHTML += `<option value="${name}">${name}</option>`;
+            });
+
+            receptionFilter.value = currentReceptionValue;
+            groomingFilter.value = currentGroomingValue;
+        }
+
+        function setupVirtualKeyboard() {
+            let activeInputElement = null;
+            let capsLock = false;
+            const keyboardContainer = document.getElementById('virtual-keyboard-container');
+            const keyboard = document.getElementById('virtual-keyboard');
+            
+            const keysLayout = [
+                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
+                ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
+                ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ç"],
+                ["caps", "z", "x", "c", "v", "b", "n", "m", "backspace"],
+                ["space"]
+            ];
+            
+            function createKeys() {
+                keyboard.innerHTML = '';
+                keyboard.className = 'space-y-1';
+                keysLayout.forEach(row => {
+                    const rowDiv = document.createElement('div');
+                    rowDiv.className = 'flex justify-center gap-1';
+                    row.forEach(key => {
+                        const keyElement = document.createElement('button');
+                        keyElement.type = 'button';
+                        keyElement.className = 'keyboard-key py-2 px-3 bg-white rounded-md shadow-sm font-semibold flex items-center justify-center border border-gray-300 flex-grow';
+                        keyElement.setAttribute('data-key', key);
+
+                        switch(key) {
+                            case "backspace":
+                                keyElement.innerHTML = '&#9003;';
+                                keyElement.classList.add('flex-grow-[1.5]');
+                                break;
+                            case "caps":
+                                keyElement.innerHTML = 'Caps';
+                                keyElement.classList.add('flex-grow-[1.5]');
+                                if(capsLock) keyElement.classList.add('active-special');
+                                break;
+                            case "space":
+                                keyElement.innerHTML = ' ';
+                                keyElement.classList.add('flex-grow-[8]');
+                                break;
+                            default:
+                                keyElement.textContent = capsLock ? key.toUpperCase() : key.toLowerCase();
+                                break;
+                        }
+                        rowDiv.appendChild(keyElement);
+                    });
+                    keyboard.appendChild(rowDiv);
+                });
+            }
+
+            createKeys();
+            
+            document.addEventListener('focusin', (e) => {
+                if(e.target.matches('input[type="text"], input[type="time"], input[type="datetime-local"], textarea, input[type="date"], input[type="month"]')) {
+                    activeInputElement = e.target;
+                    keyboardContainer.classList.remove('translate-y-full');
+                }
+            });
+
+            document.addEventListener('focusout', (e) => {
+                setTimeout(() => {
+                    if (!document.activeElement.closest('#virtual-keyboard-container')) {
+                         keyboardContainer.classList.add('translate-y-full');
+                         activeInputElement = null;
+                    }
+                }, 100);
+            });
+
+            keyboard.addEventListener('click', (e) => {
+                if(!activeInputElement) return;
+                
+                const key = e.target.closest('.keyboard-key')?.dataset.key;
+                if (!key) return;
+
+                switch(key) {
+                    case "backspace":
+                        activeInputElement.value = activeInputElement.value.slice(0, -1);
+                        break;
+                    case "caps":
+                        capsLock = !capsLock;
+                        createKeys();
+                        break;
+                    case "space":
+                        activeInputElement.value += ' ';
+                        break;
+                    default:
+                        activeInputElement.value += capsLock ? key.toUpperCase() : key.toLowerCase();
+                        break;
+                }
+                activeInputElement.focus();
+            });
+            
+            keyboardContainer.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+            });
+        }
+
+        // --- Info Modals Functions ---
+        const popContentHTML = `
+            <h4>POP – Procedimento Operacional Padrão: Etapas do Serviço de Banho</h4>
+            <p><strong>Objetivo:</strong> Padronizar o processo de banho para garantir a segurança, o bem-estar do pet, a qualidade do serviço e a satisfação do cliente.</p>
+            <h5>Processo 1: Pré-Banho (Avaliação e Preparação)</h5>
+            <p>Esta é a etapa de diagnóstico, onde a qualidade do serviço final é definida.</p>
+            <ul>
+                <li><strong>Passo 1: Confirmação do Serviço:</strong> Verifique na comanda ou agenda digital qual o serviço contratado (Banho, Banho com Hidratação, Combo, etc.) e se há alguma observação do tutor ou da recepção.</li>
+                <li><strong>Passo 2: Avaliação Diagnóstica da Pelagem:</strong> Coloque o pet na mesa de avaliação. Com as mãos e um pente, inspecione a condição da pelagem e da pele. Procure por:
+                    <ul>
+                        <li><strong>Nós e Emaranhados:</strong> Verifique a intensidade. Se for um caso severo, o serviço de "Remoção de Nós" deve ser solicitado.</li>
+                        <li><strong>Excesso de Subpelo/Pelo Morto:</strong> Identifique se o cão está em período de troca de pelo para sugerir o serviço de "Remoção de Subpelo".</li>
+                        <li><strong>Saúde da Pele:</strong> Observe se há vermelhidão, irritações, falhas na pelagem ou presença de parasitas.</li>
+                    </ul>
+                </li>
+                <li><strong>Passo 3: Comunicação e Upsell:</strong> Caso identifique a necessidade de um serviço adicional, comunique imediatamente à Liderança ou à Recepção. Eles serão responsáveis por contatar o tutor para aprovação. Nunca realize um serviço extra sem autorização prévia.</li>
+                <li><strong>Passo 4: Corte de Unhas:</strong>
+                    <ul>
+                        <li><strong>Ferramentas:</strong> Alicate (guilhotina ou tradicional) e pó hemostático (pó para estancar sangue).</li>
+                        <li><strong>Execução:</strong> Com o pet contido de forma segura, corte apenas as pontas das unhas, com muito cuidado para não atingir o "sabugo" (veia interna). Tenha sempre o pó hemostático ao alcance da mão.</li>
+                    </ul>
+                </li>
+                <li><strong>Passo 5: Limpeza dos Ouvidos:</strong>
+                    <ul>
+                        <li><strong>Ferramentas:</strong> Solução de limpeza auricular específica para cães e algodão ou gaze.</li>
+                        <li><strong>Execução:</strong> Aplique a solução no algodão (não diretamente no ouvido, a menos que seja a indicação do produto) e limpe suavemente apenas a parte externa e visível da orelha (pavilhão auricular).</li>
+                    </ul>
+                    <p><strong>⚠️ ATENÇÃO:</strong> Nunca introduza cotonetes ou qualquer objeto no canal auditivo do animal.</p>
+                </li>
+            </ul>
+
+            <h5>Processo 2: Banho (Higienização Profunda)</h5>
+            <ul>
+                <li><strong>Passo 1: Preparação:</strong> Coloque o pet na banheira com o apoio de uma Guia de Contenção. Certifique-se de que o Pet está Seguro.</li>
+                <li><strong>Passo 2: Primeiro Banho (Pré-Lavagem):</strong> Molhe o cão completamente com água em temperatura morna. Aplique o shampoo neutro (ou o produto específico indicado pela Liderança). O objetivo é remover a sujeira mais pesada. Enxágue bem.</li>
+                <li><strong>Passo 3: Segundo Banho (Limpeza e Tratamento):</strong> Aplique o shampoo mais potente/cheiroso ou o shampoo de tratamento (ex: para pelos claros, antialérgicos, etc.). Massageie bem o corpo todo, no sentido do pelo, para limpar profundamente a pele e a pelagem. Deixe agir por alguns minutos, se indicado. Enxágue completamente.</li>
+                <li><strong>Passo 4: Terceiro Banho (Hidratação e Selagem):</strong> Aplique o condicionador, espalhando uniformemente por toda a pelagem. Deixe agir pelo tempo indicado na embalagem (geralmente de 3 a 5 minutos).</li>
+                <li><strong>Passo 5: Enxágue Final:</strong> Este é um passo crítico. Enxágue o animal de forma abundante, garantindo que NENHUM resíduo de produto permaneça na pele. Resíduos podem causar coceiras e alergias. Retire o algodão dos ouvidos.</li>
+            </ul>
+            <p><strong>OBS:</strong> Dependendo da situação do Pet, será necessário dar 1 banho a mais.</p>
+
+            <h5>Processo 3: Processo de Sopro (Secagem Inicial)</h5>
+            <ul>
+                <li><strong>Passo 1: Remoção do Excesso de Água:</strong> Antes de ligar o soprador, pressione suavemente uma toalha sobre o corpo do pet para remover o excesso de água.</li>
+                <li><strong>Passo 2: Utilização do Soprador:</strong>
+                    <ul>
+                       <li><strong>Segurança:</strong> Proteja o rosto e os ouvidos do animal do jato de ar direto. Comece com a potência mais baixa para o pet se acostumar.</li>
+                        <li><strong>Técnica para Pelo Curto:</strong> Pode-se aproximar mais o bocal do soprador, mas mantenha-o sempre em movimento circular para evitar concentração de calor em um único ponto.</li>
+                        <li><strong>Técnica para Pelo Longo:</strong> Mantenha o bocal a uma distância maior para evitar a formação de nós. Direcione o ar no sentido do crescimento do pelo.</li>
+                    </ul>
+                     <p><strong>⚠️ ATENÇÃO:</strong> Nunca mantenha o soprador parado em um único local, pois isso pode causar desconforto e até queimaduras na pele do animal.</p>
+                </li>
+                <li><strong>Passo 3: Transição para a Secadora (se aplicável):</strong> Após remover cerca de 70-80% da umidade com o soprador, o pet pode ser colocado na máquina secadora de gabinete.</li>
+                 <p><strong>⚠️ ATENÇÃO MÁXIMA - SECADORA DE GABINETE:</strong></p>
+                <ul>
+                    <li>Utilize APENAS em temperatura baixa ou morna.</li>
+                    <li>NUNCA deixe o animal sem supervisão. Monitore visualmente a cada 5 minutos.</li>
+                    <li>NÃO UTILIZE em cães braquicefálicos (focinho curto), idosos, cardíacos ou com problemas respiratórios.</li>
+                </ul>
+            </ul>
+
+            <h5>Processo 4: Escovação e Finalização</h5>
+            <ul>
+                <li><strong>Passo 1: Escovação e Secagem Final com Secador de Pedestal:</strong>
+                    <ul>
+                        <li><strong>Execução:</strong> Coloque o pet na mesa de tosa. Posicione o secador de pedestal a uma distância segura, direcionando o jato de ar morno para a área a ser trabalhada.</li>
+                        <li><strong>Técnica:</strong> O uso do secador de pedestal libera ambas as mãos do profissional. Com uma mão, separe as mechas de pelo para expor a raiz, e com a outra, utilize a rasqueadeira para escovar no sentido do crescimento. Este método garante uma secagem completa desde a raiz e um alisamento eficaz da pelagem.</li>
+                        <li><strong>Segurança:</strong> Mesmo com o secador de pedestal, movimente o pet ou redirecione o bocal periodicamente para não concentrar calor em um único ponto. Verifique a temperatura da pele do animal com frequência com o dorso da sua mão.</li>
+                    </ul>
+                </li>
+                <li><strong>Passo 2: Adornos e Perfume:</strong> Com o pet completamente seco, aplique os adornos (laços, gravatas) de forma segura e confortável. Aplique o perfume (se contratado/permitido) borrifando a uma certa distância, nunca no rosto.</li>
+                <li><strong>Passo 3: Atualização da Agenda:</strong> Avise no card da agenda digital que o pet foi "Finalizado". Isso notifica a recepção e o tutor.</li>
+                <li><strong>Passo 4: Repouso e Aguardo:</strong> Leve o pet para uma das baías de finalização, um local limpo, seco e tranquilo. Ofereça água fresca enquanto ele aguarda o tutor.</li>
+            </ul>
+
+            <h4>Anexo: Procedimentos de Remoção e Tratamento da Pelagem</h4>
+            <h5>A. Remoção de Nós (Desembolo)</h5>
+            <ul>
+                <li><strong>Ferramentas:</strong> Fluido desembaraçante, rasqueadeira, pente, desemboladores (ganchos ou rastelos).</li>
+                <li><strong>Processo:</strong>
+                    <ul>
+                        <li>Aplique o fluido desembaraçante diretamente sobre o nó.</li>
+                        <li>Com os dedos, tente abrir o nó o máximo possível.</li>
+                        <li>Segure a base do pelo, junto à pele, para evitar puxar e causar dor.</li>
+                        <li>Com a ponta de um pente ou um desembolador, vá desfazendo o nó de fora para dentro, em pequenas mechas.</li>
+                        <li>Finalize passando a rasqueadeira suavemente.</li>
+                    </ul>
+                    <p><strong>⚠️ ATENÇÃO:</strong> Se um nó estiver muito compacto e colado à pele, não force. Informe a liderança. A tosa daquela área é a opção mais segura para evitar ferir o animal.</p>
+                </li>
+            </ul>
+
+            <h5>B. Remoção de Subpelo (Deshedding)</h5>
+            <ul>
+                <li><strong>Ferramentas:</strong> Escova ou ferramenta de remoção de subpelo (estilo "Furminator"), rasqueadeira, soprador.</li>
+                <li><strong>Processo:</strong>
+                     <ul>
+                        <li>(Durante o Processo de Sopro) Direcione o jato de ar do soprador contra o crescimento do pelo para levantar e soltar o subpelo morto.</li>
+                        <li>(Na Etapa de Escovação) Passe a rasqueadeira para remover a primeira camada de pelo solto.</li>
+                        <li>Utilize a ferramenta de de-shedding, passando-a suavemente, sem pressão excessiva, no sentido do crescimento do pelo. As passadas devem ser curtas e contínuas.</li>
+                        <li>Limpe a ferramenta a cada passada. Finalize com um pente para verificar a remoção.</li>
+                    </ul>
+                </li>
+            </ul>
+
+             <h5>C. Remoção de Pelo Morto (Geral)</h5>
+             <ul>
+                 <li><strong>Ferramentas:</strong> Rasqueadeira de borracha ("luva mágica") ou escovas de cerdas.</li>
+                 <li><strong>Processo:</strong>
+                    <ul>
+                        <li>(Durante o Banho) Ao aplicar o shampoo ou condicionador, massageie a pele com uma rasqueadeira de borracha em movimentos circulares para soltar os pelos mortos.</li>
+                        <li>(Na Etapa de Escovação) Escove toda a pelagem vigorosamente, mas com cuidado, para remover os pelos que se soltaram. Este processo é mais simples e focado em raças de pelo curto.</li>
+                    </ul>
+                 </li>
+             </ul>
+        `;
+
+        const policyContentHTML = `
+            <h4>Política de Comportamento e Segurança – Setor de Banho e Tosa Empório Pet</h4>
+            <h5>Nossa Filosofia: Artesãos do Cuidado, Guardiões da Confiança</h5>
+            <p>A equipe de Banho e Tosa do Empório Pet é composta por artistas e cuidadores. Nosso trabalho vai além da estética; ele promove saúde, bem-estar e fortalece o vínculo de confiança com nossos clientes. Esta política estabelece os padrões de excelência e segurança que nos definem como referência no mercado.</p>
+            
+            <h5>Seção 1: Segurança do Animal: Prioridade Absoluta</h5>
+            <ul>
+                <li><strong>1.1. Avaliação Pré-Serviço:</strong> Realize uma avaliação completa do animal (pele, pelo, comportamento) e comunique qualquer achado ao tutor e supervisor antes de iniciar.</li>
+                <li><strong>1.2. Segurança na Mesa e na Banheira:</strong> NUNCA deixe um animal desacompanhado. Utilize sempre a guia de contenção de forma segura e se possível use tapetes antiderrapantes. Mantenha uma mão no cão sempre que possível.</li>
+                <li><strong>1.3. Uso Seguro de Equipamentos:</strong> Verifique a temperatura das lâminas, manuseie tesouras com cuidado e mantenha os equipamentos em perfeito estado de manutenção, conforme detalhado na Seção 2.4.</li>
+                <li><strong>1.4. Secagem Segura:</strong> É ESTRITAMENTE PROIBIDO o uso de secadores de cabine com aquecimento e sem supervisão direta. Monitore constantemente a temperatura e os sinais do cão (a cada 5m).</li>
+                <li><strong>1.5. Manejo de Cães Difíceis ou Ansiosos:</strong> Priorize técnicas de baixo estresse. A segurança do colaborador e do cão vem em primeiro lugar. Interrompa o serviço se houver risco.</li>
+                <li><strong>1.6. Uso Correto e Consciente de Produtos:</strong> Respeite a diluição e a aplicação recomendada para cada produto, evitando desperdício e possíveis reações alérgicas.</li>
+            </ul>
+
+            <h5>Seção 2: Segurança, Organização e Responsabilidade do Colaborador</h5>
+            <ul>
+                <li><strong>2.1. Ergonomia e Prevenção de Lesões:</strong> Mantenha uma postura correta e peça ajuda para levantar animais pesados. Cuide do seu corpo.</li>
+                <li><strong>2.2. Equipamentos de Proteção Individual (EPIs):</strong> O uso de avental impermeável e calçados de segurança e Protetor Auricular na Área de Secagem é obrigatório.</li>
+                <li><strong>2.3. Organização e Limpeza do Ambiente:</strong> Mantenha sua estação de trabalho e o ambiente geral impecavelmente limpos e organizados. Um ambiente limpo é um ambiente seguro.</li>
+                <li><strong>2.4. Cuidado e Manutenção dos Equipamentos de Trabalho (NOVO E DETALHADO):</strong>
+                    <ul>
+                        <li><strong>Princípio Fundamental:</strong> Nossas ferramentas são ativos valiosos da empresa e essenciais para um trabalho de qualidade e seguro. O cuidado diário é responsabilidade de quem as utiliza.</li>
+                        <li><strong>Equipamentos Elétricos (Sopradores, Secadores, Máquinas de Tosa):</strong> Inspecione cabos antes do uso. Reporte qualquer avaria. Mantenha as saídas de ar limpas.</li>
+                        <li><strong>Ferramentas Manuais e Lâminas:</strong> Evite quedas. Limpe e desinfete após CADA uso. Informe sobre a necessidade de afiação.</li>
+                        <li><strong>Responsabilidade:</strong> Danos por mau uso poderão ser de responsabilidade do colaborador.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <h5>Seção 3: Padrões de Excelência no Atendimento e Rotinas</h5>
+            <ul>
+                <li><strong>3.1. Comunicação e Alinhamento com o Tutor:</strong> Ouça com atenção, gerencie as expectativas e seja honesto sobre o que é possível ser feito.</li>
+                <li><strong>3.2. Documentação do Serviço:</strong> Mantenha um registro para cada cão (tipo de tosa, produtos, observações) para garantir consistência.</li>
+                <li><strong>3.3. Transparência em Incidentes:</strong> Em caso de qualquer incidente, siga o protocolo: Pare > Avise o Supervisor > Comunique ao Tutor com Honestidade.</li>
+                <li><strong>3.4. Finalização e Apresentação (O "Fator UAU"):</strong> Faça uma revisão final do serviço. Adicione um toque especial (laço, bandana) e entregue o cão ao tutor com um feedback positivo sobre o comportamento dele.</li>
+                <li><strong>3.5. Preparação e Encerramento do Expediente:</strong> Ao final do dia, garanta que o setor esteja limpo, esterilizado e reabastecido para o dia seguinte.</li>
+            </ul>
+
+            <h5>Checklist Rápido de Segurança do Banhista e Tosador</h5>
+            <ul>
+                <li>[ ] O cão passou pela avaliação e o tutor está ciente do plano?</li>
+                <li>[ ] A contenção está segura?</li>
+                <li>[ ] Inspecionei os cabos dos equipamentos elétricos antes de ligar?</li>
+                <li>[ ] Minhas ferramentas estão limpas, desinfetadas e as lâminas estão frias?</li>
+                <li>[ ] Ao terminar, limpei e guardei todas as ferramentas corretamente?</li>
+            </ul>
+
+            <h5>Termo de Compromisso do Colaborador</h5>
+            <p>Eu, [Nome do Colaborador], CPF [Número do CPF], declaro que recebi, li, compreendi e concordo em seguir integralmente a "Política de Comportamento e Segurança do Setor de Banho e Tosa" do Empório Pet.</p>
+            <p>Comprometo-me a zelar pela segurança e bem-estar de cada animal, a manter um padrão de conduta profissional exemplar, a cuidar com diligência de todos os equipamentos de trabalho e a seguir todos os protocolos aqui estabelecidos.</p>
+            <p class="mt-4">[Cidade], [Data].</p>
+            <p class="mt-8">______________________________<br>Assinatura do Colaborador</p>
+        `;
+
+        function showPopModal() {
+            document.getElementById('info-modal-title').textContent = 'Procedimento Operacional Padrão';
+            document.getElementById('info-modal-content').innerHTML = popContentHTML;
+            document.getElementById('pop-modal').classList.remove('hidden');
+        }
+
+        function showPolicyModal() {
+            document.getElementById('info-modal-title').textContent = 'Política de Comportamento e Segurança';
+            document.getElementById('info-modal-content').innerHTML = policyContentHTML;
+            document.getElementById('pop-modal').classList.remove('hidden');
+        }
+
+
+        // --- Remessa Functions ---
+        function startRemessaMode() {
+            isRemessaModeActive = true;
+            selectedForRemessa = [];
+            currentRemessaId = null;
+            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.add('hidden');
+            document.getElementById('active-remessa-controls').classList.remove('hidden');
+            document.getElementById('remessa-name-input').value = '';
+            renderAllContent();
+        }
+        
+        function startEditRemessaMode(remessaId, remessaName) {
+            isRemessaModeActive = true;
+            currentRemessaId = remessaId;
+            selectedForRemessa = allAppointments
+                .filter(app => app.remessaId === remessaId)
+                .map(app => app.id);
+            
+            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.add('hidden');
+            document.getElementById('active-remessa-controls').classList.remove('hidden');
+            document.getElementById('remessa-name-input').value = remessaName;
+            renderAllContent();
+        }
+
+        function exitRemessaMode() {
+            isRemessaModeActive = false;
+            document.getElementById('grooming-tab-content').classList.remove('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.remove('hidden');
+            document.getElementById('active-remessa-controls').classList.add('hidden');
+            document.getElementById('remessa-name-input').value = '';
+            selectedForRemessa = [];
+            currentRemessaId = null;
+            renderAllContent();
+        }
+
+        function toggleRemessaSelection(id) {
+            const index = selectedForRemessa.indexOf(id);
+            if (index > -1) {
+                selectedForRemessa.splice(index, 1);
+            } else {
+                selectedForRemessa.push(id);
+            }
+            renderAllContent();
+        }
+
+        async function finalizeRemessa() {
+            const name = document.getElementById('remessa-name-input').value;
+            if (!name.trim()) {
+                showFeedback("Por favor, insira um nome para a remessa.", 'error');
+                return;
+            }
+            if (selectedForRemessa.length === 0) {
+                showFeedback("Nenhum pet selecionado para a remessa.", 'error');
+                exitRemessaMode();
+                return;
+            }
+            
+            const remessaId = currentRemessaId || `remessa_${Date.now()}`;
+            const remessaTimestamp = currentRemessaId ? null : serverTimestamp();
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+
+            const updates = [];
+
+            // Find apps that should be in the remessa
+            selectedForRemessa.forEach(appointmentId => {
+                const data = { remessaName: name, remessaId, remessaColor: randomColor };
+                if (remessaTimestamp) data.remessaCreatedAt = remessaTimestamp;
+                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId); 
+                updates.push(updateDoc(docRef, data));
+            });
+
+            // If editing, find apps to remove from the remessa
+            if (currentRemessaId) {
+                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id));
+                appsToRemove.forEach(app => {
+                    updates.push(updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, app.id), {
+                        remessaName: null,
+                        remessaId: null,
+                        remessaCreatedAt: null,
+                        remessaColor: null,
+                    }));
+                });
+            }
+
+            try {
+                await Promise.all(updates);
+                showFeedback(`Remessa "${name}" salva com sucesso!`);
+            } catch (error) {
+                showFeedback("Erro ao salvar a remessa.", "error");
+                console.error("Error creating remessa: ", error);
+            } finally {
+                exitRemessaMode();
+            }
+        }
+
+        function openRemocaoModal() {
+            document.getElementById('remocao-control-modal').classList.remove('hidden');
+            renderRemocaoHistory();
+        }
+        
+        async function handleRemocaoFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const date = form.querySelector('#remocao-date').value;
+            const handlerName = form.querySelector('#remocao-handler-name').value;
+            const petName = form.querySelector('#remocao-pet-name').value;
+
+            if (!date || !handlerName || !petName) {
+                showFeedback('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            const removalData = {
+                date,
+                handlerName,
+                petName,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/removals`), removalData);
+                showFeedback('Registo de remoção salvo com sucesso!');
+                form.reset();
+                document.getElementById('remocao-date').value = new Date().toISOString().split('T')[0];
+            } catch (error) {
+                showFeedback(`Erro ao salvar: ${error.message}`, 'error');
+                console.error("Error saving removal record: ", error);
+            }
+        }
+        
+        function renderRemocaoHistory() {
+             const listEl = document.getElementById('remocao-list');
+            const dayFilter = document.getElementById('remocao-day-filter').value;
+            const monthFilter = document.getElementById('remocao-month-filter').value;
+
+            let filteredRemovals = allRemovals;
+
+            if (dayFilter) {
+                filteredRemovals = filteredRemovals.filter(r => r.date === dayFilter);
+            } else if (monthFilter) {
+                filteredRemovals = filteredRemovals.filter(r => r.date && r.date.startsWith(monthFilter));
+            }
+
+            filteredRemovals.sort((a,b) => {
+                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                return dateB - dateA;
+            });
+
+            if(filteredRemovals.length === 0) {
+                listEl.innerHTML = `<p class="text-gray-500 text-center">Nenhum registo encontrado.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = filteredRemovals.map(removal => `
+                <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+                    <div>
+                        <p class="font-semibold">${removal.petName} - <span class="font-normal">${new Date(removal.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span></p>
+                        <p class="text-sm text-gray-600">Executor: ${removal.handlerName}</p>
+                    </div>
+                    <button data-id="${removal.id}" data-type="remocao" class="delete-remocao-btn text-red-500 hover:text-red-700 font-bold px-2">&times;</button>
+                </div>
+            `).join('');
+        }
+        
+    </script>
+
+</body>
+</html>
