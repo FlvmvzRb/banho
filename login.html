@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Agenda Pet Shop</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center h-screen">
+
+    <div class="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-lg">
+        <div>
+            <h2 class="mt-6 text-center text-3xl font-extrabold text-gray-900">
+                Acesso à Agenda
+            </h2>
+        </div>
+        <form id="login-form" class="mt-8 space-y-6">
+            <div class="rounded-md shadow-sm -space-y-px">
+                <div>
+                    <label for="email-address" class="sr-only">Endereço de e-mail</label>
+                    <input id="email-address" name="email" type="email" autocomplete="email" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm" placeholder="Endereço de e-mail">
+                </div>
+                <div>
+                    <label for="password" class="sr-only">Senha</label>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required class="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-b-md focus:outline-none focus:ring-teal-500 focus:border-teal-500 focus:z-10 sm:text-sm" placeholder="Senha">
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                    Entrar
+                </button>
+            </div>
+        </form>
+        <div id="error-message" class="hidden text-center text-sm text-red-600 p-2 bg-red-100 rounded-md">
+            <!-- Mensagens de erro aparecerão aqui -->
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, onAuthStateChanged, signInWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+
+        // --- Configuração do Firebase ---
+        // É seguro ter isso no lado do cliente.
+        const firebaseConfig = {
+          apiKey: "AIzaSyAe12mlm0UHfi8S31XMrKCgfVhXhjJ_BQY",
+          authDomain: "banho-e6a59.firebaseapp.com",
+          projectId: "banho-e6a59",
+          storageBucket: "banho-e6a59.appspot.com",
+          messagingSenderId: "588155731269",
+          appId: "1:588155731269:web:158811c35e4c20b2ddd22c"
+        };
+
+        // --- Inicialização ---
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Se o usuário já estiver logado, redireciona para a agenda
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                window.location.href = './index.html';
+            }
+        });
+
+        const loginForm = document.getElementById('login-form');
+        const errorMessageDiv = document.getElementById('error-message');
+
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const email = loginForm['email-address'].value;
+            const password = loginForm['password'].value;
+
+            signInWithEmailAndPassword(auth, email, password)
+                .then((userCredential) => {
+                    // Login bem-sucedido, o onAuthStateChanged fará o redirecionamento.
+                })
+                .catch((error) => {
+                    let message = "Ocorreu um erro. Tente novamente.";
+                    if (error.code === 'auth/wrong-password' || error.code === 'auth/user-not-found' || error.code === 'auth/invalid-credential') {
+                        message = "E-mail ou senha incorretos.";
+                    }
+                    errorMessageDiv.textContent = message;
+                    errorMessageDiv.classList.remove('hidden');
+                });
+        });
+
+    </script>
+</body>
+</html>
