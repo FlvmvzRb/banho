@@ -1,93 +1,4 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
-
-    <!-- update the version number as needed -->
-    <script defer src="/__/firebase/11.9.1/firebase-app-compat.js"></script>
-    <!-- include only the Firebase features as you need -->
-    <script defer src="/__/firebase/11.9.1/firebase-auth-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-database-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-firestore-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-functions-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-messaging-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-storage-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-analytics-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-remote-config-compat.js"></script>
-    <script defer src="/__/firebase/11.9.1/firebase-performance-compat.js"></script>
-    <!-- 
-      initialize the SDK after all desired features are loaded, set useEmulator to false
-      to avoid connecting the SDK to running emulators.
-    -->
-    <script defer src="/__/firebase/init.js?useEmulator=true"></script>
-
-    <style media="screen">
-      body { background: #ECEFF1; color: rgba(0,0,0,0.87); font-family: Roboto, Helvetica, Arial, sans-serif; margin: 0; padding: 0; }
-      #message { background: white; max-width: 360px; margin: 100px auto 16px; padding: 32px 24px; border-radius: 3px; }
-      #message h2 { color: #ffa100; font-weight: bold; font-size: 16px; margin: 0 0 8px; }
-      #message h1 { font-size: 22px; font-weight: 300; color: rgba(0,0,0,0.6); margin: 0 0 16px;}
-      #message p { line-height: 140%; margin: 16px 0 24px; font-size: 14px; }
-      #message a { display: block; text-align: center; background: #039be5; text-transform: uppercase; text-decoration: none; color: white; padding: 16px; border-radius: 4px; }
-      #message, #message a { box-shadow: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24); }
-      #load { color: rgba(0,0,0,0.4); text-align: center; font-size: 13px; }
-      @media (max-width: 600px) {
-        body, #message { margin-top: 0; background: white; box-shadow: none; }
-        body { border-top: 16px solid #ffa100; }
-      }
-    </style>
-  </head>
-  <body>
-    <div id="message">
-      <h2>Welcome</h2>
-      <h1>Firebase Hosting Setup Complete</h1>
-      <p>You're seeing this because you've successfully setup Firebase Hosting. Now it's time to go build something extraordinary!</p>
-      <a target="_blank" href="https://firebase.google.com/docs/hosting/">Open Hosting Documentation</a>
-    </div>
-    <p id="load">Firebase SDK Loading&hellip;</p>
-
-    <script>
-      document.addEventListener('DOMContentLoaded', function() {
-        const loadEl = document.querySelector('#load');
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-        // // The Firebase SDK is initialized and available here!
-        //
-        // firebase.auth().onAuthStateChanged(user => { });
-        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
-        // firebase.firestore().doc('/foo/bar').get().then(() => { });
-        // firebase.functions().httpsCallable('yourFunction')().then(() => { });
-        // firebase.messaging().requestPermission().then(() => { });
-        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
-        // firebase.analytics(); // call to activate
-        // firebase.analytics().logEvent('tutorial_completed');
-        // firebase.performance(); // call to activate
-        //
-        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
-
-        try {
-          let app = firebase.app();
-          let features = [
-            'auth', 
-            'database', 
-            'firestore',
-            'functions',
-            'messaging', 
-            'storage', 
-            'analytics', 
-            'remoteConfig',
-            'performance',
-          ].filter(feature => typeof app[feature] === 'function');
-          loadEl.textContent = `Firebase SDK loaded with ${features.join(', ')}`;
-        } catch (e) {
-          console.error(e);
-          loadEl.textContent = 'Error loading the Firebase SDK, check the console.';
-        }
-      });
-    </script>
-  </body>
-</html>
-<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -247,7 +158,7 @@
         </header>
 
         <!-- Tab Navigation -->
-        <nav class="flex justify-center gap-2 mb-6 no-print">
+        <nav class="flex justify-center gap-2 mb-6">
             <button id="reception-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)]" data-tab="reception-tab-content">Recepção</button>
             <button id="grooming-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="grooming-tab-content">Banho e Tosa</button>
             <button id="taxi-dog-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="taxi-dog-monitoring-tab-content">Taxi Dog</button>
@@ -257,7 +168,7 @@
         <main class="flex flex-col lg:flex-row gap-6">
 
             <!-- Left Sidebar: New Appointment Form -->
-            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] no-print transition-all duration-300">
+            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] transition-all duration-300">
                 <h2 class="text-2xl font-bold mb-4 border-b pb-2">Novo Agendamento</h2>
                 <form id="appointment-form" class="space-y-4">
                     <!-- Tutor and Pet Info -->
@@ -359,7 +270,7 @@
                     <section>
                         <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
                             <div class="flex items-center gap-2">
-                                <button id="toggle-sidebar-btn" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 no-print" title="Ocultar/Mostrar formulário">
+                                <button id="toggle-sidebar-btn" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300" title="Ocultar/Mostrar formulário">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                                     </svg>
@@ -645,10 +556,8 @@
         </div>
     </div>
     
-    <div id="print-area" class="hidden"></div>
-    
     <!-- Virtual Keyboard -->
-    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full no-print">
+    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full">
         <div id="virtual-keyboard" class="space-y-1"></div>
     </div>
     
@@ -693,46 +602,10 @@
 
 
     <!-- Firebase SDKs -->
-    <!-- Bloco de Configuração para Produção -->
-<script>
-    // COLE AQUI A CONFIGURAÇÃO DO SEU FIREBASE
-    // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
-
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
-const firebaseConfig = {
-  apiKey: "AIzaSyAe12mlm0UHfi8S31XMrKCgfVhXhjJ_BQY",
-  authDomain: "banho-e6a59.firebaseapp.com",
-  projectId: "banho-e6a59",
-  storageBucket: "banho-e6a59.firebasestorage.app",
-  messagingSenderId: "588155731269",
-  appId: "1:588155731269:web:158811c35e4c20b2ddd22c",
-  measurementId: "G-29KE4608TF"
-};
-
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
-
-    // Defina um ID único para sua aplicação
-    const __app_id = 'banho-e6a59';
-
-    // Em produção, o token não existe, o login será anônimo
-    const __initial_auth_token = undefined; 
-</script>
-
-<!-- O seu script principal começa aqui -->
-<script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-    // ... resto do seu código ...
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, addDoc, updateDoc, deleteDoc, 
             onSnapshot, collection, query, Timestamp, serverTimestamp
@@ -783,10 +656,24 @@ const analytics = getAnalytics(app);
 
         function initializeAppAndAuth() {
             try {
-                appId = typeof __app_id !== 'undefined' ? __app_id : 'default-pet-shop-app-id';
-                const firebaseConfigString = typeof __firebase_config !== 'undefined' ? __firebase_config : '{}';
-                const firebaseConfig = JSON.parse(firebaseConfigString);
-                if (!firebaseConfig.apiKey) throw new Error("A configuração do Firebase (API Key) não foi encontrada.");
+                // SUA CONFIGURAÇÃO DO FIREBASE FOI INSERIDA AQUI
+                const firebaseConfig = {
+                  apiKey: "AIzaSyAe12mlm0UHfi8S31XMrKCgfVhXhjJ_BQY",
+                  authDomain: "banho-e6a59.firebaseapp.com",
+                  projectId: "banho-e6a59",
+                  storageBucket: "banho-e6a59.appspot.com",
+                  messagingSenderId: "588155731269",
+                  appId: "1:588155731269:web:158811c35e4c20b2ddd22c",
+                  measurementId: "G-29KE4608TF"
+                };
+
+                // Defina um ID único e Fixo para sua aplicação
+                appId = 'meu-petshop-app-2025'; 
+                
+                // Validação da Configuração
+                if (!firebaseConfig.apiKey) {
+                    throw new Error("A configuração do Firebase (firebaseConfig) está faltando a apiKey.");
+                }
                 
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
@@ -795,24 +682,31 @@ const analytics = getAnalytics(app);
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
-                        document.getElementById('user-id-display').textContent = `ID do Utilizador: ${userId}`;
+                        document.getElementById('user-id-display').textContent = `ID do Usuário: ${userId}`;
                         if (!hasRealtimeListenersStarted) {
                             setupRealtimeListeners();
                         }
                     } else {
+                        // Em produção, o login será sempre anônimo
                         try {
-                            const token = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
-                            if (token) await signInWithCustomToken(auth, token);
-                            else await signInAnonymously(auth);
+                             await signInAnonymously(auth);
                         } catch (error) {
-                            console.error("Authentication Error:", error);
-                            showFeedback(`Erro de autenticação: ${error.message}`, 'error');
+                             console.error("Anonymous Authentication Error:", error);
+                             showFeedback(`Erro de autenticação: ${error.message}`, 'error');
                         }
                     }
                 });
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                showFeedback(`Erro ao iniciar o sistema: ${error.message}`, 'error');
+                // Exibe o erro de forma mais visível para o usuário
+                const mainContent = document.getElementById('main-content-area');
+                if (mainContent) {
+                    mainContent.innerHTML = `<div class="text-center p-8 bg-red-100 border-2 border-red-500 rounded-lg">
+                        <h2 class="text-2xl font-bold text-red-700">Erro Crítico na Inicialização</h2>
+                        <p class="mt-4 text-red-600">${error.message}</p>
+                        <p class="mt-2 text-sm text-gray-500">Verifique o console (F12) para mais detalhes técnicos.</p>
+                    </div>`;
+                }
             }
         }
 
@@ -872,8 +766,6 @@ const analytics = getAnalytics(app);
             document.getElementById('service-request-form').addEventListener('submit', handleSendServiceRequest);
             document.getElementById('cancel-service-request-btn').addEventListener('click', () => document.getElementById('service-request-modal').classList.add('hidden'));
             document.getElementById('save-package-dates-btn').addEventListener('click', handleSavePackageDatesOnly);
-            
-            // Removido listener do botão de impressão
             
             // Remessa Listeners
             document.getElementById('start-remessa-btn').addEventListener('click', startRemessaMode);
@@ -1833,7 +1725,7 @@ const analytics = getAnalytics(app);
                 e.preventDefault();
             });
         }
-
+        
         // --- Info Modals Functions ---
         const popContentHTML = `
             <h4>POP – Procedimento Operacional Padrão: Etapas do Serviço de Banho</h4>
