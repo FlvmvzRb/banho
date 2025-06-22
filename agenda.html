@@ -8,6 +8,9 @@
     <!-- Tailwind CSS via CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
 
+    <!-- Phosphor Icons -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
     <!-- Google Fonts: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -28,6 +31,7 @@
             --color-arrived-border: #7DD3FC; /* Sky-300 */
             --color-requested-bg: #FFF7ED; /* Orange-100 */
             --color-requested-border: #FB923C; /* Orange-400 */
+            --color-accent-gold: #F59E0B; /* Amber-500 */
         }
 
         /* Apply the main font to the entire application */
@@ -144,32 +148,54 @@
         .prose li { margin-bottom: 0.5rem; }
         .prose strong { color: #2D3748; }
 
+        /* Custom style for Sala VIP label */
+        label[for*="service-sala-vip"] {
+            color: #FBBF24; /* Tailwind's amber-400 */
+            font-weight: 700; /* bold */
+            text-shadow: 0px 1px 2px rgba(0,0,0,0.5);
+            transition: color 0.2s;
+        }
+        label[for*="service-sala-vip"]:hover {
+            color: var(--color-accent-gold); 
+        }
+
+        /* Sala VIP Tab Button Style */
+        #sala-vip-tab-btn {
+            color: var(--color-accent-gold);
+            border-color: var(--color-accent-gold);
+        }
+        #sala-vip-tab-btn.gradient-purple-to-dark-purple, 
+        #sala-vip-tab-btn:hover {
+             color: white;
+             border-color: var(--color-primary-base);
+        }
     </style>
 </head>
 <body class="bg-gray-50 pb-64">
 
     <!-- Main Application Container -->
-    <div class="container mx-auto p-4 md:p-6 lg:p-8">
+    <div id="app-container" class="container mx-auto p-4 md:p-6 lg:p-8">
         
-        <!-- Header -->
+        <!-- REVERTIDO: Header para o estado original -->
         <header class="text-center mb-6">
             <h1 class="text-4xl font-extrabold text-gray-700">Agenda: Banho e Tosa</h1>
             <p id="user-id-display" class="text-sm text-gray-500 mt-1"></p>
         </header>
 
         <!-- Tab Navigation -->
-        <nav class="flex justify-center gap-2 mb-6">
-            <button id="reception-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)]" data-tab="reception-tab-content">Recepção</button>
-            <button id="grooming-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="grooming-tab-content">Banho e Tosa</button>
-            <button id="taxi-dog-tab-btn" class="tab-button px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="taxi-dog-monitoring-tab-content">Taxi Dog</button>
+        <nav class="flex justify-center flex-wrap gap-2 mb-6 no-print">
+            <button id="reception-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)]" data-tab="reception-tab-content"><i class="ph-bold ph-desktop"></i>Recepção</button>
+            <button id="grooming-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="grooming-tab-content"><i class="ph-bold ph-scissors"></i>Banho e Tosa</button>
+            <button id="taxi-dog-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="taxi-dog-monitoring-tab-content"><i class="ph-bold ph-car"></i>Taxi Dog</button>
+            <button id="sala-vip-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md bg-amber-50 font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 border-2" data-tab="sala-vip-tab-content"><i class="ph-bold ph-crown"></i>Sala VIP</button>
         </nav>
         
         <!-- Main Content Area (Form + Lists) -->
         <main class="flex flex-col lg:flex-row gap-6">
 
             <!-- Left Sidebar: New Appointment Form -->
-            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] transition-all duration-300">
-                <h2 class="text-2xl font-bold mb-4 border-b pb-2">Novo Agendamento</h2>
+            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] no-print transition-all duration-300">
+                <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2"><i class="ph-bold ph-calendar-plus"></i>Novo Agendamento</h2>
                 <form id="appointment-form" class="space-y-4">
                     <!-- Tutor and Pet Info -->
                     <div>
@@ -204,6 +230,7 @@
                                 <div class="flex items-center"><input type="checkbox" id="service-pacote" value="Pacote de Banho" class="h-4 w-4 rounded"><label for="service-pacote" class="ml-2 whitespace-nowrap text-xs">Pacote de Banho</label></div>
                                 <div class="flex items-center"><input type="checkbox" id="service-taxi" value="Taxi Dog" class="h-4 w-4 rounded"><label for="service-taxi" class="ml-2 whitespace-nowrap text-xs">Taxi Dog</label></div>
                                 <div class="flex items-center"><input type="checkbox" id="service-creche" value="Creche/Hotel" class="h-4 w-4 rounded"><label for="service-creche" class="ml-2 whitespace-nowrap text-xs">Creche/Hotel</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-sala-vip" value="Sala VIP" class="h-4 w-4 rounded"><label for="service-sala-vip" class="ml-2 whitespace-nowrap text-xs">Sala VIP</label></div>
                             </div>
                         </div>
                         <!-- Conditional Sub-Services for Remoção -->
@@ -270,12 +297,12 @@
                     <section>
                         <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
                             <div class="flex items-center gap-2">
-                                <button id="toggle-sidebar-btn" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300" title="Ocultar/Mostrar formulário">
+                                <button id="toggle-sidebar-btn" class="p-2 rounded-md bg-gray-200 hover:bg-gray-300 no-print" title="Ocultar/Mostrar formulário">
                                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M11 19l-7-7 7-7m8 14l-7-7 7-7" />
                                     </svg>
                                 </button>
-                                <h3 class="text-2xl font-bold text-gray-700">Agendamentos do Dia</h3>
+                                <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-calendar"></i>Agendamentos do Dia</h3>
                             </div>
                             <div class="flex items-center flex-wrap gap-4">
                                 <!-- Service Filter -->
@@ -317,10 +344,9 @@
                     <!-- History Section -->
                     <section>
                         <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                            <h3 class="text-2xl font-bold text-gray-700">Histórico de Serviços</h3>
+                            <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-archive"></i>Histórico de Serviços</h3>
                             <div class="flex flex-wrap items-center gap-2">
-                                <input type="text" id="history-tutor-filter" placeholder="Buscar por Tutor..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
-                                <input type="text" id="history-pet-filter" placeholder="Buscar por Pet..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <input type="text" id="history-search-filter" placeholder="Buscar por Tutor ou Pet..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
                                 <input type="date" id="history-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
                                 <button id="clear-history-filters-btn" class="px-4 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600">Limpar</button>
                             </div>
@@ -335,7 +361,7 @@
                 <!-- Grooming Tab Content -->
                 <div id="grooming-tab-content" class="tab-content-panel hidden space-y-6">
                     <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                        <h3 class="text-2xl font-bold text-gray-700">Agenda Banho e Tosa</h3>
+                        <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-scissors"></i>Agenda Banho e Tosa</h3>
                         <div class="flex items-center gap-4">
                              <!-- Service Filter -->
                             <div class="flex items-center gap-2">
@@ -410,7 +436,7 @@
                 <!-- Taxi Dog Tab Content -->
                 <div id="taxi-dog-monitoring-tab-content" class="tab-content-panel hidden space-y-6">
                     <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
-                        <h3 class="text-2xl font-bold text-gray-700">Monitoramento Taxi Dog</h3>
+                        <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-car"></i>Monitoramento Taxi Dog</h3>
                          <div class="flex items-center gap-4">
                             <!-- View Toggles -->
                             <div class="flex items-center gap-1">
@@ -450,6 +476,39 @@
                     </div>
                     <div id="container-politicas-taxidog" class="mt-6"></div>
                 </div>
+
+                <!-- Sala VIP Tab Content -->
+                <div id="sala-vip-tab-content" class="tab-content-panel hidden space-y-6">
+                    <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
+                        <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-crown"></i>Monitoramento Sala VIP</h3>
+                         <div class="flex items-center gap-4">
+                            <!-- View Toggles -->
+                            <div class="flex items-center gap-1">
+                                 <button class="view-toggle-btn p-1.5 rounded-md" data-tab="sala-vip" data-view="compact">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor">
+                                      <path d="M4 3a1 1 0 100 2h12a1 1 0 100-2H4zM4 7a1 1 0 100 2h12a1 1 0 100-2H4zm0 4a1 1 0 100 2h12a1 1 0 100-2H4z" />
+                                    </svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="sala-vip" data-view="grid">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path d="M5 3a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2V5a2 2 0 00-2-2H5zM5 11a2 2 0 00-2 2v2a2 2 0 002 2h2a2 2 0 002-2v-2a2 2 0 00-2-2H5zM11 5a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V5zM11 13a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" /></svg>
+                                </button>
+                                <button class="view-toggle-btn p-1.5 rounded-md" data-tab="sala-vip" data-view="list">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zm0 4a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>
+                                </button>
+                            </div>
+                            <!-- Date Filter -->
+                            <div class="flex items-center gap-2">
+                                <label for="salavip-date-filter" class="text-sm font-medium">Filtrar por data:</label>
+                                <input type="date" id="salavip-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                            </div>
+                        </div>
+                    </div>
+                    <div id="sala-vip-appointments-list">
+                         <!-- Sala VIP appointment cards will be inserted here -->
+                    </div>
+                    <div id="container-politicas-salavip" class="mt-6"></div>
+                </div>
+
             </div>
         </main>
     </div>
@@ -556,8 +615,10 @@
         </div>
     </div>
     
+    <div id="print-area" class="hidden"></div>
+    
     <!-- Virtual Keyboard -->
-    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full">
+    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full no-print">
         <div id="virtual-keyboard" class="space-y-1"></div>
     </div>
     
@@ -579,11 +640,12 @@
     <div id="finalize-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
             <h3 class="text-xl font-bold mb-4">Identificar Executor</h3>
-            <p class="mb-6">Por favor, selecione quem finalizou o serviço.</p>
-            <div id="finalize-options" class="grid grid-cols-5 gap-2">
-                <!-- Executor buttons will be added here by JS -->
+            <p class="mb-4">Por favor, digite quem finalizou o serviço.</p>
+            <input type="text" id="finalize-handler-input" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" placeholder="Nome do executor...">
+            <div class="mt-6 flex justify-center gap-4">
+                 <button id="confirm-finalize-btn" class="px-6 py-2 bg-teal-500 text-white rounded-md hover:bg-teal-600">Confirmar</button>
+                 <button id="cancel-finalize-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
             </div>
-            <button id="cancel-finalize-btn" class="mt-6 px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
         </div>
     </div>
 
@@ -605,7 +667,7 @@
     <script type="module">
         // Import Firebase modules
         import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, addDoc, updateDoc, deleteDoc, 
             onSnapshot, collection, query, Timestamp, serverTimestamp
@@ -629,7 +691,8 @@
         const viewModes = {
             reception: 'grid',
             grooming: 'grid',
-            'taxi-dog': 'grid'
+            'taxi-dog': 'grid',
+            'sala-vip': 'grid'
         };
         const gridLayouts = {
             reception: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
@@ -638,10 +701,12 @@
             grooming: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4',
             compact_grooming: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
             'taxi-dog': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
-            compact_taxidog: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2'
+            compact_taxidog: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
+            'sala-vip': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
+            compact_salavip: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2'
         };
         let activeTabId = 'reception-tab-content';
-        const TAB_SWITCH_PASSWORD = "1234"; 
+        const TAB_SWITCH_PASSWORD = "dib256"; 
         let isRemessaModeActive = false;
         let selectedForRemessa = [];
         let currentRemessaId = null; 
@@ -654,63 +719,55 @@
             switchTab('reception-tab-content', true);
         });
 
+        // REVERTIDO: Lógica de autenticação para acesso anônimo
         function initializeAppAndAuth() {
             try {
-                // SUA CONFIGURAÇÃO DO FIREBASE FOI INSERIDA AQUI
                 const firebaseConfig = {
                   apiKey: "AIzaSyAe12mlm0UHfi8S31XMrKCgfVhXhjJ_BQY",
                   authDomain: "banho-e6a59.firebaseapp.com",
                   projectId: "banho-e6a59",
-                  storageBucket: "banho-e6a59.appspot.com",
+                  storageBucket: "banho-e6a59.firebasestorage.app",
                   messagingSenderId: "588155731269",
                   appId: "1:588155731269:web:158811c35e4c20b2ddd22c",
                   measurementId: "G-29KE4608TF"
                 };
 
-                // Defina um ID único e Fixo para sua aplicação
-                appId = 'meu-petshop-app-2025'; 
-                
-                // Validação da Configuração
-                if (!firebaseConfig.apiKey) {
-                    throw new Error("A configuração do Firebase (firebaseConfig) está faltando a apiKey.");
-                }
-                
                 const app = initializeApp(firebaseConfig);
                 db = getFirestore(app);
                 auth = getAuth(app);
+                appId = firebaseConfig.appId;
                 
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
-                        document.getElementById('user-id-display').textContent = `ID do Usuário: ${userId}`;
+                        document.getElementById('user-id-display').textContent = `ID de Sessão: ${userId}`;
                         if (!hasRealtimeListenersStarted) {
                             setupRealtimeListeners();
                         }
                     } else {
-                        // Em produção, o login será sempre anônimo
+                        // Se não houver utilizador, faz login anónimo
                         try {
-                             await signInAnonymously(auth);
+                           await signInAnonymously(auth);
                         } catch (error) {
-                             console.error("Anonymous Authentication Error:", error);
-                             showFeedback(`Erro de autenticação: ${error.message}`, 'error');
+                           console.error("Anonymous Authentication Error:", error);
+                           // CORRIGIDO: Deteta erro específico de configuração e informa o utilizador
+                           if (error.code === 'auth/admin-restricted-operation') {
+                                showFeedback('Erro de Configuração: Ative o login anónimo na consola do Firebase.', 'error');
+                           } else {
+                                showFeedback(`Erro de autenticação: ${error.message}`, 'error');
+                           }
                         }
                     }
                 });
             } catch (error) {
                 console.error("Firebase Initialization Error:", error);
-                // Exibe o erro de forma mais visível para o usuário
-                const mainContent = document.getElementById('main-content-area');
-                if (mainContent) {
-                    mainContent.innerHTML = `<div class="text-center p-8 bg-red-100 border-2 border-red-500 rounded-lg">
-                        <h2 class="text-2xl font-bold text-red-700">Erro Crítico na Inicialização</h2>
-                        <p class="mt-4 text-red-600">${error.message}</p>
-                        <p class="mt-2 text-sm text-gray-500">Verifique o console (F12) para mais detalhes técnicos.</p>
-                    </div>`;
-                }
+                showFeedback(`Erro ao iniciar o sistema: ${error.message}`, 'error');
             }
         }
 
         function setupEventListeners() {
+            // REMOVIDO: Event listener do botão de logout
+            
             document.querySelectorAll('.tab-button').forEach(b => b.addEventListener('click', () => handleTabClick(b.dataset.tab)));
             document.getElementById('appointment-form').addEventListener('submit', handleFormSubmit);
 
@@ -749,13 +806,14 @@
                 document.getElementById('toggle-sidebar-btn').querySelector('svg').classList.toggle('rotate-180');
             });
             
-            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'taxidog-route-filter', 'reception-service-filter', 'grooming-service-filter', 'grooming-route-filter'].forEach(id => {
+            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'taxidog-route-filter', 'reception-service-filter', 'grooming-service-filter', 'grooming-route-filter', 'salavip-date-filter'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('change', renderAllContent);
                 }
             });
-            ['history-tutor-filter', 'history-pet-filter'].forEach(id => {
+            
+            ['history-search-filter'].forEach(id => {
                  const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', renderAllContent);
@@ -766,6 +824,7 @@
             document.getElementById('service-request-form').addEventListener('submit', handleSendServiceRequest);
             document.getElementById('cancel-service-request-btn').addEventListener('click', () => document.getElementById('service-request-modal').classList.add('hidden'));
             document.getElementById('save-package-dates-btn').addEventListener('click', handleSavePackageDatesOnly);
+            
             
             // Remessa Listeners
             document.getElementById('start-remessa-btn').addEventListener('click', startRemessaMode);
@@ -829,18 +888,22 @@
                  }
             });
             
-            // Finalize Modal Listener
-            document.getElementById('finalize-modal').addEventListener('click', (e) => {
-                if (e.target.matches('.executor-btn')) {
-                    const modal = document.getElementById('finalize-modal');
-                    const appointmentId = modal.dataset.appointmentId;
-                    const handlerId = e.target.dataset.handlerId;
-                    handleFinalize(appointmentId, handlerId);
-                    modal.classList.add('hidden');
+            // Finalize Modal Listeners
+            const finalizeModal = document.getElementById('finalize-modal');
+            document.getElementById('confirm-finalize-btn').addEventListener('click', (e) => {
+                const appointmentId = e.target.dataset.appointmentId;
+                const handlerInput = finalizeModal.querySelector('#finalize-handler-input');
+                const handlerName = handlerInput.value.trim();
+                if (handlerName) {
+                    handleFinalize(appointmentId, handlerName);
+                    finalizeModal.classList.add('hidden');
+                } else {
+                    showFeedback("Por favor, insira o nome do executor.", "error");
+                    handlerInput.focus();
                 }
             });
-             document.getElementById('cancel-finalize-btn').addEventListener('click', () => {
-                document.getElementById('finalize-modal').classList.add('hidden');
+            document.getElementById('cancel-finalize-btn').addEventListener('click', () => {
+                finalizeModal.classList.add('hidden');
             });
 
             setupVirtualKeyboard();
@@ -885,7 +948,9 @@
             document.getElementById(tabId).classList.remove('hidden');
             document.querySelectorAll('.tab-button').forEach(b => {
                 b.classList.toggle('gradient-purple-to-dark-purple', b.dataset.tab === tabId);
-                b.classList.toggle('bg-gray-400', b.dataset.tab !== tabId);
+                if (b.id !== 'sala-vip-tab-btn') {
+                    b.classList.toggle('bg-gray-400', b.dataset.tab !== tabId);
+                }
             });
             const sidebar = document.getElementById('appointment-aside');
             if (tabId !== 'reception-tab-content' && !sidebar.classList.contains('hidden')) {
@@ -897,27 +962,26 @@
         
         function initDateFilters() {
             const today = new Date().toISOString().split('T')[0];
-            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'remocao-date'].forEach(id => {
+            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'remocao-date', 'salavip-date-filter'].forEach(id => {
                 const el = document.getElementById(id); if (el) el.value = today;
             });
         }
         
         function clearHistoryFilters() {
-            document.getElementById('history-tutor-filter').value = '';
-            document.getElementById('history-pet-filter').value = '';
+            document.getElementById('history-search-filter').value = '';
             document.getElementById('history-date-filter').value = '';
             renderAllContent();
         }
 
         function renderAllContent() {
             if (!hasRealtimeListenersStarted) return;
-            ['reception', 'history', 'grooming', 'taxi-dog'].forEach(renderAppointmentsList);
+            ['reception', 'history', 'grooming', 'taxi-dog', 'sala-vip'].forEach(renderAppointmentsList);
         }
         
         function getVisibleAppointments(type) {
             let filtered = allAppointments;
 
-            const dateFilterIds = { reception: 'reception-date-filter', history: 'history-date-filter', grooming: 'grooming-date-filter', 'taxi-dog': 'taxidog-date-filter' };
+            const dateFilterIds = { reception: 'reception-date-filter', history: 'history-date-filter', grooming: 'grooming-date-filter', 'taxi-dog': 'taxidog-date-filter', 'sala-vip': 'salavip-date-filter' };
             const dateFilterElement = document.getElementById(dateFilterIds[type]);
             const filterDateStr = dateFilterElement ? dateFilterElement.value : '';
 
@@ -929,11 +993,24 @@
                 });
             }
 
+            // Specific filtering logic for each tab
+            if (type === 'grooming') {
+                // EXCLUDE Sala VIP from the grooming list
+                filtered = filtered.filter(app => !(app.services && app.services.includes('Sala VIP')));
+            }
+            if (type === 'sala-vip') {
+                // ONLY show Sala VIP in its own list
+                filtered = filtered.filter(app => app.services && app.services.includes('Sala VIP'));
+            }
+
             if (type === 'history') {
-                const tutorFilter = document.getElementById('history-tutor-filter').value.toLowerCase();
-                const petFilter = document.getElementById('history-pet-filter').value.toLowerCase();
-                if (tutorFilter) filtered = filtered.filter(app => (app.tutorName || '').toLowerCase().includes(tutorFilter));
-                if (petFilter) filtered = filtered.filter(app => (app.petName || '').toLowerCase().includes(petFilter));
+                const searchFilter = document.getElementById('history-search-filter').value.toLowerCase().trim();
+                if (searchFilter) {
+                    filtered = filtered.filter(app => 
+                        (app.tutorName || '').toLowerCase().includes(searchFilter) || 
+                        (app.petName || '').toLowerCase().includes(searchFilter)
+                    );
+                }
             }
             
             if (type === 'reception' || type === 'grooming') {
@@ -955,7 +1032,7 @@
         }
 
         function renderAppointmentsList(type) {
-            const listContainerIds = { reception: 'reception-appointments-list', history: 'history-appointments-list', grooming: 'grooming-appointments-list', 'taxi-dog': 'taxi-dog-appointments-list' };
+            const listContainerIds = { reception: 'reception-appointments-list', history: 'history-appointments-list', grooming: 'grooming-appointments-list', 'taxi-dog': 'taxi-dog-appointments-list', 'sala-vip': 'sala-vip-appointments-list' };
             const listElement = document.getElementById(listContainerIds[type]);
             if (!listElement) return;
 
@@ -975,7 +1052,7 @@
                 const finalized = filteredAppointments.filter(a => a.status === 'Finalizado');
                 document.getElementById('pets-in-queue-count').textContent = inProgress.length;
                 document.getElementById('pets-finalized-count').textContent = finalized.length;
-                renderGroomingList([...inProgress, ...finalized]); 
+                renderGroomingList(inProgress.concat(finalized)); 
                 return; 
             } else {
                 filteredAppointments.sort((a, b) => new Date(b.appointmentDatetime) - new Date(a.appointmentDatetime));
@@ -984,8 +1061,10 @@
             const currentView = viewModes[type] || 'grid';
             let containerClasses = '';
             const compactGridClass = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2';
+            const compactViewClassSuffix = `compact_${type.replace('-', '')}`;
+            
             switch (currentView) {
-                case 'compact': containerClasses = (type === 'reception') ? compactGridClass : (gridLayouts[`compact_${type}`] || compactGridClass); break;
+                case 'compact': containerClasses = (gridLayouts[compactViewClassSuffix] || compactGridClass); break;
                 case 'grid': containerClasses = gridLayouts[type] || gridLayouts['reception']; break;
                 default: containerClasses = 'flex flex-col gap-3'; break;
             }
@@ -1127,8 +1206,11 @@
             }
             
             const servicesHTML = displayServices.map(s => {
-                const serviceName = s === 'Pacote de Banho' ? 'Pct' : s;
-                return `<strong class="text-violet-700">${serviceName}</strong>`;
+                let serviceName = s;
+                let style = "text-violet-700";
+                if (s === 'Pacote de Banho') serviceName = 'Pct';
+                if (s === 'Sala VIP') style = "text-amber-600";
+                return `<strong class="${style}">${serviceName}</strong>`;
             }).join(', ');
 
             let taxiInfoHTML = '';
@@ -1153,7 +1235,7 @@
                             <button class="approve-request-btn px-2 py-1 text-xs bg-green-500 text-white rounded" data-id="${app.id}">Liberar</button>
                             <button class="deny-request-btn px-2 py-1 text-xs bg-red-500 text-white rounded" data-id="${app.id}">Negar</button>
                         </div></div>`;
-                } else if (contextTab === 'grooming') {
+                } else if (contextTab === 'grooming' || contextTab === 'sala-vip') {
                      if (app.serviceRequest.status === 'Approved') requestNotificationHTML = `<p class="text-xs mt-2 font-bold text-green-600">Solicitação Aprovada</p>`;
                     else if (app.serviceRequest.status === 'Denied') requestNotificationHTML = `<p class="text-xs mt-2 font-bold text-red-600">Solicitação Negada</p>`;
                 }
@@ -1167,7 +1249,7 @@
                 if (app.status === 'Finalizado' && !app.isDischarged && app.notifiedAt) buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
                 buttonsHTML += `<button class="delete-btn px-1.5 py-0.5 text-xs bg-red-500 text-white rounded" data-id="${app.id}">Excluir</button>`;
             }
-            if (contextTab === 'grooming') {
+            if (contextTab === 'grooming' || contextTab === 'sala-vip') {
                  if (app.status === 'Finalizado') {
                      buttonsHTML += `<button class="revert-finalize-btn px-1.5 py-0.5 text-xs bg-gray-500 text-white rounded" data-id="${app.id}">Reverter</button>`;
                  } else {
@@ -1415,20 +1497,11 @@
         
         function openFinalizeModal(id) {
             const modal = document.getElementById('finalize-modal');
-            modal.dataset.appointmentId = id;
-            
-            const optionsContainer = document.getElementById('finalize-options');
-            optionsContainer.innerHTML = ''; // Clear previous options
-            for (let i = 1; i <= 10; i++) {
-                const handlerId = String(i).padStart(2, '0');
-                const button = document.createElement('button');
-                button.className = 'executor-btn p-4 bg-teal-500 text-white font-bold rounded-md hover:bg-teal-600';
-                button.textContent = handlerId;
-                button.dataset.handlerId = handlerId;
-                optionsContainer.appendChild(button);
-            }
-            
+            modal.querySelector('#confirm-finalize-btn').dataset.appointmentId = id;
+            const input = modal.querySelector('#finalize-handler-input');
+            input.value = '';
             modal.classList.remove('hidden');
+            input.focus();
         }
 
         async function handleFinalize(appointmentId, handlerId) {
@@ -1725,7 +1798,7 @@
                 e.preventDefault();
             });
         }
-        
+
         // --- Info Modals Functions ---
         const popContentHTML = `
             <h4>POP – Procedimento Operacional Padrão: Etapas do Serviço de Banho</h4>
