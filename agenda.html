@@ -304,12 +304,14 @@
                                 </button>
                                 <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-calendar"></i>Agendamentos do Dia</h3>
                             </div>
+                            <!-- MODIFICADO: Adicionado campo de busca -->
                             <div class="flex items-center flex-wrap gap-4">
+                                <input type="text" id="reception-search-filter" placeholder="Buscar por Tutor ou Pet..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm">
                                 <!-- Service Filter -->
                                 <div class="flex items-center gap-2">
-                                    <label for="reception-service-filter" class="text-sm font-medium">Filtrar por serviço:</label>
+                                    <label for="reception-service-filter" class="text-sm font-medium">Serviço:</label>
                                     <select id="reception-service-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm">
-                                        <option value="">Todos os Serviços</option>
+                                        <option value="">Todos</option>
                                     </select>
                                 </div>
                                 <!-- View Toggles -->
@@ -328,8 +330,8 @@
                                 </div>
                                 <!-- Date Filter -->
                                 <div class="flex items-center gap-2">
-                                    <label for="reception-date-filter" class="text-sm font-medium">Filtrar por data:</label>
-                                    <input type="date" id="reception-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                    <label for="reception-date-filter" class="text-sm font-medium">Data:</label>
+                                    <button id="reception-date-filter" class="date-filter-btn px-3 py-1.5 border border-gray-300 rounded-md shadow-sm bg-white"></button>
                                 </div>
                             </div>
                         </div>
@@ -347,7 +349,7 @@
                             <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-archive"></i>Histórico de Serviços</h3>
                             <div class="flex flex-wrap items-center gap-2">
                                 <input type="text" id="history-search-filter" placeholder="Buscar por Tutor ou Pet..." class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
-                                <input type="date" id="history-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <button id="history-date-filter" class="date-filter-btn px-3 py-1.5 border border-gray-300 rounded-md shadow-sm bg-white"></button>
                                 <button id="clear-history-filters-btn" class="px-4 py-1.5 bg-gray-500 text-white rounded-md hover:bg-gray-600">Limpar</button>
                             </div>
                         </div>
@@ -362,6 +364,8 @@
                 <div id="grooming-tab-content" class="tab-content-panel hidden space-y-6">
                     <div class="flex flex-wrap justify-between items-center mb-4 gap-4">
                         <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-scissors"></i>Agenda Banho e Tosa</h3>
+                         <!-- ADICIONADO: Relógio Digital -->
+                        <div id="digital-clock" class="text-5xl font-bold text-gray-700"></div>
                         <div class="flex items-center gap-4">
                              <!-- Service Filter -->
                             <div class="flex items-center gap-2">
@@ -399,7 +403,7 @@
                             <!-- Date Filter -->
                             <div class="flex items-center gap-2">
                                 <label for="grooming-date-filter" class="text-sm font-medium">Filtrar por data:</label>
-                                <input type="date" id="grooming-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <button id="grooming-date-filter" class="date-filter-btn px-3 py-1.5 border border-gray-300 rounded-md shadow-sm bg-white"></button>
                             </div>
                         </div>
                     </div>
@@ -467,7 +471,7 @@
                             <!-- Date Filter -->
                             <div class="flex items-center gap-2">
                                 <label for="taxidog-date-filter" class="text-sm font-medium">Filtrar por data:</label>
-                                <input type="date" id="taxidog-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <button id="taxidog-date-filter" class="date-filter-btn px-3 py-1.5 border border-gray-300 rounded-md shadow-sm bg-white"></button>
                             </div>
                         </div>
                     </div>
@@ -499,7 +503,7 @@
                             <!-- Date Filter -->
                             <div class="flex items-center gap-2">
                                 <label for="salavip-date-filter" class="text-sm font-medium">Filtrar por data:</label>
-                                <input type="date" id="salavip-date-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
+                                <button id="salavip-date-filter" class="date-filter-btn px-3 py-1.5 border border-gray-300 rounded-md shadow-sm bg-white"></button>
                             </div>
                         </div>
                     </div>
@@ -514,6 +518,15 @@
     </div>
 
     <!-- Modals -->
+    <!-- ADICIONADO: Modal do Calendário -->
+    <div id="calendar-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white rounded-lg shadow-xl p-4 w-11/12 md:w-auto">
+            <div id="calendar-modal-content" class="text-gray-800">
+                <!-- O calendário será renderizado aqui pelo JavaScript -->
+            </div>
+        </div>
+    </div>
+
     <!-- Generic Feedback Modal -->
     <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
@@ -587,7 +600,7 @@
                     <h4 class="font-semibold text-lg">Registar Novo Serviço</h4>
                     <div>
                         <label for="remocao-date" class="block text-sm font-medium">Data</label>
-                        <input type="date" id="remocao-date" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                        <button id="remocao-date-filter" class="date-filter-btn mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
                     </div>
                     <div>
                         <label for="remocao-handler-name" class="block text-sm font-medium">Executor</label>
@@ -604,7 +617,7 @@
                 <div class="p-4 border rounded-lg">
                     <h4 class="font-semibold text-lg mb-4">Histórico de Remoções</h4>
                     <div class="flex gap-4 mb-4">
-                        <input type="date" id="remocao-day-filter" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
+                        <button id="remocao-day-filter" class="date-filter-btn flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
                         <input type="month" id="remocao-month-filter" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
                     </div>
                     <div id="remocao-list" class="space-y-2 max-h-64 overflow-y-auto">
@@ -688,6 +701,12 @@
             currentYear: new Date().getFullYear(),
             selectedDates: new Set()
         };
+        // ADICIONADO: Estado para o calendário de filtro
+        let filterCalendarState = {
+            currentMonth: new Date().getMonth(),
+            currentYear: new Date().getFullYear(),
+            activeFilterId: null
+        };
         const viewModes = {
             reception: 'grid',
             grooming: 'grid',
@@ -717,6 +736,7 @@
             setupEventListeners();
             initDateFilters();
             switchTab('reception-tab-content', true);
+            setInterval(updateClock, 1000); // Inicia o relógio
         });
 
         // REVERTIDO: Lógica de autenticação para acesso anônimo
@@ -806,14 +826,20 @@
                 document.getElementById('toggle-sidebar-btn').querySelector('svg').classList.toggle('rotate-180');
             });
             
-            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'taxidog-route-filter', 'reception-service-filter', 'grooming-service-filter', 'grooming-route-filter', 'salavip-date-filter'].forEach(id => {
+            // MODIFICADO: Listener para os botões de data
+            document.querySelectorAll('.date-filter-btn').forEach(btn => {
+                btn.addEventListener('click', () => openFilterCalendar(btn.id));
+            });
+
+            ['reception-service-filter', 'grooming-service-filter', 'grooming-route-filter', 'salavip-date-filter', 'taxidog-route-filter', 'remocao-month-filter'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('change', renderAllContent);
                 }
             });
             
-            ['history-search-filter'].forEach(id => {
+            // MODIFICADO: Adicionado listener para o novo campo de busca da recepção
+            ['history-search-filter', 'reception-search-filter'].forEach(id => {
                  const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('input', renderAllContent);
@@ -857,53 +883,45 @@
                     passwordError.classList.remove('hidden');
                 }
             });
+            // ADICIONADO: Listener da tecla Enter para o modal de senha
+            passwordInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    confirmPasswordBtn.click();
+                }
+            });
 
             // Confirmation Modal Listeners
             document.getElementById('cancel-delete-btn').addEventListener('click', () => document.getElementById('confirmation-modal').classList.add('hidden'));
-            document.getElementById('confirm-delete-btn').addEventListener('click', (e) => {
-                const id = e.target.dataset.id;
-                const type = e.target.dataset.type;
-                if (!id) return;
-                
-                if (type === 'remocao') {
-                    deleteRemocao(id);
-                } else if (type === 'remessa_undo') {
-                    undoRemessaAction(id);
-                }
-                else {
-                    deleteAppointment(id);
-                }
-                document.getElementById('confirmation-modal').classList.add('hidden');
-            });
             
             // Remoção Modal Listeners
             document.getElementById('remocao-control-btn').addEventListener('click', openRemocaoModal);
             document.getElementById('close-remocao-modal-btn').addEventListener('click', () => document.getElementById('remocao-control-modal').classList.add('hidden'));
             document.getElementById('remocao-form').addEventListener('submit', handleRemocaoFormSubmit);
-            document.getElementById('remocao-day-filter').addEventListener('change', renderRemocaoHistory);
-            document.getElementById('remocao-month-filter').addEventListener('change', renderRemocaoHistory);
-            document.getElementById('remocao-control-modal').addEventListener('click', (e) => {
-                 if(e.target.matches('.delete-remocao-btn')) {
-                     openConfirmationModal(e.target.dataset.id, 'remocao');
-                 }
-            });
             
             // Finalize Modal Listeners
             const finalizeModal = document.getElementById('finalize-modal');
+            const finalizeInput = document.getElementById('finalize-handler-input');
             document.getElementById('confirm-finalize-btn').addEventListener('click', (e) => {
                 const appointmentId = e.target.dataset.appointmentId;
-                const handlerInput = finalizeModal.querySelector('#finalize-handler-input');
-                const handlerName = handlerInput.value.trim();
+                const handlerName = finalizeInput.value.trim();
                 if (handlerName) {
                     handleFinalize(appointmentId, handlerName);
                     finalizeModal.classList.add('hidden');
                 } else {
                     showFeedback("Por favor, insira o nome do executor.", "error");
-                    handlerInput.focus();
+                    finalizeInput.focus();
                 }
             });
             document.getElementById('cancel-finalize-btn').addEventListener('click', () => {
                 finalizeModal.classList.add('hidden');
+            });
+            // ADICIONADO: Listener da tecla Enter para o modal de finalização
+            finalizeInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    document.getElementById('confirm-finalize-btn').click();
+                }
             });
 
             setupVirtualKeyboard();
@@ -961,15 +979,21 @@
         }
         
         function initDateFilters() {
-            const today = new Date().toISOString().split('T')[0];
-            ['reception-date-filter', 'grooming-date-filter', 'taxidog-date-filter', 'history-date-filter', 'remocao-date', 'salavip-date-filter'].forEach(id => {
-                const el = document.getElementById(id); if (el) el.value = today;
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            document.querySelectorAll('.date-filter-btn').forEach(btn => {
+                btn.dataset.date = todayString;
+                btn.textContent = today.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
             });
         }
         
         function clearHistoryFilters() {
             document.getElementById('history-search-filter').value = '';
-            document.getElementById('history-date-filter').value = '';
+            const today = new Date();
+            const todayString = today.toISOString().split('T')[0];
+            const historyDateBtn = document.getElementById('history-date-filter');
+            historyDateBtn.dataset.date = todayString;
+            historyDateBtn.textContent = today.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
             renderAllContent();
         }
 
@@ -978,12 +1002,13 @@
             ['reception', 'history', 'grooming', 'taxi-dog', 'sala-vip'].forEach(renderAppointmentsList);
         }
         
+        // MODIFICADO: Adicionada lógica de busca para a recepção
         function getVisibleAppointments(type) {
             let filtered = allAppointments;
-
+            
             const dateFilterIds = { reception: 'reception-date-filter', history: 'history-date-filter', grooming: 'grooming-date-filter', 'taxi-dog': 'taxidog-date-filter', 'sala-vip': 'salavip-date-filter' };
             const dateFilterElement = document.getElementById(dateFilterIds[type]);
-            const filterDateStr = dateFilterElement ? dateFilterElement.value : '';
+            const filterDateStr = dateFilterElement ? dateFilterElement.dataset.date : '';
 
             if (filterDateStr) {
                 filtered = filtered.filter(app => {
@@ -995,12 +1020,20 @@
 
             // Specific filtering logic for each tab
             if (type === 'grooming') {
-                // EXCLUDE Sala VIP from the grooming list
                 filtered = filtered.filter(app => !(app.services && app.services.includes('Sala VIP')));
             }
             if (type === 'sala-vip') {
-                // ONLY show Sala VIP in its own list
                 filtered = filtered.filter(app => app.services && app.services.includes('Sala VIP'));
+            }
+
+            if (type === 'reception') {
+                 const searchFilter = document.getElementById('reception-search-filter').value.toLowerCase().trim();
+                 if (searchFilter) {
+                    filtered = filtered.filter(app => 
+                        (app.tutorName || '').toLowerCase().includes(searchFilter) || 
+                        (app.petName || '').toLowerCase().includes(searchFilter)
+                    );
+                }
             }
 
             if (type === 'history') {
@@ -1040,15 +1073,35 @@
             
             let filteredAppointments = getVisibleAppointments(type);
 
+            // MODIFICADO: Lógica de ordenação da recepção
             if (type === 'reception') {
-                 filteredAppointments.sort((a, b) => {
-                    const aPending = a.serviceRequest?.status === 'Pending';
-                    const bPending = b.serviceRequest?.status === 'Pending';
-                    if (aPending !== bPending) return aPending ? -1 : 1;
-                    return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
+                const getStatusScore = (app) => {
+                    if (app.serviceRequest?.status === 'Pending') return 0; // Highest
+                    if (app.status === 'Finalizado') return 1;
+                    if (app.status === 'Chegou') return 2;
+                    if (app.status === 'Agendado') return 3;
+                    return 4; // Fallback
+                };
+
+                filteredAppointments.sort((a, b) => {
+                    const scoreA = getStatusScore(a);
+                    const scoreB = getStatusScore(b);
+                    if (scoreA !== scoreB) {
+                        return scoreA - scoreB;
+                    }
+                    // For same-status items, sort by time (check-in time if available, otherwise scheduled time)
+                    const timeA = a.checkinTime || a.appointmentDatetime;
+                    const timeB = b.checkinTime || b.appointmentDatetime;
+                    return new Date(timeA) - new Date(timeB);
                 });
             } else if (type === 'grooming') {
-                const inProgress = filteredAppointments.filter(a => a.status !== 'Finalizado');
+                const getGroomingStatusScore = (app) => {
+                    if (app.status === 'Chegou') return 1;
+                    if (app.status === 'Agendado') return 2;
+                    return 3; // Finalizado e outros
+                };
+                
+                const inProgress = filteredAppointments.filter(a => a.status !== 'Finalizado').sort((a, b) => getGroomingStatusScore(a) - getGroomingStatusScore(b));
                 const finalized = filteredAppointments.filter(a => a.status === 'Finalizado');
                 document.getElementById('pets-in-queue-count').textContent = inProgress.length;
                 document.getElementById('pets-finalized-count').textContent = finalized.length;
@@ -1102,7 +1155,8 @@
             const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado');
+            const getGroomingStatusScore = (app) => (app.status === 'Chegou' ? 1 : 2);
+            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => getGroomingStatusScore(a) - getGroomingStatusScore(b));
             const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado');
 
             const mainContainer = document.createElement('div');
@@ -1261,6 +1315,10 @@
                 if (app.status === 'Agendado') {
                      buttonsHTML += `<button class="checkin-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Chegou</button>`;
                 }
+            }
+            // ADICIONADO: Botão de Replicar no Histórico
+            if (contextTab === 'history') {
+                buttonsHTML += `<button class="replicate-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Replicar</button>`;
             }
             
             const arrivalNumberHTML = app.arrivalNumber ? `<span class="absolute top-1 left-1 bg-violet-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">#${app.arrivalNumber}</span>` : '';
@@ -1431,30 +1489,41 @@
             else if (target.matches('.deny-request-btn')) handleServiceRequestResponse(appointmentId, false);
             else if (target.matches('.discharge-btn')) handleDischarge(appointmentId);
             else if (target.matches('.notify-btn')) handleNotifyClient(appointmentId);
+            else if (target.matches('.replicate-btn')) handleReplicateAppointment(appointmentId);
         }
 
         function openConfirmationModal(id, type = 'appointment') {
             const modal = document.getElementById('confirmation-modal');
             const confirmBtn = modal.querySelector('#confirm-delete-btn');
-            const message = modal.querySelector('#confirmation-message');
-            const title = modal.querySelector('#confirmation-title');
+            const cancelBtn = modal.querySelector('#cancel-delete-btn');
             confirmBtn.dataset.id = id;
             confirmBtn.dataset.type = type;
 
-            switch (type) {
-                case 'remocao':
-                    title.textContent = 'Confirmar Exclusão';
-                    message.textContent = 'Tem a certeza que deseja excluir este registo de remoção?';
-                    break;
-                case 'remessa_undo':
-                    title.textContent = 'Confirmar Ação';
-                    message.textContent = 'Tem a certeza que deseja desfazer esta remessa? Todos os pets voltarão para a fila geral.';
-                    break;
-                default: // 'appointment'
-                    title.textContent = 'Confirmar Exclusão';
-                    message.textContent = 'Tem a certeza que deseja excluir este agendamento? Esta ação não pode ser desfeita.';
-                    break;
-            }
+            const enterListener = (e) => {
+                if (e.key === 'Enter' && !modal.classList.contains('hidden')) {
+                    e.preventDefault();
+                    confirmBtn.click();
+                }
+            };
+            
+            const cleanup = () => {
+                window.removeEventListener('keydown', enterListener);
+            };
+
+            confirmBtn.onclick = () => {
+                if (type === 'remocao') deleteRemocao(id);
+                else if (type === 'remessa_undo') undoRemessaAction(id);
+                else deleteAppointment(id);
+                modal.classList.add('hidden');
+                cleanup();
+            };
+            
+            cancelBtn.onclick = () => {
+                modal.classList.add('hidden');
+                cleanup();
+            };
+
+            window.addEventListener('keydown', enterListener);
             modal.classList.remove('hidden');
         }
 
@@ -1680,26 +1749,33 @@
             });
         }
         
+        // MODIFICADO: Função de população de filtros dinâmica
         function populateServiceFilters() {
-            const serviceCheckboxes = document.querySelectorAll('#services-checkboxes input[type="checkbox"]');
-            const serviceNames = Array.from(serviceCheckboxes).map(cb => cb.value);
+            const allServices = new Set();
+            allAppointments.forEach(app => {
+                (app.services || []).forEach(service => {
+                    if (!service.startsWith('Remoção de ')) {
+                        allServices.add(service);
+                    }
+                });
+            });
+            const uniqueServiceNames = [...allServices].sort();
+
+            const populate = (filter, currentVal) => {
+                if (filter) {
+                    filter.innerHTML = '<option value="">Todos os Serviços</option>';
+                    uniqueServiceNames.forEach(name => {
+                        filter.innerHTML += `<option value="${name}">${name}</option>`;
+                    });
+                    filter.value = currentVal;
+                }
+            };
             
             const receptionFilter = document.getElementById('reception-service-filter');
             const groomingFilter = document.getElementById('grooming-service-filter');
             
-            const currentReceptionValue = receptionFilter.value;
-            const currentGroomingValue = groomingFilter.value;
-            
-            receptionFilter.innerHTML = '<option value="">Todos os Serviços</option>';
-            groomingFilter.innerHTML = '<option value="">Todos os Serviços</option>';
-
-            serviceNames.forEach(name => {
-                receptionFilter.innerHTML += `<option value="${name}">${name}</option>`;
-                groomingFilter.innerHTML += `<option value="${name}">${name}</option>`;
-            });
-
-            receptionFilter.value = currentReceptionValue;
-            groomingFilter.value = currentGroomingValue;
+            populate(receptionFilter, receptionFilter ? receptionFilter.value : "");
+            populate(groomingFilter, groomingFilter ? groomingFilter.value : "");
         }
 
         function setupVirtualKeyboard() {
@@ -2117,8 +2193,9 @@
         
         function renderRemocaoHistory() {
              const listEl = document.getElementById('remocao-list');
-            const dayFilter = document.getElementById('remocao-day-filter').value;
-            const monthFilter = document.getElementById('remocao-month-filter').value;
+             const dayFilterBtn = document.getElementById('remocao-day-filter');
+             const dayFilter = dayFilterBtn ? dayFilterBtn.dataset.date : '';
+             const monthFilter = document.getElementById('remocao-month-filter').value;
 
             let filteredRemovals = allRemovals;
 
@@ -2150,6 +2227,124 @@
             `).join('');
         }
         
+        // --- FUNÇÕES DO CALENDÁRIO E RELÓGIO ---
+
+        function updateClock() {
+            const clockElement = document.getElementById('digital-clock');
+            if (clockElement) {
+                const now = new Date();
+                const timeString = now.toLocaleTimeString('pt-BR');
+                clockElement.textContent = timeString;
+            }
+        }
+
+        function openFilterCalendar(filterId) {
+            filterCalendarState.activeFilterId = filterId;
+            const targetButton = document.getElementById(filterId);
+            const currentDate = new Date(targetButton.dataset.date + 'T12:00:00');
+            
+            filterCalendarState.currentMonth = currentDate.getMonth();
+            filterCalendarState.currentYear = currentDate.getFullYear();
+
+            renderFilterCalendar(filterId);
+            document.getElementById('calendar-modal').classList.remove('hidden');
+        }
+
+        function renderFilterCalendar() {
+            const { currentMonth, currentYear, activeFilterId } = filterCalendarState;
+            const container = document.getElementById('calendar-modal-content');
+            const targetButton = document.getElementById(activeFilterId);
+            const selectedDate = targetButton.dataset.date;
+            
+            const monthNames = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
+            const daysOfWeek = ['D', 'S', 'T', 'Q', 'Q', 'S', 'S'];
+            
+            const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+            const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+
+            let html = `<div class="w-80"><div class="flex justify-between items-center mb-4"><button type="button" id="prev-month-btn" class="p-2 rounded-full hover:bg-gray-200">&lt;</button><span class="font-bold text-lg">${monthNames[currentMonth]} ${currentYear}</span><button type="button" id="next-month-btn" class="p-2 rounded-full hover:bg-gray-200">&gt;</button></div><div class="grid grid-cols-7 text-center text-sm font-medium text-gray-500">${daysOfWeek.map(d => `<div>${d}</div>`).join('')}</div><div class="grid grid-cols-7 text-center text-sm gap-1 mt-2">`;
+            
+            html += '<div></div>'.repeat(firstDayOfMonth);
+
+            for (let i = 1; i <= daysInMonth; i++) {
+                const dateStr = `${currentYear}-${String(currentMonth + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+                const isSelected = dateStr === selectedDate;
+                html += `<div class="p-2 cursor-pointer rounded-full hover:bg-teal-100 ${isSelected ? 'bg-teal-500 text-white font-bold' : ''}" data-date="${dateStr}">${i}</div>`;
+            }
+            
+            container.innerHTML = html + '</div></div>';
+
+            container.querySelectorAll('[data-date]').forEach(dayCell => {
+                dayCell.addEventListener('click', () => {
+                    const newDate = dayCell.dataset.date;
+                    const dateObj = new Date(newDate + 'T12:00:00');
+                    targetButton.dataset.date = newDate;
+                    targetButton.textContent = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+                    document.getElementById('calendar-modal').classList.add('hidden');
+                    renderAllContent(); // Atualiza a lista após selecionar nova data
+                });
+            });
+
+            document.getElementById('prev-month-btn').addEventListener('click', () => {
+                filterCalendarState.currentMonth--;
+                if (filterCalendarState.currentMonth < 0) {
+                    filterCalendarState.currentMonth = 11;
+                    filterCalendarState.currentYear--;
+                }
+                renderFilterCalendar();
+            });
+
+            document.getElementById('next-month-btn').addEventListener('click', () => {
+                filterCalendarState.currentMonth++;
+                if (filterCalendarState.currentMonth > 11) {
+                    filterCalendarState.currentMonth = 0;
+                    filterCalendarState.currentYear++;
+                }
+                renderFilterCalendar();
+            });
+        }
+
+        // ADICIONADO: Função para replicar agendamento
+        function handleReplicateAppointment(id) {
+            const appointmentToReplicate = allAppointments.find(app => app.id === id);
+            if (!appointmentToReplicate) {
+                showFeedback("Agendamento não encontrado para replicar.", "error");
+                return;
+            }
+
+            const form = document.getElementById('appointment-form');
+            resetFormState(); // Limpa o formulário primeiro
+
+            // Preenche os dados
+            form.querySelector('#tutor-name').value = appointmentToReplicate.tutorName || '';
+            form.querySelector('#pet-name').value = appointmentToReplicate.petName || '';
+            form.querySelector('#pet-breed').value = appointmentToReplicate.petBreed || '';
+            form.querySelector('#observations').value = appointmentToReplicate.observations || '';
+
+            // Limpa o campo de data/hora
+            form.querySelector('#appointment-datetime').value = '';
+
+            // Seleciona os serviços
+            const allServices = appointmentToReplicate.services || [];
+            form.querySelectorAll('#services-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = allServices.includes(cb.value);
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            
+            if (allServices.includes('Remoção')) {
+                form.querySelectorAll('#remocao-sub-services input[type="checkbox"]').forEach(subCb => {
+                    subCb.checked = allServices.includes(`Remoção de ${subCb.value}`);
+                });
+            }
+
+            showFeedback("Dados replicados! Defina uma nova data e hora.", "success");
+            
+            // Mostra a barra lateral se estiver oculta e foca no campo de data
+            document.getElementById('appointment-aside').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            form.querySelector('#appointment-datetime').focus();
+        }
+
     </script>
 
 </body>
