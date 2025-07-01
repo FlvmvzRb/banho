@@ -31,6 +31,12 @@
             --color-arrived-border: #7DD3FC; /* Sky-300 */
             --color-requested-bg: #FFF7ED; /* Orange-100 */
             --color-requested-border: #FB923C; /* Orange-400 */
+            --color-tosa-bg: #FEF3C7; /* Amber-100 */
+            --color-tosa-border: #FBBF24; /* Amber-400 */
+            --color-creche-bg: #374151; /* Gray-700 */
+            --color-creche-border: #1F2937; /* Gray-800 */
+            --color-taxidog-bg: #D1D5DB; /* Gray-300 */
+            --color-taxidog-border: #9CA3AF; /* Gray-400 */
             --color-accent-gold: #F59E0B; /* Amber-500 */
         }
 
@@ -79,6 +85,22 @@
         .requested-orange-bg {
             background-color: var(--color-requested-bg);
             border-color: var(--color-requested-border);
+        }
+        .tosa-yellow-bg {
+            background-color: var(--color-tosa-bg);
+            border-color: var(--color-tosa-border);
+        }
+        .creche-dark-blue-bg {
+            background-color: var(--color-creche-bg);
+            border-color: var(--color-creche-border);
+            color: white;
+        }
+        .creche-dark-blue-bg h4, .creche-dark-blue-bg p, .creche-dark-blue-bg strong {
+            color: white;
+        }
+        .taxidog-dark-bg {
+            background-color: var(--color-taxidog-bg);
+            border-color: var(--color-taxidog-border);
         }
         
         /* Custom calendar styles */
@@ -410,8 +432,6 @@
                      <!-- Remessa & Summary Section -->
                     <div class="flex justify-between items-center mb-4">
                         <div id="remessa-controls-wrapper" class="flex flex-wrap gap-2">
-                            <button id="show-pop-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Ver P.O.P</button>
-                            <button id="show-policy-btn" class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700">Ver Política</button>
                             <button id="start-remessa-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Criar Remessa</button>
                             <button id="remocao-control-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Controle de Remoção</button>
                             <div id="active-remessa-controls" class="hidden flex items-center gap-2">
@@ -600,7 +620,7 @@
                     <h4 class="font-semibold text-lg">Registar Novo Serviço</h4>
                     <div>
                         <label for="remocao-date" class="block text-sm font-medium">Data</label>
-                        <button id="remocao-date-filter" class="date-filter-btn mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
+                        <button id="remocao-date" type="button" class="date-filter-btn mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
                     </div>
                     <div>
                         <label for="remocao-handler-name" class="block text-sm font-medium">Executor</label>
@@ -683,7 +703,7 @@
         import { getAuth, onAuthStateChanged, signInAnonymously } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { 
             getFirestore, doc, addDoc, updateDoc, deleteDoc, 
-            onSnapshot, collection, query, Timestamp, serverTimestamp
+            onSnapshot, collection, query, Timestamp, serverTimestamp, writeBatch
         } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
         // --- GLOBAL VARIABLES & STATE ---
@@ -725,11 +745,189 @@
             compact_salavip: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2'
         };
         let activeTabId = 'reception-tab-content';
-        const TAB_SWITCH_PASSWORD = "dib256"; 
+        const TAB_SWITCH_PASSWORD = "256"; 
         let isRemessaModeActive = false;
         let selectedForRemessa = [];
         let currentRemessaId = null; 
         
+        // --- FUNCTION DEFINITIONS (Organized for clarity and to prevent ReferenceError) ---
+
+        function showFeedback(message, type = 'success') {
+            const modal = document.getElementById('feedback-modal'), p = document.getElementById('feedback-message');
+            p.textContent = message; p.className = type==='success'?'text-green-700':'text-red-700';
+            modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('hidden'), 3000);
+        }
+        
+        // --- REMESSA FUNCTIONS ---
+        function startRemessaMode() {
+            isRemessaModeActive = true;
+            selectedForRemessa = [];
+            currentRemessaId = null;
+            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.add('hidden');
+            document.getElementById('active-remessa-controls').classList.remove('hidden');
+            document.getElementById('remessa-name-input').value = '';
+            renderAllContent();
+        }
+        
+        function startEditRemessaMode(remessaId, remessaName) {
+            isRemessaModeActive = true;
+            currentRemessaId = remessaId;
+            selectedForRemessa = allAppointments
+                .filter(app => app.remessaId === remessaId)
+                .map(app => app.id);
+            
+            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.add('hidden');
+            document.getElementById('active-remessa-controls').classList.remove('hidden');
+            document.getElementById('remessa-name-input').value = remessaName;
+            renderAllContent();
+        }
+
+        function exitRemessaMode() {
+            isRemessaModeActive = false;
+            document.getElementById('grooming-tab-content').classList.remove('remessa-selection-active');
+            document.getElementById('start-remessa-btn').classList.remove('hidden');
+            document.getElementById('active-remessa-controls').classList.add('hidden');
+            document.getElementById('remessa-name-input').value = '';
+            selectedForRemessa = [];
+            currentRemessaId = null;
+            renderAllContent();
+        }
+
+        function toggleRemessaSelection(id) {
+            const index = selectedForRemessa.indexOf(id);
+            if (index > -1) {
+                selectedForRemessa.splice(index, 1);
+            } else {
+                selectedForRemessa.push(id);
+            }
+            renderAllContent();
+        }
+
+        async function finalizeRemessa() {
+            const name = document.getElementById('remessa-name-input').value;
+            if (!name.trim()) {
+                showFeedback("Por favor, insira um nome para a remessa.", 'error');
+                return;
+            }
+            if (selectedForRemessa.length === 0) {
+                showFeedback("Nenhum pet selecionado para a remessa.", 'error');
+                exitRemessaMode();
+                return;
+            }
+            
+            const remessaId = currentRemessaId || `remessa_${Date.now()}`;
+            const remessaTimestamp = currentRemessaId ? null : serverTimestamp();
+            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+
+            const updates = [];
+
+            // Find apps that should be in the remessa
+            selectedForRemessa.forEach(appointmentId => {
+                const data = { remessaName: name, remessaId, remessaColor: randomColor };
+                if (remessaTimestamp) data.remessaCreatedAt = remessaTimestamp;
+                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId); 
+                updates.push(updateDoc(docRef, data));
+            });
+
+            // If editing, find apps to remove from the remessa
+            if (currentRemessaId) {
+                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id));
+                appsToRemove.forEach(app => {
+                    updates.push(updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, app.id), {
+                        remessaName: null,
+                        remessaId: null,
+                        remessaCreatedAt: null,
+                        remessaColor: null,
+                    }));
+                });
+            }
+
+            try {
+                await Promise.all(updates);
+                showFeedback(`Remessa "${name}" salva com sucesso!`);
+            } catch (error) {
+                showFeedback("Erro ao salvar a remessa.", "error");
+                console.error("Error creating remessa: ", error);
+            } finally {
+                exitRemessaMode();
+            }
+        }
+
+        // --- REMOÇÃO FUNCTIONS ---
+        function openRemocaoModal() {
+            document.getElementById('remocao-control-modal').classList.remove('hidden');
+            renderRemocaoHistory();
+        }
+        
+        async function handleRemocaoFormSubmit(e) {
+            e.preventDefault();
+            const form = e.target;
+            const dateButton = form.querySelector('#remocao-date');
+            const date = dateButton ? dateButton.dataset.date : '';
+            const handlerName = form.querySelector('#remocao-handler-name').value;
+            const petName = form.querySelector('#remocao-pet-name').value;
+
+            if (!date || !handlerName || !petName) {
+                showFeedback('Por favor, preencha todos os campos.', 'error');
+                return;
+            }
+
+            const removalData = {
+                date,
+                handlerName,
+                petName,
+                createdAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/removals`), removalData);
+                showFeedback('Registo de remoção salvo com sucesso!');
+                form.reset();
+                initDateFilters();
+            } catch (error) {
+                showFeedback(`Erro ao salvar: ${error.message}`, 'error');
+                console.error("Error saving removal record: ", error);
+            }
+        }
+        
+        function renderRemocaoHistory() {
+             const listEl = document.getElementById('remocao-list');
+             const dayFilterBtn = document.getElementById('remocao-day-filter');
+             const dayFilter = dayFilterBtn ? dayFilterBtn.dataset.date : '';
+             const monthFilter = document.getElementById('remocao-month-filter').value;
+
+            let filteredRemovals = allRemovals;
+
+            if (dayFilter) {
+                filteredRemovals = filteredRemovals.filter(r => r.date === dayFilter);
+            } else if (monthFilter) {
+                filteredRemovals = filteredRemovals.filter(r => r.date && r.date.startsWith(monthFilter));
+            }
+
+            filteredRemovals.sort((a,b) => {
+                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
+                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
+                return dateB - dateA;
+            });
+
+            if(filteredRemovals.length === 0) {
+                listEl.innerHTML = `<p class="text-gray-500 text-center">Nenhum registo encontrado.</p>`;
+                return;
+            }
+
+            listEl.innerHTML = filteredRemovals.map(removal => `
+                <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
+                    <div>
+                        <p class="font-semibold">${removal.petName} - <span class="font-normal">${new Date(removal.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span></p>
+                        <p class="text-sm text-gray-600">Executor: ${removal.handlerName}</p>
+                    </div>
+                    <button data-id="${removal.id}" data-type="remocao" class="delete-remocao-btn text-red-500 hover:text-red-700 font-bold px-2">&times;</button>
+                </div>
+            `).join('');
+        }
+
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             initializeAppAndAuth();
@@ -856,12 +1054,6 @@
             document.getElementById('start-remessa-btn').addEventListener('click', startRemessaMode);
             document.getElementById('finalize-remessa-btn').addEventListener('click', finalizeRemessa);
             document.getElementById('cancel-remessa-btn').addEventListener('click', exitRemessaMode);
-
-            // Info Modals Listeners
-            document.getElementById('show-pop-btn').addEventListener('click', showPopModal);
-            document.getElementById('show-policy-btn').addEventListener('click', showPolicyModal);
-            document.getElementById('close-pop-modal-btn').addEventListener('click', () => document.getElementById('pop-modal').classList.add('hidden'));
-
             
             // Password Modal Listeners
             const passwordModal = document.getElementById('password-modal');
@@ -904,9 +1096,15 @@
             const finalizeInput = document.getElementById('finalize-handler-input');
             document.getElementById('confirm-finalize-btn').addEventListener('click', (e) => {
                 const appointmentId = e.target.dataset.appointmentId;
+                const remessaId = e.target.dataset.remessaId;
                 const handlerName = finalizeInput.value.trim();
+
                 if (handlerName) {
-                    handleFinalize(appointmentId, handlerName);
+                    if (appointmentId) {
+                        handleFinalize(appointmentId, handlerName);
+                    } else if (remessaId) {
+                        handleBatchFinalize(remessaId, handlerName);
+                    }
                     finalizeModal.classList.add('hidden');
                 } else {
                     showFeedback("Por favor, insira o nome do executor.", "error");
@@ -1096,12 +1294,23 @@
                 });
             } else if (type === 'grooming') {
                 const getGroomingStatusScore = (app) => {
-                    if (app.status === 'Chegou') return 1;
-                    if (app.status === 'Agendado') return 2;
-                    return 3; // Finalizado e outros
+                    const hasCreche = app.services?.includes('Creche/Hotel');
+                    if (app.status === 'Chegou' && !hasCreche) return 1;
+                    if (app.status === 'Agendado' && !hasCreche) return 2;
+                    if (hasCreche) return 3;
+                    return 4; // Finalizado e outros
                 };
                 
-                const inProgress = filteredAppointments.filter(a => a.status !== 'Finalizado').sort((a, b) => getGroomingStatusScore(a) - getGroomingStatusScore(b));
+                const inProgress = filteredAppointments.filter(a => a.status !== 'Finalizado').sort((a, b) => {
+                    const scoreA = getGroomingStatusScore(a);
+                    const scoreB = getGroomingStatusScore(b);
+                    if (scoreA !== scoreB) {
+                        return scoreA - scoreB;
+                    }
+                    const timeA = a.checkinTime || a.appointmentDatetime;
+                    const timeB = b.checkinTime || b.appointmentDatetime;
+                    return new Date(timeA) - new Date(timeB);
+                });
                 const finalized = filteredAppointments.filter(a => a.status === 'Finalizado');
                 document.getElementById('pets-in-queue-count').textContent = inProgress.length;
                 document.getElementById('pets-finalized-count').textContent = finalized.length;
@@ -1138,9 +1347,18 @@
             const remessas = {};
             const noRemessa = [];
             
-            let arrivalCount = 0;
+            // Assign arrival numbers based on checkinTime
+            const arrivedPets = allAppointments
+                .filter(app => app.status === 'Chegou' && app.checkinTime)
+                .sort((a,b) => new Date(a.checkinTime) - new Date(b.checkinTime));
+            
+            arrivedPets.forEach((pet, index) => {
+                // Find the original appointment object and update it
+                const originalApp = allAppointments.find(a => a.id === pet.id);
+                if(originalApp) originalApp.arrivalNumber = index + 1;
+            });
+
             filteredAppointments.forEach(app => { 
-                app.arrivalNumber = app.status === 'Chegou' ? ++arrivalCount : undefined;
                 if (app.remessaId) {
                     if (!remessas[app.remessaId]) {
                         remessas[app.remessaId] = { name: app.remessaName, apps: [], createdAt: app.remessaCreatedAt || app.createdAt, remessaId: app.remessaId, color: app.remessaColor, isFinalized: true };
@@ -1155,8 +1373,21 @@
             const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-            const getGroomingStatusScore = (app) => (app.status === 'Chegou' ? 1 : 2);
-            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => getGroomingStatusScore(a) - getGroomingStatusScore(b));
+            const getGroomingStatusScore = (app) => {
+                const hasCreche = app.services?.includes('Creche/Hotel');
+                if (app.status === 'Chegou' && !hasCreche) return 1;
+                if (app.status === 'Agendado' && !hasCreche) return 2;
+                if (hasCreche) return 3; // Creche/Hotel pets go after regular ones
+                return 4; // Others
+            };
+            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => {
+                 const scoreA = getGroomingStatusScore(a);
+                 const scoreB = getGroomingStatusScore(b);
+                 if (scoreA !== scoreB) return scoreA - scoreB;
+                 const timeA = a.checkinTime || a.appointmentDatetime;
+                 const timeB = b.checkinTime || b.appointmentDatetime;
+                 return new Date(timeA) - new Date(timeB);
+            });
             const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado');
 
             const mainContainer = document.createElement('div');
@@ -1180,6 +1411,7 @@
                          <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa #${index + 1}: ${remessa.name}</h3>
                     </div>
                     <div class="flex flex-col gap-1">
+                        <button class="finalize-remessa-btn px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-remessa-id="${remessa.remessaId}">Finalizar Lote</button>
                         <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}">Editar</button>
                         <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
                     </div>`;
@@ -1219,15 +1451,33 @@
         function createAppointmentCardHTML(app, contextTab) {
             const viewMode = viewModes[contextTab];
             const isCompact = viewMode === 'compact';
+            const hasTosa = app.services?.includes('Tosa'); // Only "Tosa"
+            const hasTaxiDog = app.services?.includes('Taxi Dog');
+            const hasCreche = app.services?.includes('Creche/Hotel');
 
             // Determine background color class based on a priority of statuses
             let cardBgClass = 'bg-white'; // Default
+
+            // Base service colors
+            if (contextTab === 'reception' && hasTaxiDog) {
+                cardBgClass = 'taxidog-dark-bg';
+            } else if (hasCreche) {
+                cardBgClass = 'creche-dark-blue-bg';
+            } else if (hasTosa) {
+                cardBgClass = 'tosa-yellow-bg';
+            }
+
+            // Status colors override service colors
+            if (app.status === 'Chegou') {
+                cardBgClass = 'arrived-blue-bg';
+            }
+
+            // Highest priority overrides
+            if (app.status === 'Finalizado') {
+                cardBgClass = 'finalized-green-bg'; // Finalized is always green
+            }
             if (app.serviceRequest?.status === 'Pending') {
-                cardBgClass = 'requested-orange-bg'; // ORANGE for pending service request (highest priority)
-            } else if (app.status === 'Chegou') {
-                cardBgClass = 'arrived-blue-bg'; // BLUE for arrived pets
-            } else if (app.status === 'Finalizado') {
-                cardBgClass = 'finalized-green-bg'; // GREEN for finalized services
+                cardBgClass = 'requested-orange-bg'; // Pending request is always orange
             }
 
             // Base classes, now including the dynamic background class
@@ -1246,10 +1496,16 @@
             
             // Show a specific status bubble for pending requests for better clarity
             let statusBubbleHTML;
+            let pulseClass = '';
+            // MODIFIED: Pulse if finalized but not notified, only in reception
+            if (contextTab === 'reception' && app.status === 'Finalizado' && !app.notifiedAt) {
+                pulseClass = 'animate-pulse';
+            }
+
             if (app.serviceRequest?.status === 'Pending') {
                 statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-orange-500 text-white animate-pulse">Solicitado</span>`;
             } else {
-                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'}">${app.status}</span>`;
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'} ${pulseClass}">${app.status}</span>`;
             }
 
             let displayServices = app.services || [];
@@ -1446,6 +1702,46 @@
             // Ensure hidden editing ID is always cleared on reset
             form.querySelector('#editing-appointment-id').value = '';
         }
+        
+        function handleReplicateAppointment(id) {
+            const appointmentToReplicate = allAppointments.find(app => app.id === id);
+            if (!appointmentToReplicate) {
+                showFeedback("Agendamento não encontrado para replicar.", "error");
+                return;
+            }
+
+            const form = document.getElementById('appointment-form');
+            resetFormState(); // Limpa o formulário primeiro
+
+            // Preenche os dados
+            form.querySelector('#tutor-name').value = appointmentToReplicate.tutorName || '';
+            form.querySelector('#pet-name').value = appointmentToReplicate.petName || '';
+            form.querySelector('#pet-breed').value = appointmentToReplicate.petBreed || '';
+            form.querySelector('#observations').value = appointmentToReplicate.observations || '';
+
+            // Limpa o campo de data/hora
+            form.querySelector('#appointment-datetime').value = '';
+
+            // Seleciona os serviços
+            const allServices = appointmentToReplicate.services || [];
+            form.querySelectorAll('#services-checkboxes input[type="checkbox"]').forEach(cb => {
+                cb.checked = allServices.includes(cb.value);
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
+            });
+            
+            if (allServices.includes('Remoção')) {
+                form.querySelectorAll('#remocao-sub-services input[type="checkbox"]').forEach(subCb => {
+                    subCb.checked = allServices.includes(`Remoção de ${subCb.value}`);
+                });
+            }
+
+            showFeedback("Dados replicados! Defina uma nova data e hora.", "success");
+            
+            // Mostra a barra lateral se estiver oculta e foca no campo de data
+            document.getElementById('appointment-aside').classList.remove('hidden');
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+            form.querySelector('#appointment-datetime').focus();
+        }
 
         function handleCardActions(e) {
             const target = e.target;
@@ -1457,6 +1753,10 @@
             }
             if (target.matches('.undo-remessa-btn')) {
                 handleUndoRemessa(target.dataset.remessaId);
+                return;
+            }
+            if (target.matches('.finalize-remessa-btn')) {
+                openFinalizeModal(null, target.dataset.remessaId);
                 return;
             }
 
@@ -1564,9 +1864,21 @@
 
         async function handleCheckIn(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { status: 'Chegou', checkinTime: serverTimestamp() }); showFeedback("Check-in realizado."); } catch (e) { showFeedback(`Erro: ${e.message}`, "error"); } }
         
-        function openFinalizeModal(id) {
+        function openFinalizeModal(appointmentId, remessaId = null) {
             const modal = document.getElementById('finalize-modal');
-            modal.querySelector('#confirm-finalize-btn').dataset.appointmentId = id;
+            const confirmBtn = modal.querySelector('#confirm-finalize-btn');
+            
+            // Limpa os data-attributes anteriores
+            delete confirmBtn.dataset.appointmentId;
+            delete confirmBtn.dataset.remessaId;
+
+            if (appointmentId) {
+                confirmBtn.dataset.appointmentId = appointmentId;
+            }
+            if (remessaId) {
+                confirmBtn.dataset.remessaId = remessaId;
+            }
+
             const input = modal.querySelector('#finalize-handler-input');
             input.value = '';
             modal.classList.remove('hidden');
@@ -1583,6 +1895,32 @@
                 showFeedback("Serviço finalizado com sucesso.");
             } catch (e) {
                 showFeedback(`Erro ao finalizar: ${e.message}`, "error");
+            }
+        }
+
+        async function handleBatchFinalize(remessaId, handlerId) {
+            const batch = writeBatch(db);
+            const appointmentsToUpdate = allAppointments.filter(app => app.remessaId === remessaId && app.status !== 'Finalizado');
+
+            if (appointmentsToUpdate.length === 0) {
+                showFeedback("Todos os pets nesta remessa já estão finalizados.", "info");
+                return;
+            }
+
+            appointmentsToUpdate.forEach(app => {
+                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, app.id);
+                batch.update(docRef, {
+                    status: 'Finalizado',
+                    finalizedAt: serverTimestamp(),
+                    finalizedBy: handlerId
+                });
+            });
+
+            try {
+                await batch.commit();
+                showFeedback(`Remessa finalizada com sucesso por ${handlerId}.`);
+            } catch (error) {
+                showFeedback(`Erro ao finalizar remessa: ${error.message}`, "error");
             }
         }
         
@@ -1730,12 +2068,6 @@
             } catch(e) { showFeedback(`Erro: ${e.message}`, "error"); } finally { btn.disabled = false; btn.textContent = 'Guardar Datas'; }
         }
         
-        function showFeedback(message, type = 'success') {
-            const modal = document.getElementById('feedback-modal'), p = document.getElementById('feedback-message');
-            p.textContent = message; p.className = type==='success'?'text-green-700':'text-red-700';
-            modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('hidden'), 3000);
-        }
-
         function updateViewToggleButtons(activeTab) {
             if (!activeTab || activeTab === 'history') return;
 
@@ -1874,358 +2206,6 @@
                 e.preventDefault();
             });
         }
-
-        // --- Info Modals Functions ---
-        const popContentHTML = `
-            <h4>POP – Procedimento Operacional Padrão: Etapas do Serviço de Banho</h4>
-            <p><strong>Objetivo:</strong> Padronizar o processo de banho para garantir a segurança, o bem-estar do pet, a qualidade do serviço e a satisfação do cliente.</p>
-            <h5>Processo 1: Pré-Banho (Avaliação e Preparação)</h5>
-            <p>Esta é a etapa de diagnóstico, onde a qualidade do serviço final é definida.</p>
-            <ul>
-                <li><strong>Passo 1: Confirmação do Serviço:</strong> Verifique na comanda ou agenda digital qual o serviço contratado (Banho, Banho com Hidratação, Combo, etc.) e se há alguma observação do tutor ou da recepção.</li>
-                <li><strong>Passo 2: Avaliação Diagnóstica da Pelagem:</strong> Coloque o pet na mesa de avaliação. Com as mãos e um pente, inspecione a condição da pelagem e da pele. Procure por:
-                    <ul>
-                        <li><strong>Nós e Emaranhados:</strong> Verifique a intensidade. Se for um caso severo, o serviço de "Remoção de Nós" deve ser solicitado.</li>
-                        <li><strong>Excesso de Subpelo/Pelo Morto:</strong> Identifique se o cão está em período de troca de pelo para sugerir o serviço de "Remoção de Subpelo".</li>
-                        <li><strong>Saúde da Pele:</strong> Observe se há vermelhidão, irritações, falhas na pelagem ou presença de parasitas.</li>
-                    </ul>
-                </li>
-                <li><strong>Passo 3: Comunicação e Upsell:</strong> Caso identifique a necessidade de um serviço adicional, comunique imediatamente à Liderança ou à Recepção. Eles serão responsáveis por contatar o tutor para aprovação. Nunca realize um serviço extra sem autorização prévia.</li>
-                <li><strong>Passo 4: Corte de Unhas:</strong>
-                    <ul>
-                        <li><strong>Ferramentas:</strong> Alicate (guilhotina ou tradicional) e pó hemostático (pó para estancar sangue).</li>
-                        <li><strong>Execução:</strong> Com o pet contido de forma segura, corte apenas as pontas das unhas, com muito cuidado para não atingir o "sabugo" (veia interna). Tenha sempre o pó hemostático ao alcance da mão.</li>
-                    </ul>
-                </li>
-                <li><strong>Passo 5: Limpeza dos Ouvidos:</strong>
-                    <ul>
-                        <li><strong>Ferramentas:</strong> Solução de limpeza auricular específica para cães e algodão ou gaze.</li>
-                        <li><strong>Execução:</strong> Aplique a solução no algodão (não diretamente no ouvido, a menos que seja a indicação do produto) e limpe suavemente apenas a parte externa e visível da orelha (pavilhão auricular).</li>
-                    </ul>
-                    <p><strong>⚠️ ATENÇÃO:</strong> Nunca introduza cotonetes ou qualquer objeto no canal auditivo do animal.</p>
-                </li>
-            </ul>
-
-            <h5>Processo 2: Banho (Higienização Profunda)</h5>
-            <ul>
-                <li><strong>Passo 1: Preparação:</strong> Coloque o pet na banheira com o apoio de uma Guia de Contenção. Certifique-se de que o Pet está Seguro.</li>
-                <li><strong>Passo 2: Primeiro Banho (Pré-Lavagem):</strong> Molhe o cão completamente com água em temperatura morna. Aplique o shampoo neutro (ou o produto específico indicado pela Liderança). O objetivo é remover a sujeira mais pesada. Enxágue bem.</li>
-                <li><strong>Passo 3: Segundo Banho (Limpeza e Tratamento):</strong> Aplique o shampoo mais potente/cheiroso ou o shampoo de tratamento (ex: para pelos claros, antialérgicos, etc.). Massageie bem o corpo todo, no sentido do pelo, para limpar profundamente a pele e a pelagem. Deixe agir por alguns minutos, se indicado. Enxágue completamente.</li>
-                <li><strong>Passo 4: Terceiro Banho (Hidratação e Selagem):</strong> Aplique o condicionador, espalhando uniformemente por toda a pelagem. Deixe agir pelo tempo indicado na embalagem (geralmente de 3 a 5 minutos).</li>
-                <li><strong>Passo 5: Enxágue Final:</strong> Este é um passo crítico. Enxágue o animal de forma abundante, garantindo que NENHUM resíduo de produto permaneça na pele. Resíduos podem causar coceiras e alergias. Retire o algodão dos ouvidos.</li>
-            </ul>
-            <p><strong>OBS:</strong> Dependendo da situação do Pet, será necessário dar 1 banho a mais.</p>
-
-            <h5>Processo 3: Processo de Sopro (Secagem Inicial)</h5>
-            <ul>
-                <li><strong>Passo 1: Remoção do Excesso de Água:</strong> Antes de ligar o soprador, pressione suavemente uma toalha sobre o corpo do pet para remover o excesso de água.</li>
-                <li><strong>Passo 2: Utilização do Soprador:</strong>
-                    <ul>
-                       <li><strong>Segurança:</strong> Proteja o rosto e os ouvidos do animal do jato de ar direto. Comece com a potência mais baixa para o pet se acostumar.</li>
-                        <li><strong>Técnica para Pelo Curto:</strong> Pode-se aproximar mais o bocal do soprador, mas mantenha-o sempre em movimento circular para evitar concentração de calor em um único ponto.</li>
-                        <li><strong>Técnica para Pelo Longo:</strong> Mantenha o bocal a uma distância maior para evitar a formação de nós. Direcione o ar no sentido do crescimento do pelo.</li>
-                    </ul>
-                     <p><strong>⚠️ ATENÇÃO:</strong> Nunca mantenha o soprador parado em um único local, pois isso pode causar desconforto e até queimaduras na pele do animal.</p>
-                </li>
-                <li><strong>Passo 3: Transição para a Secadora (se aplicável):</strong> Após remover cerca de 70-80% da umidade com o soprador, o pet pode ser colocado na máquina secadora de gabinete.</li>
-                 <p><strong>⚠️ ATENÇÃO MÁXIMA - SECADORA DE GABINETE:</strong></p>
-                <ul>
-                    <li>Utilize APENAS em temperatura baixa ou morna.</li>
-                    <li>NUNCA deixe o animal sem supervisão. Monitore visualmente a cada 5 minutos.</li>
-                    <li>NÃO UTILIZE em cães braquicefálicos (focinho curto), idosos, cardíacos ou com problemas respiratórios.</li>
-                </ul>
-            </ul>
-
-            <h5>Processo 4: Escovação e Finalização</h5>
-            <ul>
-                <li><strong>Passo 1: Escovação e Secagem Final com Secador de Pedestal:</strong>
-                    <ul>
-                        <li><strong>Execução:</strong> Coloque o pet na mesa de tosa. Posicione o secador de pedestal a uma distância segura, direcionando o jato de ar morno para a área a ser trabalhada.</li>
-                        <li><strong>Técnica:</strong> O uso do secador de pedestal libera ambas as mãos do profissional. Com uma mão, separe as mechas de pelo para expor a raiz, e com a outra, utilize a rasqueadeira para escovar no sentido do crescimento. Este método garante uma secagem completa desde a raiz e um alisamento eficaz da pelagem.</li>
-                        <li><strong>Segurança:</strong> Mesmo com o secador de pedestal, movimente o pet ou redirecione o bocal periodicamente para não concentrar calor em um único ponto. Verifique a temperatura da pele do animal com frequência com o dorso da sua mão.</li>
-                    </ul>
-                </li>
-                <li><strong>Passo 2: Adornos e Perfume:</strong> Com o pet completamente seco, aplique os adornos (laços, gravatas) de forma segura e confortável. Aplique o perfume (se contratado/permitido) borrifando a uma certa distância, nunca no rosto.</li>
-                <li><strong>Passo 3: Atualização da Agenda:</strong> Avise no card da agenda digital que o pet foi "Finalizado". Isso notifica a recepção e o tutor.</li>
-                <li><strong>Passo 4: Repouso e Aguardo:</strong> Leve o pet para uma das baías de finalização, um local limpo, seco e tranquilo. Ofereça água fresca enquanto ele aguarda o tutor.</li>
-            </ul>
-
-            <h4>Anexo: Procedimentos de Remoção e Tratamento da Pelagem</h4>
-            <h5>A. Remoção de Nós (Desembolo)</h5>
-            <ul>
-                <li><strong>Ferramentas:</strong> Fluido desembaraçante, rasqueadeira, pente, desemboladores (ganchos ou rastelos).</li>
-                <li><strong>Processo:</strong>
-                    <ul>
-                        <li>Aplique o fluido desembaraçante diretamente sobre o nó.</li>
-                        <li>Com os dedos, tente abrir o nó o máximo possível.</li>
-                        <li>Segure a base do pelo, junto à pele, para evitar puxar e causar dor.</li>
-                        <li>Com a ponta de um pente ou um desembolador, vá desfazendo o nó de fora para dentro, em pequenas mechas.</li>
-                        <li>Finalize passando a rasqueadeira suavemente.</li>
-                    </ul>
-                    <p><strong>⚠️ ATENÇÃO:</strong> Se um nó estiver muito compacto e colado à pele, não force. Informe a liderança. A tosa daquela área é a opção mais segura para evitar ferir o animal.</p>
-                </li>
-            </ul>
-
-            <h5>B. Remoção de Subpelo (Deshedding)</h5>
-            <ul>
-                <li><strong>Ferramentas:</strong> Escova ou ferramenta de remoção de subpelo (estilo "Furminator"), rasqueadeira, soprador.</li>
-                <li><strong>Processo:</strong>
-                     <ul>
-                        <li>(Durante o Processo de Sopro) Direcione o jato de ar do soprador contra o crescimento do pelo para levantar e soltar o subpelo morto.</li>
-                        <li>(Na Etapa de Escovação) Passe a rasqueadeira para remover a primeira camada de pelo solto.</li>
-                        <li>Utilize a ferramenta de de-shedding, passando-a suavemente, sem pressão excessiva, no sentido do crescimento do pelo. As passadas devem ser curtas e contínuas.</li>
-                        <li>Limpe a ferramenta a cada passada. Finalize com um pente para verificar a remoção.</li>
-                    </ul>
-                </li>
-            </ul>
-
-             <h5>C. Remoção de Pelo Morto (Geral)</h5>
-             <ul>
-                 <li><strong>Ferramentas:</strong> Rasqueadeira de borracha ("luva mágica") ou escovas de cerdas.</li>
-                 <li><strong>Processo:</strong>
-                    <ul>
-                        <li>(Durante o Banho) Ao aplicar o shampoo ou condicionador, massageie a pele com uma rasqueadeira de borracha em movimentos circulares para soltar os pelos mortos.</li>
-                        <li>(Na Etapa de Escovação) Escove toda a pelagem vigorosamente, mas com cuidado, para remover os pelos que se soltaram. Este processo é mais simples e focado em raças de pelo curto.</li>
-                    </ul>
-                 </li>
-             </ul>
-        `;
-
-        const policyContentHTML = `
-            <h4>Política de Comportamento e Segurança – Setor de Banho e Tosa Empório Pet</h4>
-            <h5>Nossa Filosofia: Artesãos do Cuidado, Guardiões da Confiança</h5>
-            <p>A equipe de Banho e Tosa do Empório Pet é composta por artistas e cuidadores. Nosso trabalho vai além da estética; ele promove saúde, bem-estar e fortalece o vínculo de confiança com nossos clientes. Esta política estabelece os padrões de excelência e segurança que nos definem como referência no mercado.</p>
-            
-            <h5>Seção 1: Segurança do Animal: Prioridade Absoluta</h5>
-            <ul>
-                <li><strong>1.1. Avaliação Pré-Serviço:</strong> Realize uma avaliação completa do animal (pele, pelo, comportamento) e comunique qualquer achado ao tutor e supervisor antes de iniciar.</li>
-                <li><strong>1.2. Segurança na Mesa e na Banheira:</strong> NUNCA deixe um animal desacompanhado. Utilize sempre a guia de contenção de forma segura e se possível use tapetes antiderrapantes. Mantenha uma mão no cão sempre que possível.</li>
-                <li><strong>1.3. Uso Seguro de Equipamentos:</strong> Verifique a temperatura das lâminas, manuseie tesouras com cuidado e mantenha os equipamentos em perfeito estado de manutenção, conforme detalhado na Seção 2.4.</li>
-                <li><strong>1.4. Secagem Segura:</strong> É ESTRITAMENTE PROIBIDO o uso de secadores de cabine com aquecimento e sem supervisão direta. Monitore constantemente a temperatura e os sinais do cão (a cada 5m).</li>
-                <li><strong>1.5. Manejo de Cães Difíceis ou Ansiosos:</strong> Priorize técnicas de baixo estresse. A segurança do colaborador e do cão vem em primeiro lugar. Interrompa o serviço se houver risco.</li>
-                <li><strong>1.6. Uso Correto e Consciente de Produtos:</strong> Respeite a diluição e a aplicação recomendada para cada produto, evitando desperdício e possíveis reações alérgicas.</li>
-            </ul>
-
-            <h5>Seção 2: Segurança, Organização e Responsabilidade do Colaborador</h5>
-            <ul>
-                <li><strong>2.1. Ergonomia e Prevenção de Lesões:</strong> Mantenha uma postura correta e peça ajuda para levantar animais pesados. Cuide do seu corpo.</li>
-                <li><strong>2.2. Equipamentos de Proteção Individual (EPIs):</strong> O uso de avental impermeável e calçados de segurança e Protetor Auricular na Área de Secagem é obrigatório.</li>
-                <li><strong>2.3. Organização e Limpeza do Ambiente:</strong> Mantenha sua estação de trabalho e o ambiente geral impecavelmente limpos e organizados. Um ambiente limpo é um ambiente seguro.</li>
-                <li><strong>2.4. Cuidado e Manutenção dos Equipamentos de Trabalho (NOVO E DETALHADO):</strong>
-                    <ul>
-                        <li><strong>Princípio Fundamental:</strong> Nossas ferramentas são ativos valiosos da empresa e essenciais para um trabalho de qualidade e seguro. O cuidado diário é responsabilidade de quem as utiliza.</li>
-                        <li><strong>Equipamentos Elétricos (Sopradores, Secadores, Máquinas de Tosa):</strong> Inspecione cabos antes do uso. Reporte qualquer avaria. Mantenha as saídas de ar limpas.</li>
-                        <li><strong>Ferramentas Manuais e Lâminas:</strong> Evite quedas. Limpe e desinfete após CADA uso. Informe sobre a necessidade de afiação.</li>
-                        <li><strong>Responsabilidade:</strong> Danos por mau uso poderão ser de responsabilidade do colaborador.</li>
-                    </ul>
-                </li>
-            </ul>
-
-            <h5>Seção 3: Padrões de Excelência no Atendimento e Rotinas</h5>
-            <ul>
-                <li><strong>3.1. Comunicação e Alinhamento com o Tutor:</strong> Ouça com atenção, gerencie as expectativas e seja honesto sobre o que é possível ser feito.</li>
-                <li><strong>3.2. Documentação do Serviço:</strong> Mantenha um registro para cada cão (tipo de tosa, produtos, observações) para garantir consistência.</li>
-                <li><strong>3.3. Transparência em Incidentes:</strong> Em caso de qualquer incidente, siga o protocolo: Pare > Avise o Supervisor > Comunique ao Tutor com Honestidade.</li>
-                <li><strong>3.4. Finalização e Apresentação (O "Fator UAU"):</strong> Faça uma revisão final do serviço. Adicione um toque especial (laço, bandana) e entregue o cão ao tutor com um feedback positivo sobre o comportamento dele.</li>
-                <li><strong>3.5. Preparação e Encerramento do Expediente:</strong> Ao final do dia, garanta que o setor esteja limpo, esterilizado e reabastecido para o dia seguinte.</li>
-            </ul>
-
-            <h5>Checklist Rápido de Segurança do Banhista e Tosador</h5>
-            <ul>
-                <li>[ ] O cão passou pela avaliação e o tutor está ciente do plano?</li>
-                <li>[ ] A contenção está segura?</li>
-                <li>[ ] Inspecionei os cabos dos equipamentos elétricos antes de ligar?</li>
-                <li>[ ] Minhas ferramentas estão limpas, desinfetadas e as lâminas estão frias?</li>
-                <li>[ ] Ao terminar, limpei e guardei todas as ferramentas corretamente?</li>
-            </ul>
-
-            <h5>Termo de Compromisso do Colaborador</h5>
-            <p>Eu, [Nome do Colaborador], CPF [Número do CPF], declaro que recebi, li, compreendi e concordo em seguir integralmente a "Política de Comportamento e Segurança do Setor de Banho e Tosa" do Empório Pet.</p>
-            <p>Comprometo-me a zelar pela segurança e bem-estar de cada animal, a manter um padrão de conduta profissional exemplar, a cuidar com diligência de todos os equipamentos de trabalho e a seguir todos os protocolos aqui estabelecidos.</p>
-            <p class="mt-4">[Cidade], [Data].</p>
-            <p class="mt-8">______________________________<br>Assinatura do Colaborador</p>
-        `;
-
-        function showPopModal() {
-            document.getElementById('info-modal-title').textContent = 'Procedimento Operacional Padrão';
-            document.getElementById('info-modal-content').innerHTML = popContentHTML;
-            document.getElementById('pop-modal').classList.remove('hidden');
-        }
-
-        function showPolicyModal() {
-            document.getElementById('info-modal-title').textContent = 'Política de Comportamento e Segurança';
-            document.getElementById('info-modal-content').innerHTML = policyContentHTML;
-            document.getElementById('pop-modal').classList.remove('hidden');
-        }
-
-
-        // --- Remessa Functions ---
-        function startRemessaMode() {
-            isRemessaModeActive = true;
-            selectedForRemessa = [];
-            currentRemessaId = null;
-            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.add('hidden');
-            document.getElementById('active-remessa-controls').classList.remove('hidden');
-            document.getElementById('remessa-name-input').value = '';
-            renderAllContent();
-        }
-        
-        function startEditRemessaMode(remessaId, remessaName) {
-            isRemessaModeActive = true;
-            currentRemessaId = remessaId;
-            selectedForRemessa = allAppointments
-                .filter(app => app.remessaId === remessaId)
-                .map(app => app.id);
-            
-            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.add('hidden');
-            document.getElementById('active-remessa-controls').classList.remove('hidden');
-            document.getElementById('remessa-name-input').value = remessaName;
-            renderAllContent();
-        }
-
-        function exitRemessaMode() {
-            isRemessaModeActive = false;
-            document.getElementById('grooming-tab-content').classList.remove('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.remove('hidden');
-            document.getElementById('active-remessa-controls').classList.add('hidden');
-            document.getElementById('remessa-name-input').value = '';
-            selectedForRemessa = [];
-            currentRemessaId = null;
-            renderAllContent();
-        }
-
-        function toggleRemessaSelection(id) {
-            const index = selectedForRemessa.indexOf(id);
-            if (index > -1) {
-                selectedForRemessa.splice(index, 1);
-            } else {
-                selectedForRemessa.push(id);
-            }
-            renderAllContent();
-        }
-
-        async function finalizeRemessa() {
-            const name = document.getElementById('remessa-name-input').value;
-            if (!name.trim()) {
-                showFeedback("Por favor, insira um nome para a remessa.", 'error');
-                return;
-            }
-            if (selectedForRemessa.length === 0) {
-                showFeedback("Nenhum pet selecionado para a remessa.", 'error');
-                exitRemessaMode();
-                return;
-            }
-            
-            const remessaId = currentRemessaId || `remessa_${Date.now()}`;
-            const remessaTimestamp = currentRemessaId ? null : serverTimestamp();
-            const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
-
-            const updates = [];
-
-            // Find apps that should be in the remessa
-            selectedForRemessa.forEach(appointmentId => {
-                const data = { remessaName: name, remessaId, remessaColor: randomColor };
-                if (remessaTimestamp) data.remessaCreatedAt = remessaTimestamp;
-                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId); 
-                updates.push(updateDoc(docRef, data));
-            });
-
-            // If editing, find apps to remove from the remessa
-            if (currentRemessaId) {
-                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id));
-                appsToRemove.forEach(app => {
-                    updates.push(updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, app.id), {
-                        remessaName: null,
-                        remessaId: null,
-                        remessaCreatedAt: null,
-                        remessaColor: null,
-                    }));
-                });
-            }
-
-            try {
-                await Promise.all(updates);
-                showFeedback(`Remessa "${name}" salva com sucesso!`);
-            } catch (error) {
-                showFeedback("Erro ao salvar a remessa.", "error");
-                console.error("Error creating remessa: ", error);
-            } finally {
-                exitRemessaMode();
-            }
-        }
-
-        function openRemocaoModal() {
-            document.getElementById('remocao-control-modal').classList.remove('hidden');
-            renderRemocaoHistory();
-        }
-        
-        async function handleRemocaoFormSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const date = form.querySelector('#remocao-date').value;
-            const handlerName = form.querySelector('#remocao-handler-name').value;
-            const petName = form.querySelector('#remocao-pet-name').value;
-
-            if (!date || !handlerName || !petName) {
-                showFeedback('Por favor, preencha todos os campos.', 'error');
-                return;
-            }
-
-            const removalData = {
-                date,
-                handlerName,
-                petName,
-                createdAt: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/removals`), removalData);
-                showFeedback('Registo de remoção salvo com sucesso!');
-                form.reset();
-                document.getElementById('remocao-date').value = new Date().toISOString().split('T')[0];
-            } catch (error) {
-                showFeedback(`Erro ao salvar: ${error.message}`, 'error');
-                console.error("Error saving removal record: ", error);
-            }
-        }
-        
-        function renderRemocaoHistory() {
-             const listEl = document.getElementById('remocao-list');
-             const dayFilterBtn = document.getElementById('remocao-day-filter');
-             const dayFilter = dayFilterBtn ? dayFilterBtn.dataset.date : '';
-             const monthFilter = document.getElementById('remocao-month-filter').value;
-
-            let filteredRemovals = allRemovals;
-
-            if (dayFilter) {
-                filteredRemovals = filteredRemovals.filter(r => r.date === dayFilter);
-            } else if (monthFilter) {
-                filteredRemovals = filteredRemovals.filter(r => r.date && r.date.startsWith(monthFilter));
-            }
-
-            filteredRemovals.sort((a,b) => {
-                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
-                return dateB - dateA;
-            });
-
-            if(filteredRemovals.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center">Nenhum registo encontrado.</p>`;
-                return;
-            }
-
-            listEl.innerHTML = filteredRemovals.map(removal => `
-                <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
-                    <div>
-                        <p class="font-semibold">${removal.petName} - <span class="font-normal">${new Date(removal.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span></p>
-                        <p class="text-sm text-gray-600">Executor: ${removal.handlerName}</p>
-                    </div>
-                    <button data-id="${removal.id}" data-type="remocao" class="delete-remocao-btn text-red-500 hover:text-red-700 font-bold px-2">&times;</button>
-                </div>
-            `).join('');
-        }
         
         // --- FUNÇÕES DO CALENDÁRIO E RELÓGIO ---
 
@@ -2281,7 +2261,11 @@
                     targetButton.dataset.date = newDate;
                     targetButton.textContent = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
                     document.getElementById('calendar-modal').classList.add('hidden');
-                    renderAllContent(); // Atualiza a lista após selecionar nova data
+                    if (activeFilterId.startsWith('remocao-')) {
+                        renderRemocaoHistory();
+                    } else {
+                        renderAllContent();
+                    }
                 });
             });
 
@@ -2303,48 +2287,6 @@
                 renderFilterCalendar();
             });
         }
-
-        // ADICIONADO: Função para replicar agendamento
-        function handleReplicateAppointment(id) {
-            const appointmentToReplicate = allAppointments.find(app => app.id === id);
-            if (!appointmentToReplicate) {
-                showFeedback("Agendamento não encontrado para replicar.", "error");
-                return;
-            }
-
-            const form = document.getElementById('appointment-form');
-            resetFormState(); // Limpa o formulário primeiro
-
-            // Preenche os dados
-            form.querySelector('#tutor-name').value = appointmentToReplicate.tutorName || '';
-            form.querySelector('#pet-name').value = appointmentToReplicate.petName || '';
-            form.querySelector('#pet-breed').value = appointmentToReplicate.petBreed || '';
-            form.querySelector('#observations').value = appointmentToReplicate.observations || '';
-
-            // Limpa o campo de data/hora
-            form.querySelector('#appointment-datetime').value = '';
-
-            // Seleciona os serviços
-            const allServices = appointmentToReplicate.services || [];
-            form.querySelectorAll('#services-checkboxes input[type="checkbox"]').forEach(cb => {
-                cb.checked = allServices.includes(cb.value);
-                cb.dispatchEvent(new Event('change', { bubbles: true }));
-            });
-            
-            if (allServices.includes('Remoção')) {
-                form.querySelectorAll('#remocao-sub-services input[type="checkbox"]').forEach(subCb => {
-                    subCb.checked = allServices.includes(`Remoção de ${subCb.value}`);
-                });
-            }
-
-            showFeedback("Dados replicados! Defina uma nova data e hora.", "success");
-            
-            // Mostra a barra lateral se estiver oculta e foca no campo de data
-            document.getElementById('appointment-aside').classList.remove('hidden');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-            form.querySelector('#appointment-datetime').focus();
-        }
-
     </script>
 
 </body>
