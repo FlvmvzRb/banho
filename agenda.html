@@ -312,11 +312,10 @@
                             <label for="client-route" class="block text-xs font-medium">Rota do Cliente</label>
                             <select id="client-route" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
                                 <option value="">Selecione uma rota</option>
-                                <option value="Rota 1">Rota 1</option>
-                                <option value="Rota 2">Rota 2</option>
-                                <option value="Rota 3">Rota 3</option>
-                                <option value="Rota 4">Rota 4</option>
-                                <option value="Rota 5">Rota 5</option>
+                                <option value="Rafael">Rafael</option>
+                                <option value="Douglas">Douglas</option>
+                                <option value="Matheus">Matheus</option>
+                                <option value="Avulso">Avulso</option>
                             </select>
                         </div>
                     </div>
@@ -417,11 +416,10 @@
                                     <label for="grooming-route-filter" class="text-sm font-medium">Filtrar por Rota:</label>
                                     <select id="grooming-route-filter" class="mt-1 block w-full px-2 py-1 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900 text-sm">
                                         <option value="">Todas as Rotas</option>
-                                        <option value="Rota 1">Rota 1</option>
-                                        <option value="Rota 2">Rota 2</option>
-                                        <option value="Rota 3">Rota 3</option>
-                                        <option value="Rota 4">Rota 4</option>
-                                        <option value="Rota 5">Rota 5</option>
+                                        <option value="Rafael">Rafael</option>
+                                        <option value="Douglas">Douglas</option>
+                                        <option value="Matheus">Matheus</option>
+                                        <option value="Avulso">Avulso</option>
                                     </select>
                                 </div>
                                 <div class="flex items-center gap-1">
@@ -489,11 +487,10 @@
                                     <label for="taxidog-route-filter" class="text-sm font-medium">Filtrar por rota:</label>
                                     <select id="taxidog-route-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm">
                                         <option value="">Todas as Rotas</option>
-                                        <option value="Rota 1">Rota 1</option>
-                                        <option value="Rota 2">Rota 2</option>
-                                        <option value="Rota 3">Rota 3</option>
-                                        <option value="Rota 4">Rota 4</option>
-                                        <option value="Rota 5">Rota 5</option>
+                                        <option value="Rafael">Rafael</option>
+                                        <option value="Douglas">Douglas</option>
+                                        <option value="Matheus">Matheus</option>
+                                        <option value="Avulso">Avulso</option>
                                     </select>
                                 </div>
                                 <div class="flex items-center gap-2">
@@ -1466,14 +1463,13 @@
             // --- Service-based coloring ---
             if (hasCreche) {
                 cardBgClass = 'creche-dark-blue-bg';
-            } else if (contextTab === 'reception') {
-                // MODIFICADO: Lógica invertida para o Taxi Dog na Recepção
+            } else if (contextTab === 'reception' || contextTab === 'grooming') { // MODIFICADO: Aplicar a mesma lógica para Banho e Tosa
                 if (!hasTaxiDog) { // Se NÃO tiver Taxi Dog, fica cinza
                     cardBgClass = 'taxidog-dark-bg';
                 } else if (hasTosa) { // Se tiver Taxi Dog, volta a ser amarelo se tiver tosa
                     cardBgClass = 'tosa-yellow-bg';
                 }
-            } else if (hasTosa) { // Para outras abas, a cor de tosa é padrão
+            } else if (hasTosa) { 
                 cardBgClass = 'tosa-yellow-bg';
             }
 
