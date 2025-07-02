@@ -31,12 +31,13 @@
             --color-finalized-dark-border: #34D399; /* Green-400 */
             --color-arrived-bg: #E0F2FE; /* Sky-100 */
             --color-arrived-border: #7DD3FC; /* Sky-300 */
-            --color-requested-bg: #FFF7ED; /* Orange-100 */
-            --color-requested-border: #FB923C; /* Orange-400 */
-            --color-tosa-bg: #FEF3C7; /* Amber-100 */
-            --color-tosa-border: #FBBF24; /* Amber-400 */
-            --color-creche-bg: #374151; /* Gray-700 */
-            --color-creche-border: #1F2937; /* Gray-800 */
+            --color-requested-bg: #FEE2E2; /* Red-100 */
+            --color-requested-border: #F87171; /* Red-400 */
+            --color-attention-orange-bg: #FFF7ED; /* Orange-100 */
+            --color-attention-orange-border: #FB923C; /* Orange-400 */
+            /* MODIFICADO: Cor de Tosa para amarelo-bege */
+            --color-tosa-bg: #FFFFCC; /* Amarelo-Bege (Custom) */
+            --color-tosa-border: #F0E68C; /* Khaki (Borda correspondente) */
             --color-taxidog-bg: #D1D5DB; /* Gray-300 */
             --color-taxidog-border: #9CA3AF; /* Gray-400 */
             --color-accent-gold: #F59E0B; /* Amber-500 */
@@ -88,21 +89,17 @@
             background-color: var(--color-arrived-bg);
             border-color: var(--color-arrived-border);
         }
-        .requested-orange-bg {
+        .requested-red-bg {
             background-color: var(--color-requested-bg);
             border-color: var(--color-requested-border);
+        }
+        .attention-orange-bg {
+            background-color: var(--color-attention-orange-bg);
+            border-color: var(--color-attention-orange-border);
         }
         .tosa-yellow-bg {
             background-color: var(--color-tosa-bg);
             border-color: var(--color-tosa-border);
-        }
-        .creche-dark-blue-bg {
-            background-color: var(--color-creche-bg);
-            border-color: var(--color-creche-border);
-            color: white;
-        }
-        .creche-dark-blue-bg h4, .creche-dark-blue-bg p, .creche-dark-blue-bg strong {
-            color: white;
         }
         .taxidog-dark-bg {
             background-color: var(--color-taxidog-bg);
@@ -1136,8 +1133,15 @@
             onSnapshot(query(collection(db, `artifacts/${appId}/public/data/appointments`)), (snapshot) => {
                 allAppointments = snapshot.docs.map(doc => {
                     const data = doc.data();
-                    Object.keys(data).forEach(key => { if (data[key] instanceof Timestamp) data[key] = data[key].toDate(); });
-                    if (Array.isArray(data.bathPackageDates)) data.bathPackageDates = data.bathPackageDates.map(ts => ts.toDate());
+                    // CORRIGIDO: Converte todos os timestamps para datas de uma só vez
+                    Object.keys(data).forEach(key => {
+                        if (data[key] instanceof Timestamp) {
+                            data[key] = data[key].toDate();
+                        } else if (key === 'bathPackageDates' && Array.isArray(data[key])) {
+                            // Converte timestamps dentro do array bathPackageDates
+                            data[key] = data[key].map(ts => (ts instanceof Timestamp ? ts.toDate() : ts));
+                        }
+                    });
                     return { id: doc.id, ...data };
                 });
                 populateServiceFilters();
@@ -1272,11 +1276,13 @@
             // MODIFICADO: Lógica de ordenação da recepção
             if (type === 'reception') {
                 const getStatusScore = (app) => {
-                    if (app.serviceRequest?.status === 'Pending') return 0; // Highest
-                    if (app.status === 'Finalizado') return 1;
-                    if (app.status === 'Chegou') return 2;
-                    if (app.status === 'Agendado') return 3;
-                    return 4; // Fallback
+                    if (app.isDischarged) return 99; // Itens com baixa vão para o final
+                    if (app.serviceRequest?.status === 'Pending') return 0;
+                    if (app.status === 'Finalizado' && !app.notifiedAt) return 1;
+                    if (app.status === 'Finalizado') return 2;
+                    if (app.status === 'Chegou') return 3;
+                    if (app.status === 'Agendado') return 4;
+                    return 5;
                 };
 
                 filteredAppointments.sort((a, b) => {
@@ -1285,12 +1291,11 @@
                     if (scoreA !== scoreB) {
                         return scoreA - scoreB;
                     }
-                    // For same-status items, sort by time (check-in time if available, otherwise scheduled time)
+                    
                     const timeA = a.checkinTime || a.appointmentDatetime;
                     const timeB = b.checkinTime || b.appointmentDatetime;
                     return new Date(timeA) - new Date(timeB);
                 });
-            // MODIFICADO: Lógica para a aba de Banho e Tosa agora chama a função renderGroomingList
             } else if (type === 'grooming') {
                 renderGroomingList(filteredAppointments); 
                 return; 
@@ -1315,17 +1320,14 @@
                 : '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento encontrado para os filtros selecionados.</p>';
         }
         
-        // MODIFICADO: Função refatorada para renderizar ambas as listas de Banho/Tosa e Creche
         function renderGroomingList(allGroomingAppointments) {
             const groomingListElement = document.getElementById('grooming-appointments-list');
             const crecheListElement = document.getElementById('creche-appointments-list');
             const type = 'grooming';
 
-            // 1. Separa os agendamentos
             const crecheAppointments = allGroomingAppointments.filter(app => app.services?.includes('Creche/Hotel'));
             const regularGroomingAppointments = allGroomingAppointments.filter(app => !app.services?.includes('Creche/Hotel'));
 
-            // 2. Renderiza a lista principal de Banho e Tosa (com remessas)
             groomingListElement.innerHTML = ''; 
             groomingListElement.className = ''; 
 
@@ -1352,8 +1354,18 @@
                     noRemessa.push(app);
                 }
             });
+
+            for (const remessaId in remessas) {
+                remessas[remessaId].apps.sort((a, b) => {
+                    const aHasCheckin = a.checkinTime;
+                    const bHasCheckin = b.checkinTime;
+                    if (aHasCheckin && !bHasCheckin) return -1;
+                    if (!aHasCheckin && bHasCheckin) return 1;
+                    if (aHasCheckin && bHasCheckin) return new Date(a.checkinTime) - new Date(b.checkinTime);
+                    return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
+                });
+            }
             
-            // Atualiza os contadores com base apenas nos agendamentos regulares
             const inProgress = regularGroomingAppointments.filter(a => a.status !== 'Finalizado');
             const finalized = regularGroomingAppointments.filter(a => a.status === 'Finalizado');
             document.getElementById('pets-in-queue-count').textContent = inProgress.length;
@@ -1363,11 +1375,15 @@
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
             const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => {
-                 const timeA = a.checkinTime || a.appointmentDatetime;
-                 const timeB = b.checkinTime || b.appointmentDatetime;
-                 return new Date(timeA) - new Date(timeB);
+                const aHasCheckin = a.checkinTime;
+                const bHasCheckin = b.checkinTime;
+                if (aHasCheckin && !bHasCheckin) return -1;
+                if (!aHasCheckin && bHasCheckin) return 1;
+                if (aHasCheckin && bHasCheckin) return new Date(a.checkinTime) - new Date(b.checkinTime);
+                return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
             });
-            const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado');
+
+            const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado').sort((a,b) => new Date(b.finalizedAt) - new Date(a.finalizedAt));
 
             const mainContainer = document.createElement('div');
             mainContainer.className = 'flex flex-wrap gap-4 items-start';
@@ -1456,37 +1472,33 @@
             const isCompact = viewMode === 'compact';
             const hasTosa = app.services?.includes('Tosa');
             const hasTaxiDog = app.services?.includes('Taxi Dog');
-            const hasCreche = app.services?.includes('Creche/Hotel');
 
             let cardBgClass = 'bg-white'; // Default color
 
-            // --- Service-based coloring ---
-            if (hasCreche) {
-                cardBgClass = 'creche-dark-blue-bg';
-            } else if (contextTab === 'reception' || contextTab === 'grooming') { // MODIFICADO: Aplicar a mesma lógica para Banho e Tosa
-                if (!hasTaxiDog) { // Se NÃO tiver Taxi Dog, fica cinza
-                    cardBgClass = 'taxidog-dark-bg';
-                } else if (hasTosa) { // Se tiver Taxi Dog, volta a ser amarelo se tiver tosa
-                    cardBgClass = 'tosa-yellow-bg';
-                }
-            } else if (hasTosa) { 
-                cardBgClass = 'tosa-yellow-bg';
+            // MODIFICADO: Lógica de cores invertida e simplificada
+            if (hasTaxiDog) {
+                cardBgClass = 'taxidog-dark-bg'; // Regra 1: Se tem Taxi Dog, é cinza.
+            } else if (hasTosa) {
+                cardBgClass = 'tosa-yellow-bg'; // Regra 2: Se não tem Taxi Dog mas tem Tosa, é amarelo.
             }
-
-            // --- Status-based coloring (overrides service colors) ---
+            
+            // --- Status-based coloring (overrides all service colors) ---
             if (app.status === 'Chegou') {
                 cardBgClass = 'arrived-blue-bg';
             }
 
             if (app.status === 'Finalizado') {
-                if (contextTab === 'reception' && !hasTaxiDog) {
-                    cardBgClass = 'finalized-dark-green-bg'; // Verde escuro para avisar
+                if (contextTab === 'reception' && !app.notifiedAt) {
+                    cardBgClass = 'attention-orange-bg'; // Laranja: Finalizado, precisa avisar
+                } else if (contextTab === 'reception' && !hasTaxiDog) {
+                    cardBgClass = 'finalized-dark-green-bg'; // Verde escuro: Avisado, sem taxi
                 } else {
-                    cardBgClass = 'finalized-green-bg'; // Verde claro padrão
+                    cardBgClass = 'finalized-green-bg'; // Verde claro: Avisado com taxi, ou outras abas
                 }
             }
+            
             if (app.serviceRequest?.status === 'Pending') {
-                cardBgClass = 'requested-orange-bg';
+                cardBgClass = 'requested-red-bg';
             }
 
             let cardClasses = `relative p-4 rounded-lg border shadow-md flex flex-col justify-between gap-2 card-servico transition-all duration-200 ${cardBgClass}`;
@@ -1508,7 +1520,7 @@
             }
 
             if (app.serviceRequest?.status === 'Pending') {
-                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-orange-500 text-white animate-pulse">Solicitado</span>`;
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-red-500 text-white animate-pulse">Solicitado</span>`;
             } else {
                 statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'} ${pulseClass}">${app.status}</span>`;
             }
@@ -1542,7 +1554,7 @@
             let requestNotificationHTML = '';
             if (app.serviceRequest?.status) {
                 if (contextTab === 'reception' && app.serviceRequest.status === 'Pending') {
-                    requestNotificationHTML = `<div class="mt-2 p-2 bg-orange-100 border-l-4 border-orange-500 text-orange-700 text-xs rounded">
+                    requestNotificationHTML = `<div class="mt-2 p-2 bg-red-100 border-l-4 border-red-500 text-red-700 text-xs rounded">
                         <p class="font-bold">Solicitação Pendente:</p>
                         <p>${app.serviceRequest.requestedAdditions.join(', ')}</p>
                         ${app.serviceRequest.newObservations ? `<p class="mt-1"><strong>Obs:</strong> ${app.serviceRequest.newObservations}</p>` : ''}
