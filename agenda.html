@@ -35,12 +35,14 @@
             --color-requested-border: #F87171; /* Red-400 */
             --color-attention-orange-bg: #FFF7ED; /* Orange-100 */
             --color-attention-orange-border: #FB923C; /* Orange-400 */
-            /* MODIFICADO: Cor de Tosa para amarelo-bege */
             --color-tosa-bg: #FFFFCC; /* Amarelo-Bege (Custom) */
             --color-tosa-border: #F0E68C; /* Khaki (Borda correspondente) */
             --color-taxidog-bg: #D1D5DB; /* Gray-300 */
             --color-taxidog-border: #9CA3AF; /* Gray-400 */
             --color-accent-gold: #F59E0B; /* Amber-500 */
+            /* ADICIONADO: Cores para bordas de status de solicitação */
+            --color-approved-border: #22C55E; /* green-500 */
+            --color-denied-border: #EF4444; /* red-500 */
         }
 
         /* Apply the main font to the entire application */
@@ -210,6 +212,18 @@
             margin-right: -1.5rem;
             padding-left: 1.5rem;
             padding-right: 1.5rem;
+        }
+
+        /* ADICIONADO: Estilos para bordas de status de solicitação */
+        .approved-border {
+            border-color: var(--color-approved-border) !important;
+            border-width: 2px;
+            box-shadow: 0 0 8px var(--color-approved-border);
+        }
+        .denied-border {
+            border-color: var(--color-denied-border) !important;
+            border-width: 2px;
+            box-shadow: 0 0 8px var(--color-denied-border);
         }
     </style>
 </head>
@@ -751,6 +765,28 @@
             const modal = document.getElementById('feedback-modal'), p = document.getElementById('feedback-message');
             p.textContent = message; p.className = type==='success'?'text-green-700':'text-red-700';
             modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('hidden'), 3000);
+        }
+
+        // ADICIONADO: Função para contagem avançada de pets
+        function getPetCount(appointment) {
+            const petName = appointment.petName?.trim() || '';
+            if (!petName) {
+                return 0;
+            }
+
+            // Verifica se o nome é puramente numérico
+            if (/^\d+$/.test(petName)) {
+                const count = parseInt(petName, 10);
+                return isNaN(count) ? 1 : count;
+            }
+            
+            // Verifica se há múltiplos nomes separados por "/"
+            if (petName.includes('/')) {
+                return petName.split('/').filter(name => name.trim() !== '').length;
+            }
+
+            // Padrão para 1 pet
+            return 1;
         }
         
         // --- REMESSA FUNCTIONS ---
@@ -1325,6 +1361,38 @@
             const crecheListElement = document.getElementById('creche-appointments-list');
             const type = 'grooming';
 
+            // CORRIGIDO: Limpa números de chegada antigos antes de recalcular
+            allGroomingAppointments.forEach(app => delete app.arrivalNumber);
+
+            // CORRIGIDO: Lógica de numeração de chegada com prioridade
+            const arrivedRegularPets = allGroomingAppointments
+                .filter(app => app.status === 'Chegou' && app.checkinTime && !app.services?.includes('Creche/Hotel'))
+                .sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
+
+            const arrivedCrechePets = allGroomingAppointments
+                .filter(app => app.status === 'Chegou' && app.checkinTime && app.services?.includes('Creche/Hotel'))
+                .sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
+
+            let arrivalCounter = 1;
+            arrivedRegularPets.forEach(pet => {
+                pet.arrivalNumber = arrivalCounter++;
+            });
+            
+            arrivedCrechePets.forEach(pet => {
+                pet.arrivalNumber = arrivalCounter++;
+            });
+
+            // CORRIGIDO: Inclui pets da creche na contagem geral
+            const inProgressCount = allGroomingAppointments
+                .filter(a => a.status !== 'Finalizado')
+                .reduce((total, app) => total + getPetCount(app), 0);
+            const finalizedCount = allGroomingAppointments
+                .filter(a => a.status === 'Finalizado')
+                .reduce((total, app) => total + getPetCount(app), 0);
+
+            document.getElementById('pets-in-queue-count').textContent = inProgressCount;
+            document.getElementById('pets-finalized-count').textContent = finalizedCount;
+
             const crecheAppointments = allGroomingAppointments.filter(app => app.services?.includes('Creche/Hotel'));
             const regularGroomingAppointments = allGroomingAppointments.filter(app => !app.services?.includes('Creche/Hotel'));
 
@@ -1334,15 +1402,6 @@
             const remessas = {};
             const noRemessa = [];
             
-            const arrivedPets = allAppointments
-                .filter(app => app.status === 'Chegou' && app.checkinTime)
-                .sort((a,b) => new Date(a.checkinTime) - new Date(b.checkinTime));
-            
-            arrivedPets.forEach((pet, index) => {
-                const originalApp = allAppointments.find(a => a.id === pet.id);
-                if(originalApp) originalApp.arrivalNumber = index + 1;
-            });
-
             regularGroomingAppointments.forEach(app => { 
                 if (app.remessaId) {
                     if (!remessas[app.remessaId]) {
@@ -1366,11 +1425,6 @@
                 });
             }
             
-            const inProgress = regularGroomingAppointments.filter(a => a.status !== 'Finalizado');
-            const finalized = regularGroomingAppointments.filter(a => a.status === 'Finalizado');
-            document.getElementById('pets-in-queue-count').textContent = inProgress.length;
-            document.getElementById('pets-finalized-count').textContent = finalized.length;
-
             const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
@@ -1511,6 +1565,13 @@
                 cardClasses += ' opacity-50';
             }
             
+            // ADICIONADO: Lógica para borda de aprovação/negação
+            if (app.serviceRequest?.status === 'Approved') {
+                cardClasses += ' approved-border';
+            } else if (app.serviceRequest?.status === 'Denied') {
+                cardClasses += ' denied-border';
+            }
+
             const statusStyles = { 'Agendado': 'bg-gray-400 text-white', 'Chegou': 'bg-blue-500 text-white', 'Finalizado': 'bg-green-600 text-white' };
             
             let statusBubbleHTML;
