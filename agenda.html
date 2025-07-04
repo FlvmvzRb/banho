@@ -140,8 +140,8 @@
         }
 
         /* Request status borders */
-        .approved-border { border-color: var(--color-approved-border) !important; border-width: 2px; box-shadow: 0 0 8px var(--color-approved-border); }
-        .denied-border { border-color: var(--color-denied-border) !important; border-width: 2px; box-shadow: 0 0 8px var(--color-denied-border); }
+        .approved-border { border-color: var(--color-approved-border) !important; border-width: 4px; box-shadow: 0 0 8px var(--color-approved-border); }
+        .denied-border { border-color: var(--color-denied-border) !important; border-width: 4px; box-shadow: 0 0 8px var(--color-denied-border); }
 
         /* MODIFICADO: Estilo para Checkbox */
         input[type="checkbox"] {
@@ -395,8 +395,20 @@
                     </div>
                     
                     <hr class="my-8 border-t-2 border-gray-200">
+                    
+                    <!-- MODIFICADO: Seção de Creche com seus próprios controles de remessa -->
                     <section id="creche-section">
-                        <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2 mb-4"><i class="ph-bold ph-moon-stars"></i>Creche / Hotel</h3>
+                        <div class="flex justify-between items-center mb-4">
+                             <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-moon-stars"></i>Creche / Hotel</h3>
+                             <div id="creche-remessa-controls-wrapper" class="flex flex-wrap gap-2">
+                                <button id="start-creche-remessa-btn" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Criar Remessa (Creche)</button>
+                                <div id="active-creche-remessa-controls" class="hidden flex items-center gap-2">
+                                    <input type="text" id="creche-remessa-name-input" placeholder="Nome da Remessa" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-gray-800">
+                                    <button id="finalize-creche-remessa-btn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Finalizar</button>
+                                    <button id="cancel-creche-remessa-btn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Cancelar</button>
+                                </div>
+                            </div>
+                        </div>
                         <div id="creche-appointments-list">
                             <!-- Creche/Hotel appointments will be inserted here -->
                         </div>
@@ -678,9 +690,12 @@
         };
         let activeTabId = 'reception-tab-content';
         const TAB_SWITCH_PASSWORD = "256"; 
-        let isRemessaModeActive = false;
-        let selectedForRemessa = [];
-        let currentRemessaId = null; 
+        
+        // MODIFICADO: Estado de remessa refatorado para suportar múltiplos contextos
+        const remessaState = {
+            grooming: { isActive: false, selectedIds: [], currentId: null },
+            creche:   { isActive: false, selectedIds: [], currentId: null }
+        };
         
         // --- FUNCTION DEFINITIONS (Organized for clarity and to prevent ReferenceError) ---
 
@@ -712,140 +727,119 @@
             return 1;
         }
         
-        // --- REMESSA FUNCTIONS ---
-        function startRemessaMode() {
-            isRemessaModeActive = true;
-            selectedForRemessa = [];
-            currentRemessaId = null;
-            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.add('hidden');
-            document.getElementById('active-remessa-controls').classList.remove('hidden');
-            document.getElementById('remessa-name-input').value = '';
+        // --- REMESSA FUNCTIONS (Refatoradas para aceitar um 'type') ---
+        function startRemessaMode(type) {
+            const state = remessaState[type];
+            state.isActive = true;
+            state.selectedIds = [];
+            state.currentId = null;
+
+            const startBtnId = type === 'grooming' ? 'start-remessa-btn' : 'start-creche-remessa-btn';
+            const controlsId = type === 'grooming' ? 'active-remessa-controls' : 'active-creche-remessa-controls';
+            const nameInputId = type === 'grooming' ? 'remessa-name-input' : 'creche-remessa-name-input';
+
+            document.getElementById(startBtnId).classList.add('hidden');
+            document.getElementById(controlsId).classList.remove('hidden');
+            document.getElementById(nameInputId).value = '';
             renderAllContent();
         }
         
-        // MODIFICADO: A função agora ordena os pets pela ordem salva ao entrar no modo de edição.
-        function startEditRemessaMode(remessaId, remessaName) {
-            isRemessaModeActive = true;
-            currentRemessaId = remessaId;
-            selectedForRemessa = allAppointments
+        function startEditRemessaMode(remessaId, remessaName, type) {
+            const state = remessaState[type];
+            state.isActive = true;
+            state.currentId = remessaId;
+            state.selectedIds = allAppointments
                 .filter(app => app.remessaId === remessaId)
-                .sort((a, b) => (a.remessaOrder ?? 0) - (b.remessaOrder ?? 0)) // Ordena pela ordem da remessa
+                .sort((a, b) => (a.remessaOrder ?? 0) - (b.remessaOrder ?? 0))
                 .map(app => app.id);
             
-            document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.add('hidden');
-            document.getElementById('active-remessa-controls').classList.remove('hidden');
-            document.getElementById('remessa-name-input').value = remessaName;
+            const startBtnId = type === 'grooming' ? 'start-remessa-btn' : 'start-creche-remessa-btn';
+            const controlsId = type === 'grooming' ? 'active-remessa-controls' : 'active-creche-remessa-controls';
+            const nameInputId = type === 'grooming' ? 'remessa-name-input' : 'creche-remessa-name-input';
+
+            document.getElementById(startBtnId).classList.add('hidden');
+            document.getElementById(controlsId).classList.remove('hidden');
+            document.getElementById(nameInputId).value = remessaName;
             renderAllContent();
         }
 
-        function exitRemessaMode() {
-            isRemessaModeActive = false;
-            document.getElementById('grooming-tab-content').classList.remove('remessa-selection-active');
-            document.getElementById('start-remessa-btn').classList.remove('hidden');
-            document.getElementById('active-remessa-controls').classList.add('hidden');
-            document.getElementById('remessa-name-input').value = '';
-            selectedForRemessa = [];
-            currentRemessaId = null;
+        function exitRemessaMode(type) {
+            const state = remessaState[type];
+            state.isActive = false;
+            state.selectedIds = [];
+            state.currentId = null;
+
+            const startBtnId = type === 'grooming' ? 'start-remessa-btn' : 'start-creche-remessa-btn';
+            const controlsId = type === 'grooming' ? 'active-remessa-controls' : 'active-creche-remessa-controls';
+            
+            document.getElementById(startBtnId).classList.remove('hidden');
+            document.getElementById(controlsId).classList.add('hidden');
             renderAllContent();
         }
 
-        function toggleRemessaSelection(id) {
-            const index = selectedForRemessa.indexOf(id);
+        function toggleRemessaSelection(id, type) {
+            const state = remessaState[type];
+            const index = state.selectedIds.indexOf(id);
             if (index > -1) {
-                selectedForRemessa.splice(index, 1);
+                state.selectedIds.splice(index, 1);
             } else {
-                selectedForRemessa.push(id);
+                state.selectedIds.push(id);
             }
             renderAllContent();
         }
 
-        // MODIFICADO: A função agora salva a ordem sequencial dos pets na remessa.
-        async function finalizeRemessa() {
-            const name = document.getElementById('remessa-name-input').value;
+        async function finalizeRemessa(type) {
+            const state = remessaState[type];
+            const nameInputId = type === 'grooming' ? 'remessa-name-input' : 'creche-remessa-name-input';
+            const name = document.getElementById(nameInputId).value;
+
             if (!name.trim()) {
                 showFeedback("Por favor, insira um nome para a remessa.", 'error');
                 return;
             }
-            if (selectedForRemessa.length === 0) {
+            if (state.selectedIds.length === 0) {
                 showFeedback("Nenhum pet selecionado para a remessa.", 'error');
-                exitRemessaMode();
+                exitRemessaMode(type);
                 return;
             }
             
-            const remessaId = currentRemessaId || `remessa_${Date.now()}`;
+            const remessaId = state.currentId || `remessa_${Date.now()}`;
             const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
             const batch = writeBatch(db);
 
-            const updatedAppIds = new Set(selectedForRemessa);
+            const updatedAppIds = new Set(state.selectedIds);
 
-            // Prepara as atualizações para o Firestore, incluindo a ordem da remessa
-            selectedForRemessa.forEach((appointmentId, index) => {
+            state.selectedIds.forEach((appointmentId, index) => {
                 const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId);
                 const data = { 
                     remessaName: name, 
                     remessaId, 
                     remessaColor: randomColor,
-                    remessaOrder: index // Salva a ordem (0, 1, 2...)
+                    remessaOrder: index,
+                    remessaType: type // Salva o tipo de remessa
                 };
-                if (!currentRemessaId) {
+                if (!state.currentId) {
                     data.remessaCreatedAt = serverTimestamp();
                 }
                 batch.update(docRef, data);
             });
 
-            // Se estiver editando, remove os dados da remessa dos pets que foram desmarcados
-            if (currentRemessaId) {
-                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !updatedAppIds.has(app.id));
+            if (state.currentId) {
+                const appsToRemove = allAppointments.filter(app => app.remessaId === state.currentId && !updatedAppIds.has(app.id));
                 appsToRemove.forEach(app => {
                     const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, app.id);
-                    batch.update(docRef, { remessaName: null, remessaId: null, remessaCreatedAt: null, remessaColor: null, remessaOrder: null });
+                    batch.update(docRef, { remessaName: null, remessaId: null, remessaCreatedAt: null, remessaColor: null, remessaOrder: null, remessaType: null });
                 });
             }
 
             try {
                 await batch.commit();
-                
-                // --- Aplica a atualização otimista ao estado local ---
-                let appsToReset = new Set();
-                if (currentRemessaId) {
-                     allAppointments.forEach(app => {
-                        if(app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id)) {
-                            appsToReset.add(app.id);
-                        }
-                     });
-                }
-
-                allAppointments = allAppointments.map(app => {
-                    const selectionIndex = selectedForRemessa.indexOf(app.id);
-                    if (selectionIndex !== -1) { // Se o app está na seleção atual
-                        return { 
-                            ...app, 
-                            remessaName: name, 
-                            remessaId, 
-                            remessaColor: randomColor, 
-                            remessaOrder: selectionIndex // Adiciona a ordem
-                        };
-                    }
-                    if (appsToReset.has(app.id)) { // Se o app foi removido de uma remessa existente
-                        const newApp = { ...app };
-                        delete newApp.remessaName;
-                        delete newApp.remessaId;
-                        delete newApp.remessaCreatedAt;
-                        delete newApp.remessaColor;
-                        delete newApp.remessaOrder; // Remove a ordem
-                        return newApp;
-                    }
-                    return app;
-                });
-
                 showFeedback(`Remessa "${name}" salva com sucesso!`);
             } catch (error) {
                 showFeedback("Erro ao salvar a remessa.", "error");
                 console.error("Error creating remessa: ", error);
             } finally {
-                exitRemessaMode();
+                exitRemessaMode(type);
             }
         }
 
@@ -1044,10 +1038,14 @@
             document.getElementById('save-package-dates-btn').addEventListener('click', handleSavePackageDatesOnly);
             
             
-            // Remessa Listeners
-            document.getElementById('start-remessa-btn').addEventListener('click', startRemessaMode);
-            document.getElementById('finalize-remessa-btn').addEventListener('click', finalizeRemessa);
-            document.getElementById('cancel-remessa-btn').addEventListener('click', exitRemessaMode);
+            // MODIFICADO: Listeners de remessa para ambos os contextos
+            document.getElementById('start-remessa-btn').addEventListener('click', () => startRemessaMode('grooming'));
+            document.getElementById('finalize-remessa-btn').addEventListener('click', () => finalizeRemessa('grooming'));
+            document.getElementById('cancel-remessa-btn').addEventListener('click', () => exitRemessaMode('grooming'));
+
+            document.getElementById('start-creche-remessa-btn').addEventListener('click', () => startRemessaMode('creche'));
+            document.getElementById('finalize-creche-remessa-btn').addEventListener('click', () => finalizeRemessa('creche'));
+            document.getElementById('cancel-creche-remessa-btn').addEventListener('click', () => exitRemessaMode('creche'));
             
             // Password Modal Listeners
             const passwordModal = document.getElementById('password-modal');
@@ -1323,8 +1321,7 @@
         function renderGroomingList(allGroomingAppointments) {
             const groomingListElement = document.getElementById('grooming-appointments-list');
             const crecheListElement = document.getElementById('creche-appointments-list');
-            const type = 'grooming';
-
+            
             // --- 1. Lógica de Contagem e Numeração (sem alteração) ---
             allGroomingAppointments.forEach(app => delete app.arrivalNumber);
             const arrivedRegularPets = allGroomingAppointments.filter(app => app.status === 'Chegou' && app.checkinTime && !app.services?.includes('Creche/Hotel')).sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
@@ -1338,19 +1335,25 @@
             document.getElementById('pets-in-queue-count').textContent = inProgressCount;
             document.getElementById('pets-finalized-count').textContent = finalizedCount;
 
-            // --- 2. Separação e Agrupamento dos Agendamentos ---
+            // --- 2. Separação dos Agendamentos ---
             const crecheAppointments = allGroomingAppointments.filter(app => app.services?.includes('Creche/Hotel'));
             const regularGroomingAppointments = allGroomingAppointments.filter(app => !app.services?.includes('Creche/Hotel'));
 
-            groomingListElement.innerHTML = '';
-            groomingListElement.className = 'space-y-8'; // Espaçamento vertical entre seções
+            // --- 3. Renderiza cada seção independentemente ---
+            renderRemessaSection(groomingListElement, regularGroomingAppointments, 'grooming');
+            renderRemessaSection(crecheListElement, crecheAppointments, 'creche');
+        }
+
+        function renderRemessaSection(containerElement, appointments, type) {
+            containerElement.innerHTML = '';
+            containerElement.className = 'space-y-8';
 
             const remessas = {};
             const noRemessa = [];
-            regularGroomingAppointments.forEach(app => {
-                if (app.remessaId) {
+            appointments.forEach(app => {
+                if (app.remessaId && app.remessaType === type) { // Only group by correct type
                     if (!remessas[app.remessaId]) {
-                        remessas[app.remessaId] = { name: app.remessaName, apps: [], createdAt: app.remessaCreatedAt || app.createdAt, remessaId: app.remessaId, color: app.remessaColor, isFinalized: true };
+                        remessas[app.remessaId] = { name: app.remessaName, apps: [], createdAt: app.remessaCreatedAt || app.createdAt, remessaId: app.remessaId, color: app.remessaColor, isFinalized: true, remessaType: app.remessaType };
                     }
                     if (app.status !== 'Finalizado') remessas[app.remessaId].isFinalized = false;
                     remessas[app.remessaId].apps.push(app);
@@ -1362,111 +1365,83 @@
             for (const remessaId in remessas) {
                 remessas[remessaId].apps.sort((a, b) => (a.remessaOrder ?? 99) - (b.remessaOrder ?? 99));
             }
-
+            
             const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
             const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => (a.checkinTime ? new Date(a.checkinTime) : new Date(a.appointmentDatetime)) - (b.checkinTime ? new Date(b.checkinTime) : new Date(b.appointmentDatetime)));
             const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado').sort((a, b) => new Date(b.finalizedAt) - new Date(a.finalizedAt));
 
-            // --- 3. Definição das Classes da Grade ---
-            const currentView = viewModes[type] || 'grid';
+            const currentView = viewModes.grooming; // Both sections use the same view mode for now
             let cardsGridClasses = '';
-            const compactViewClassSuffix = `compact_${type.replace('-', '')}`;
+            const compactViewClassSuffix = `compact_grooming`;
             switch (currentView) {
                 case 'compact': cardsGridClasses = gridLayouts[compactViewClassSuffix]; break;
-                case 'grid': cardsGridClasses = gridLayouts[type]; break;
+                case 'grid': cardsGridClasses = gridLayouts.grooming; break;
                 default: cardsGridClasses = 'flex flex-col gap-3'; break;
             }
 
+            if (appointments.length === 0) {
+                if (type === 'creche') {
+                     containerElement.innerHTML = '<p class="text-gray-500 col-span-full text-center">Nenhum pet na creche/hotel hoje.</p>';
+                } else {
+                     containerElement.innerHTML = '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento de banho e tosa encontrado.</p>';
+                }
+                return;
+            }
+
+            const createSectionHTML = (title, items, isRemessa, isFinalized = false) => {
+                let sectionHTML = '';
+                if (isRemessa) {
+                    items.forEach((remessa) => {
+                        const borderColor = remessa.color || '#8B5CF6';
+                        sectionHTML += `
+                            <div class="p-4 border-2 rounded-lg space-y-4 bg-white mb-4" style="border-color: ${borderColor};">
+                                <div class="flex justify-between items-start">
+                                    <div class="flex items-center gap-2">
+                                        <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa: ${remessa.name}</h3>
+                                    </div>
+                                    <div class="flex flex-col gap-1">
+                                        ${!isFinalized ? `<button class="finalize-remessa-btn px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-remessa-id="${remessa.remessaId}" data-remessa-type="${type}">Finalizar Lote</button>` : ''}
+                                        <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}" data-remessa-type="${type}">Editar</button>
+                                        <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
+                                    </div>
+                                </div>
+                                <div class="${cardsGridClasses}">
+                                    ${remessa.apps.map(app => createAppointmentCardHTML(app, 'grooming')).join('')}
+                                </div>
+                            </div>`;
+                    });
+                } else if (items.length > 0) {
+                    sectionHTML += `
+                        ${title ? `<h4 class="text-lg font-bold text-gray-500 mb-2">${title}</h4>` : ''}
+                        <div class="${cardsGridClasses}">
+                            ${items.map(app => createAppointmentCardHTML(app, 'grooming')).join('')}
+                        </div>`;
+                }
+                return sectionHTML;
+            };
+
+            let finalHTML = '';
             const hasActiveItems = activeRemessas.length > 0 || activeNoRemessa.length > 0;
             const hasFinalizedItems = finalizedRemessas.length > 0 || finalizedNoRemessa.length > 0;
 
-            if (!hasActiveItems && !hasFinalizedItems) {
-                groomingListElement.innerHTML = '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento de banho e tosa encontrado.</p>';
-            }
-
-            // --- 4. Renderização das Seções ---
-            const createSection = (title, items, isRemessa, isFinalized = false) => {
-                const section = document.createElement('div');
-                if (isRemessa) {
-                    items.forEach((remessa, index) => {
-                        const remessaContainer = document.createElement('div');
-                        const borderColor = remessa.color || '#8B5CF6';
-                        // REVERTIDO: Removido 'w-max' para o container da remessa voltar a ser full-width.
-                        remessaContainer.className = 'p-4 border-2 rounded-lg space-y-4 bg-white mb-4';
-                        remessaContainer.style.borderColor = borderColor;
-
-                        const header = document.createElement('div');
-                        header.className = 'flex justify-between items-start';
-                        header.innerHTML = `
-                            <div class="flex items-center gap-2">
-                                <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa: ${remessa.name}</h3>
-                            </div>
-                            <div class="flex flex-col gap-1">
-                                ${!isFinalized ? `<button class="finalize-remessa-btn px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-remessa-id="${remessa.remessaId}">Finalizar Lote</button>` : ''}
-                                <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}">Editar</button>
-                                <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
-                            </div>`;
-                        
-                        const cardsContainer = document.createElement('div');
-                        cardsContainer.className = cardsGridClasses;
-                        cardsContainer.innerHTML = remessa.apps.map(app => createAppointmentCardHTML(app, type)).join('');
-                        
-                        remessaContainer.appendChild(header);
-                        remessaContainer.appendChild(cardsContainer);
-                        section.appendChild(remessaContainer);
-                    });
-                } else if (items.length > 0) {
-                    section.innerHTML += `<h4 class="text-lg font-bold text-gray-500 mb-2">${title}</h4>`;
-                    const cardsContainer = document.createElement('div');
-                    cardsContainer.className = cardsGridClasses;
-                    cardsContainer.innerHTML = items.map(app => createAppointmentCardHTML(app, type)).join('');
-                    section.appendChild(cardsContainer);
-                }
-                return section;
-            };
-
             if (hasActiveItems) {
-                const activeSection = document.createElement('section');
-                activeSection.appendChild(createSection(null, activeRemessas, true));
-                activeSection.appendChild(createSection('Avulsos na Fila', activeNoRemessa, false));
-                groomingListElement.appendChild(activeSection);
+                finalHTML += createSectionHTML(null, activeRemessas, true, false);
+                finalHTML += createSectionHTML(type === 'grooming' ? 'Avulsos na Fila' : null, activeNoRemessa, false, false);
             }
-
             if (hasFinalizedItems) {
-                if (hasActiveItems) groomingListElement.innerHTML += `<hr class="my-8 border-t-2 border-gray-200">`;
-                
-                const finalizedSection = document.createElement('section');
-                finalizedSection.className = 'opacity-60';
-                finalizedSection.innerHTML = `<h3 class="text-2xl font-bold text-gray-700 mb-4">Finalizados</h3>`;
-                finalizedSection.appendChild(createSection(null, finalizedRemessas, true, true));
-                finalizedSection.appendChild(createSection('Avulsos Finalizados', finalizedNoRemessa, false, true));
-                groomingListElement.appendChild(finalizedSection);
+                if (hasActiveItems) finalHTML += `<hr class="my-8 border-t-2 border-gray-200">`;
+                finalHTML += `<div class="opacity-60">`;
+                finalHTML += `<h3 class="text-2xl font-bold text-gray-700 mb-4">Finalizados</h3>`;
+                finalHTML += createSectionHTML(null, finalizedRemessas, true, true);
+                finalHTML += createSectionHTML(type === 'grooming' ? 'Avulsos Finalizados' : null, finalizedNoRemessa, false, true);
+                finalHTML += `</div>`;
             }
-
-            // --- 5. Renderização da Creche (sem alteração) ---
-            if (!crecheListElement) return;
-            crecheAppointments.sort((a,b) => {
-                const statusOrder = { 'Chegou': 1, 'Agendado': 2, 'Finalizado': 3 };
-                const statusA = statusOrder[a.status] || 99;
-                const statusB = statusOrder[b.status] || 99;
-                if (statusA !== statusB) return statusA - statusB;
-                return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
-            });
-            let crecheContainerClasses = '';
-            const crecheCompactSuffix = `compact_${type.replace('-', '')}`;
-            switch (currentView) {
-                case 'compact': crecheContainerClasses = (gridLayouts[crecheCompactSuffix] || compactGridClass); break;
-                case 'grid': crecheContainerClasses = gridLayouts[type] || gridLayouts['grooming']; break;
-                default: crecheContainerClasses = 'flex flex-col gap-3'; break;
-            }
-            crecheListElement.className = crecheContainerClasses;
-            crecheListElement.innerHTML = crecheAppointments.length > 0
-                ? crecheAppointments.map(app => createAppointmentCardHTML(app, type)).join('')
-                : '<p class="text-gray-500 col-span-full text-center">Nenhum pet na creche/hotel hoje.</p>';
+            
+            containerElement.innerHTML = finalHTML;
         }
 
-        // MODIFICADO: O botão de seleção agora mostra o número da ordem.
+        // CORRIGIDO: Referências a variáveis de estado de remessa globais foram substituídas.
         function createAppointmentCardHTML(app, contextTab) {
             const viewMode = viewModes[contextTab];
             const isCompact = viewMode === 'compact';
@@ -1475,25 +1450,23 @@
 
             let cardBgClass = 'bg-white'; // Default color
 
-            // MODIFICADO: Lógica de cores invertida e simplificada
             if (hasTaxiDog) {
-                cardBgClass = 'taxidog-dark-bg'; // Regra 1: Se tem Taxi Dog, é cinza.
+                cardBgClass = 'taxidog-dark-bg';
             } else if (hasTosa) {
-                cardBgClass = 'tosa-yellow-bg'; // Regra 2: Se não tem Taxi Dog mas tem Tosa, é amarelo.
+                cardBgClass = 'tosa-yellow-bg';
             }
             
-            // --- Status-based coloring (overrides all service colors) ---
             if (app.status === 'Chegou') {
                 cardBgClass = 'arrived-blue-bg';
             }
 
             if (app.status === 'Finalizado') {
                 if (contextTab === 'reception' && !app.notifiedAt) {
-                    cardBgClass = 'attention-orange-bg'; // Laranja: Finalizado, precisa avisar
+                    cardBgClass = 'attention-orange-bg';
                 } else if (contextTab === 'reception' && !hasTaxiDog) {
-                    cardBgClass = 'finalized-dark-green-bg'; // Verde escuro: Avisado, sem taxi
+                    cardBgClass = 'finalized-dark-green-bg';
                 } else {
-                    cardBgClass = 'finalized-green-bg'; // Verde claro: Avisado com taxi, ou outras abas
+                    cardBgClass = 'finalized-green-bg';
                 }
             }
             
@@ -1511,7 +1484,6 @@
                 cardClasses += ' opacity-50';
             }
             
-            // ADICIONADO: Lógica para borda de aprovação/negação
             if (app.serviceRequest?.status === 'Approved') {
                 cardClasses += ' approved-border';
             } else if (app.serviceRequest?.status === 'Denied') {
@@ -1596,22 +1568,36 @@
                      buttonsHTML += `<button class="checkin-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Chegou</button>`;
                 }
             }
-            // ADICIONADO: Botão de Replicar no Histórico
             if (contextTab === 'history') {
                 buttonsHTML += `<button class="replicate-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Replicar</button>`;
             }
             
             const arrivalNumberHTML = app.arrivalNumber ? `<span class="absolute top-1 left-1 bg-violet-600 text-white text-xs font-bold rounded-full h-5 w-5 flex items-center justify-center">#${app.arrivalNumber}</span>` : '';
             
+            const remessaTypeForCard = app.services?.includes('Creche/Hotel') ? 'creche' : 'grooming';
+            const currentRemessaState = remessaState[remessaTypeForCard];
             let remessaButtonHTML = '';
-            if (isRemessaModeActive && (app.status === 'Chegou' || app.status === 'Agendado') && (!currentRemessaId || app.remessaId === currentRemessaId || !app.remessaId)) {
-                const selectionIndex = selectedForRemessa.indexOf(app.id);
-                const isSelected = selectionIndex > -1;
-                if (isSelected) cardClasses += ' selected-for-remessa';
-                remessaButtonHTML = `
-                    <button class="remessa-select-btn absolute top-1 left-1 z-10 h-6 w-6 rounded-full border-2 ${isSelected ? 'bg-teal-500 border-teal-700' : 'bg-white border-gray-400'} flex items-center justify-center" data-id="${app.id}">
-                        ${isSelected ? `<span class="text-white font-bold text-xs">${selectionIndex + 1}</span>` : ''}
-                    </button>`;
+
+            // CORRIGIDO: A condição de elegibilidade agora é dinâmica com base no tipo de serviço
+            const isEligibleForRemessa = (remessaTypeForCard === 'creche')
+                ? (app.status !== 'Finalizado')
+                : (app.status === 'Chegou' || app.status === 'Agendado');
+
+            if (currentRemessaState.isActive && isEligibleForRemessa) {
+                const isEditing = !!currentRemessaState.currentId;
+                const canBeSelected = isEditing 
+                    ? (!app.remessaId || app.remessaId === currentRemessaState.currentId) 
+                    : !app.remessaId;
+
+                if (canBeSelected) {
+                    const selectionIndex = currentRemessaState.selectedIds.indexOf(app.id);
+                    const isSelected = selectionIndex > -1;
+                    if (isSelected) cardClasses += ' selected-for-remessa';
+                    remessaButtonHTML = `
+                        <button class="remessa-select-btn absolute top-1 left-1 z-10 h-6 w-6 rounded-full border-2 ${isSelected ? 'bg-teal-500 border-teal-700' : 'bg-white border-gray-400'} flex items-center justify-center" data-id="${app.id}" data-remessa-type="${remessaTypeForCard}">
+                            ${isSelected ? `<span class="text-white font-bold text-xs">${selectionIndex + 1}</span>` : ''}
+                        </button>`;
+                }
             }
 
             const compactViewHTML = `
@@ -1637,7 +1623,7 @@
                     <div class="flex flex-col sm:flex-row flex-wrap justify-end gap-0.5 mt-2">${buttonsHTML}</div>
                 </div>`;
             
-            return `<div class="${cardClasses}" data-id="${app.id}" data-remessa-id="${app.remessaId || ''}" data-datetime="${app.appointmentDatetime}">
+            return `<div class="${cardClasses}" data-id="${app.id}" data-remessa-id="${app.remessaId || ''}" data-datetime="${app.appointmentDatetime}" data-remessa-type="${remessaTypeForCard}">
                 ${remessaButtonHTML || arrivalNumberHTML}
                 ${statusBubbleHTML}
                 ${isCompact ? compactViewHTML + fullViewHTML : fullViewHTML}
@@ -1778,17 +1764,24 @@
         function handleCardActions(e) {
             const target = e.target;
             
-            // Handle remessa-level actions first, as they are not inside a card
-            if (target.matches('.edit-remessa-btn')) {
-                startEditRemessaMode(target.dataset.remessaId, target.dataset.remessaName);
+            // Handle remessa-level actions first
+            if (target.matches('.edit-remessa-btn, .undo-remessa-btn, .finalize-remessa-btn')) {
+                const remessaId = target.dataset.remessaId;
+                const remessaType = target.dataset.remessaType;
+                const remessaName = target.dataset.remessaName;
+
+                if (target.matches('.edit-remessa-btn')) {
+                    startEditRemessaMode(remessaId, remessaName, remessaType);
+                } else if (target.matches('.undo-remessa-btn')) {
+                    handleUndoRemessa(remessaId); // Type not needed here
+                } else if (target.matches('.finalize-remessa-btn')) {
+                    openFinalizeModal(null, remessaId); // Type not needed here either
+                }
                 return;
             }
-            if (target.matches('.undo-remessa-btn')) {
-                handleUndoRemessa(target.dataset.remessaId);
-                return;
-            }
-            if (target.matches('.finalize-remessa-btn')) {
-                openFinalizeModal(null, target.dataset.remessaId);
+            
+            if (target.matches('.remessa-select-btn')) {
+                toggleRemessaSelection(target.dataset.id, target.dataset.remessaType);
                 return;
             }
 
@@ -1797,9 +1790,29 @@
             if (!card) return;
             
             const appointmentId = card.dataset.id;
+            const remessaType = card.dataset.remessaType;
             
-            if (isRemessaModeActive && activeTabId === 'grooming-tab-content' && !target.closest('button')) {
-                toggleRemessaSelection(appointmentId);
+            // Handle card body click for remessa selection
+            if (remessaType && remessaState[remessaType]?.isActive && !target.closest('button')) {
+                // Check if the card is eligible for selection in the current mode
+                const currentRemessaState = remessaState[remessaType];
+                const app = allAppointments.find(a => a.id === appointmentId);
+                if (app) {
+                    const isEligibleForRemessa = (remessaType === 'creche')
+                        ? (app.status !== 'Finalizado')
+                        : (app.status === 'Chegou' || app.status === 'Agendado');
+
+                    if (isEligibleForRemessa) {
+                        const isEditing = !!currentRemessaState.currentId;
+                        const canBeSelected = isEditing 
+                            ? (!app.remessaId || app.remessaId === currentRemessaState.currentId) 
+                            : !app.remessaId;
+                        
+                        if (canBeSelected) {
+                            toggleRemessaSelection(appointmentId, remessaType);
+                        }
+                    }
+                }
                 return;
             }
 
@@ -1883,7 +1896,8 @@
                     remessaName: null,
                     remessaCreatedAt: null,
                     remessaColor: null,
-                    remessaOrder: null // Limpa o campo de ordem
+                    remessaOrder: null, // Limpa o campo de ordem
+                    remessaType: null
                 });
             });
 
