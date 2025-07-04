@@ -11,19 +11,19 @@
     <!-- Phosphor Icons -->
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
 
-    <!-- Google Fonts: Inter -->
+    <!-- Google Fonts: Inter (para o corpo) e Nunito (para o título) -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Nunito:wght@800;900&display=swap" rel="stylesheet">
     
     <!-- Custom CSS for Theme and Scrollbars -->
     <style>
         /* Define custom color properties for easy theme management */
         :root {
-            --color-primary-base: #14B8A6; /* Teal-500 */
-            --color-primary-light: #F0FDFA; /* Teal-50 */
-            --color-secondary-purple-start: #8B5CF6; /* Violet-500 */
-            --color-secondary-purple-end: #6D28D9; /* Violet-700 */
+            --color-primary-base: #7DFABE; /* Verde Borda (Novo) */
+            --color-primary-light: #f2e8fa; /* Lilás Claro (Novo) */
+            --color-secondary-purple-start: #c263f9; /* Roxo/Lilás Inicial (Novo) */
+            --color-secondary-purple-end: #8f1fcf; /* Roxo/Lilás Final (Novo) */
             --color-primary-dark-text: #4A5568; /* Gray-700 */
             --color-finalized-bg: #D1FAE5; /* Green-100 */
             --color-finalized-border: #6EE7B7; /* Green-300 */
@@ -40,15 +40,21 @@
             --color-taxidog-bg: #D1D5DB; /* Gray-300 */
             --color-taxidog-border: #9CA3AF; /* Gray-400 */
             --color-accent-gold: #F59E0B; /* Amber-500 */
-            /* ADICIONADO: Cores para bordas de status de solicitação */
             --color-approved-border: #22C55E; /* green-500 */
             --color-denied-border: #EF4444; /* red-500 */
         }
 
-        /* Apply the main font to the entire application */
+        /* Apply the main font and color to the entire application */
         body {
-            font-family: 'Inter', sans-serif;
+            font-family: 'Inter', sans-serif; /* Fonte padrão revertida para Inter */
             background-color: #F7FAFC; /* Gray-100 */
+            color: #4A5568; /* Cor do texto principal revertida para cinza */
+        }
+
+        /* MODIFICADO: Estilo específico para o título principal */
+        h1.page-title {
+            font-family: 'Nunito', sans-serif; /* Fonte arredondada apenas para o título */
+            color: var(--color-secondary-purple-end); /* Cor roxa para o título */
         }
         
         /* Custom scrollbar styling for a more integrated look */
@@ -79,93 +85,34 @@
         }
 
         /* Background for cards based on status */
-        .finalized-green-bg {
-            background-color: var(--color-finalized-bg);
-            border-color: var(--color-finalized-border);
-        }
-        .finalized-dark-green-bg {
-            background-color: var(--color-finalized-dark-bg);
-            border-color: var(--color-finalized-dark-border);
-        }
-        .arrived-blue-bg {
-            background-color: var(--color-arrived-bg);
-            border-color: var(--color-arrived-border);
-        }
-        .requested-red-bg {
-            background-color: var(--color-requested-bg);
-            border-color: var(--color-requested-border);
-        }
-        .attention-orange-bg {
-            background-color: var(--color-attention-orange-bg);
-            border-color: var(--color-attention-orange-border);
-        }
-        .tosa-yellow-bg {
-            background-color: var(--color-tosa-bg);
-            border-color: var(--color-tosa-border);
-        }
-        .taxidog-dark-bg {
-            background-color: var(--color-taxidog-bg);
-            border-color: var(--color-taxidog-border);
-        }
+        .finalized-green-bg { background-color: var(--color-finalized-bg); border-color: var(--color-finalized-border); }
+        .finalized-dark-green-bg { background-color: var(--color-finalized-dark-bg); border-color: var(--color-finalized-dark-border); }
+        .arrived-blue-bg { background-color: var(--color-arrived-bg); border-color: var(--color-arrived-border); }
+        .requested-red-bg { background-color: var(--color-requested-bg); border-color: var(--color-requested-border); }
+        .attention-orange-bg { background-color: var(--color-attention-orange-bg); border-color: var(--color-attention-orange-border); }
+        .tosa-yellow-bg { background-color: var(--color-tosa-bg); border-color: var(--color-tosa-border); }
+        .taxidog-dark-bg { background-color: var(--color-taxidog-bg); border-color: var(--color-taxidog-border); }
         
         /* Custom calendar styles */
-        .calendar-day {
-            transition: all 0.2s ease-in-out;
-        }
-        .calendar-day.selected {
-            background-color: var(--color-primary-base);
-            color: white;
-            border-radius: 50%;
-            font-weight: bold;
-        }
-        .calendar-day:not(.disabled):hover {
-             background-color: var(--color-secondary-purple-start);
-             color: white;
-             border-radius: 50%;
-        }
+        .calendar-day { transition: all 0.2s ease-in-out; }
+        .calendar-day.selected { background-color: var(--color-primary-base); color: white; border-radius: 50%; font-weight: bold; }
+        .calendar-day:not(.disabled):hover { background-color: var(--color-secondary-purple-start); color: white; border-radius: 50%; }
         
         /* Virtual Keyboard Styles */
-        #virtual-keyboard-container {
-            transition: transform 0.3s ease-in-out;
-            z-index: 10001; /* Ensure keyboard is on top of all modals */
-        }
-        .keyboard-key {
-            transition: background-color: 0.1s ease;
-        }
-        .keyboard-key:active {
-            background-color: var(--color-primary-base);
-            color: white;
-        }
-        .keyboard-key.active-special {
-            background-color: var(--color-secondary-purple-start);
-            color: white;
-        }
+        #virtual-keyboard-container { transition: transform 0.3s ease-in-out; z-index: 10001; }
+        .keyboard-key { transition: background-color: 0.1s ease; }
+        .keyboard-key:active { background-color: var(--color-primary-base); color: white; }
+        .keyboard-key.active-special { background-color: var(--color-secondary-purple-start); color: white; }
         
         /* Remessa (Batch) Selection Styles */
-        .selected-for-remessa {
-            border-color: var(--color-primary-base) !important;
-            background-color: var(--color-primary-light);
-            box-shadow: 0 0 0 2px var(--color-primary-base);
-        }
+        .selected-for-remessa { border-color: var(--color-primary-base) !important; background-color: var(--color-primary-light); box-shadow: 0 0 0 2px var(--color-primary-base); }
         
         /* Compact view card styling */
-        .compact-card {
-            cursor: pointer;
-        }
-        .compact-card:not(.expanded) {
-            height: 120px;
-            width: 120px; 
-        }
-        .compact-card.expanded {
-            grid-column: span 2;
-            z-index: 10;
-        }
-        @media (min-width: 640px) {
-             .compact-card.expanded { grid-column: span 2 / span 2; }
-        }
-        @media (min-width: 1024px) {
-            .compact-card.expanded { grid-column: span 3 / span 3; }
-        }
+        .compact-card { cursor: pointer; }
+        .compact-card:not(.expanded) { height: 120px; width: 120px; }
+        .compact-card.expanded { grid-column: span 2; z-index: 10; }
+        @media (min-width: 640px) { .compact-card.expanded { grid-column: span 2 / span 2; } }
+        @media (min-width: 1024px) { .compact-card.expanded { grid-column: span 3 / span 3; } }
 
         /* Styles for Info Modal Content */
         .prose h4 { font-size: 1.25rem; font-weight: bold; margin-top: 1.5rem; margin-bottom: 0.5rem; color: var(--color-primary-dark-text); border-bottom: 1px solid #ddd; padding-bottom: 0.25rem; }
@@ -176,54 +123,29 @@
         .prose strong { color: #2D3748; }
 
         /* Custom style for Sala VIP label */
-        label[for*="service-sala-vip"] {
-            color: #FBBF24; /* Tailwind's amber-400 */
-            font-weight: 700; /* bold */
-            text-shadow: 0px 1px 2px rgba(0,0,0,0.5);
-            transition: color 0.2s;
-        }
-        label[for*="service-sala-vip"]:hover {
-            color: var(--color-accent-gold); 
-        }
+        label[for*="service-sala-vip"] { color: #FBBF24; font-weight: 700; text-shadow: 0px 1px 2px rgba(0,0,0,0.5); transition: color 0.2s; }
+        label[for*="service-sala-vip"]:hover { color: var(--color-accent-gold); }
 
         /* Sala VIP Tab Button Style */
-        #sala-vip-tab-btn {
-            color: var(--color-accent-gold);
-            border-color: var(--color-accent-gold);
-        }
+        #sala-vip-tab-btn { color: var(--color-accent-gold); border-color: var(--color-accent-gold); }
         #sala-vip-tab-btn.gradient-purple-to-dark-purple, 
-        #sala-vip-tab-btn:hover {
-             color: white;
-             border-color: var(--color-primary-base);
-        }
+        #sala-vip-tab-btn:hover { color: white; border-color: var(--color-primary-base); }
         
-        /* MODIFICADO: Estilo para a barra de controlo fixa */
+        /* Sticky header styles */
         .sticky-header {
-            position: sticky;
-            top: -1px; /* Para garantir que a borda superior não fique visível */
-            z-index: 20;
-            background-color: rgba(255, 255, 255, 0.9);
-            backdrop-filter: blur(8px);
-            padding-top: 1.5rem;
-            padding-bottom: 1.5rem;
+            position: sticky; top: -1px; z-index: 20; background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(8px); padding-top: 1.5rem; padding-bottom: 1.5rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-            /* Margens negativas para esticar a barra e cobrir o padding do contentor pai */
-            margin-left: -1.5rem;
-            margin-right: -1.5rem;
-            padding-left: 1.5rem;
-            padding-right: 1.5rem;
+            margin-left: -1.5rem; margin-right: -1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;
         }
 
-        /* ADICIONADO: Estilos para bordas de status de solicitação */
-        .approved-border {
-            border-color: var(--color-approved-border) !important;
-            border-width: 2px;
-            box-shadow: 0 0 8px var(--color-approved-border);
-        }
-        .denied-border {
-            border-color: var(--color-denied-border) !important;
-            border-width: 2px;
-            box-shadow: 0 0 8px var(--color-denied-border);
+        /* Request status borders */
+        .approved-border { border-color: var(--color-approved-border) !important; border-width: 2px; box-shadow: 0 0 8px var(--color-approved-border); }
+        .denied-border { border-color: var(--color-denied-border) !important; border-width: 2px; box-shadow: 0 0 8px var(--color-denied-border); }
+
+        /* MODIFICADO: Estilo para Checkbox */
+        input[type="checkbox"] {
+            accent-color: var(--color-primary-base);
         }
     </style>
 </head>
@@ -232,9 +154,10 @@
     <!-- Main Application Container -->
     <div id="app-container" class="container mx-auto p-4 md:p-6 lg:p-8">
         
-        <!-- REVERTIDO: Header para o estado original -->
+        <!-- Header -->
         <header class="text-center mb-6">
-            <h1 class="text-4xl font-extrabold text-gray-700">Agenda: Banho e Tosa</h1>
+            <!-- MODIFICADO: Adicionada classe 'page-title' para aplicar estilo específico -->
+            <h1 class="page-title text-4xl font-extrabold">Agenda: Banho e Tosa</h1>
             <p id="user-id-display" class="text-sm text-gray-500 mt-1"></p>
         </header>
 
@@ -744,14 +667,14 @@
         };
         const gridLayouts = {
             reception: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
-            compact_reception: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
+            compact_reception: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start',
             history: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
-            grooming: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4',
-            compact_grooming: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
-            'taxi-dog': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
-            compact_taxidog: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2',
-            'sala-vip': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4',
-            compact_salavip: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2'
+            grooming: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-content-start',
+            compact_grooming: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start',
+            'taxi-dog': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-content-start',
+            compact_taxidog: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start',
+            'sala-vip': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-content-start',
+            compact_salavip: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start'
         };
         let activeTabId = 'reception-tab-content';
         const TAB_SWITCH_PASSWORD = "256"; 
@@ -801,11 +724,13 @@
             renderAllContent();
         }
         
+        // MODIFICADO: A função agora ordena os pets pela ordem salva ao entrar no modo de edição.
         function startEditRemessaMode(remessaId, remessaName) {
             isRemessaModeActive = true;
             currentRemessaId = remessaId;
             selectedForRemessa = allAppointments
                 .filter(app => app.remessaId === remessaId)
+                .sort((a, b) => (a.remessaOrder ?? 0) - (b.remessaOrder ?? 0)) // Ordena pela ordem da remessa
                 .map(app => app.id);
             
             document.getElementById('grooming-tab-content').classList.add('remessa-selection-active');
@@ -836,6 +761,7 @@
             renderAllContent();
         }
 
+        // MODIFICADO: A função agora salva a ordem sequencial dos pets na remessa.
         async function finalizeRemessa() {
             const name = document.getElementById('remessa-name-input').value;
             if (!name.trim()) {
@@ -849,34 +775,71 @@
             }
             
             const remessaId = currentRemessaId || `remessa_${Date.now()}`;
-            const remessaTimestamp = currentRemessaId ? null : serverTimestamp();
             const randomColor = '#' + Math.floor(Math.random()*16777215).toString(16).padStart(6, '0');
+            const batch = writeBatch(db);
 
-            const updates = [];
+            const updatedAppIds = new Set(selectedForRemessa);
 
-            // Find apps that should be in the remessa
-            selectedForRemessa.forEach(appointmentId => {
-                const data = { remessaName: name, remessaId, remessaColor: randomColor };
-                if (remessaTimestamp) data.remessaCreatedAt = remessaTimestamp;
-                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId); 
-                updates.push(updateDoc(docRef, data));
+            // Prepara as atualizações para o Firestore, incluindo a ordem da remessa
+            selectedForRemessa.forEach((appointmentId, index) => {
+                const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, appointmentId);
+                const data = { 
+                    remessaName: name, 
+                    remessaId, 
+                    remessaColor: randomColor,
+                    remessaOrder: index // Salva a ordem (0, 1, 2...)
+                };
+                if (!currentRemessaId) {
+                    data.remessaCreatedAt = serverTimestamp();
+                }
+                batch.update(docRef, data);
             });
 
-            // If editing, find apps to remove from the remessa
+            // Se estiver editando, remove os dados da remessa dos pets que foram desmarcados
             if (currentRemessaId) {
-                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id));
+                const appsToRemove = allAppointments.filter(app => app.remessaId === currentRemessaId && !updatedAppIds.has(app.id));
                 appsToRemove.forEach(app => {
-                    updates.push(updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, app.id), {
-                        remessaName: null,
-                        remessaId: null,
-                        remessaCreatedAt: null,
-                        remessaColor: null,
-                    }));
+                    const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, app.id);
+                    batch.update(docRef, { remessaName: null, remessaId: null, remessaCreatedAt: null, remessaColor: null, remessaOrder: null });
                 });
             }
 
             try {
-                await Promise.all(updates);
+                await batch.commit();
+                
+                // --- Aplica a atualização otimista ao estado local ---
+                let appsToReset = new Set();
+                if (currentRemessaId) {
+                     allAppointments.forEach(app => {
+                        if(app.remessaId === currentRemessaId && !selectedForRemessa.includes(app.id)) {
+                            appsToReset.add(app.id);
+                        }
+                     });
+                }
+
+                allAppointments = allAppointments.map(app => {
+                    const selectionIndex = selectedForRemessa.indexOf(app.id);
+                    if (selectionIndex !== -1) { // Se o app está na seleção atual
+                        return { 
+                            ...app, 
+                            remessaName: name, 
+                            remessaId, 
+                            remessaColor: randomColor, 
+                            remessaOrder: selectionIndex // Adiciona a ordem
+                        };
+                    }
+                    if (appsToReset.has(app.id)) { // Se o app foi removido de uma remessa existente
+                        const newApp = { ...app };
+                        delete newApp.remessaName;
+                        delete newApp.remessaId;
+                        delete newApp.remessaCreatedAt;
+                        delete newApp.remessaColor;
+                        delete newApp.remessaOrder; // Remove a ordem
+                        return newApp;
+                    }
+                    return app;
+                });
+
                 showFeedback(`Remessa "${name}" salva com sucesso!`);
             } catch (error) {
                 showFeedback("Erro ao salvar a remessa.", "error");
@@ -1341,7 +1304,7 @@
 
             const currentView = viewModes[type] || 'grid';
             let containerClasses = '';
-            const compactGridClass = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2';
+            const compactGridClass = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start';
             const compactViewClassSuffix = `compact_${type.replace('-', '')}`;
             
             switch (currentView) {
@@ -1356,53 +1319,35 @@
                 : '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento encontrado para os filtros selecionados.</p>';
         }
         
+        // MODIFICADO: Função reescrita para melhor organização visual das remessas.
         function renderGroomingList(allGroomingAppointments) {
             const groomingListElement = document.getElementById('grooming-appointments-list');
             const crecheListElement = document.getElementById('creche-appointments-list');
             const type = 'grooming';
 
-            // CORRIGIDO: Limpa números de chegada antigos antes de recalcular
+            // --- 1. Lógica de Contagem e Numeração (sem alteração) ---
             allGroomingAppointments.forEach(app => delete app.arrivalNumber);
-
-            // CORRIGIDO: Lógica de numeração de chegada com prioridade
-            const arrivedRegularPets = allGroomingAppointments
-                .filter(app => app.status === 'Chegou' && app.checkinTime && !app.services?.includes('Creche/Hotel'))
-                .sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
-
-            const arrivedCrechePets = allGroomingAppointments
-                .filter(app => app.status === 'Chegou' && app.checkinTime && app.services?.includes('Creche/Hotel'))
-                .sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
-
+            const arrivedRegularPets = allGroomingAppointments.filter(app => app.status === 'Chegou' && app.checkinTime && !app.services?.includes('Creche/Hotel')).sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
+            const arrivedCrechePets = allGroomingAppointments.filter(app => app.status === 'Chegou' && app.checkinTime && app.services?.includes('Creche/Hotel')).sort((a, b) => new Date(a.checkinTime) - new Date(b.checkinTime));
             let arrivalCounter = 1;
-            arrivedRegularPets.forEach(pet => {
-                pet.arrivalNumber = arrivalCounter++;
-            });
-            
-            arrivedCrechePets.forEach(pet => {
-                pet.arrivalNumber = arrivalCounter++;
-            });
+            arrivedRegularPets.forEach(pet => { pet.arrivalNumber = arrivalCounter++; });
+            arrivedCrechePets.forEach(pet => { pet.arrivalNumber = arrivalCounter++; });
 
-            // CORRIGIDO: Inclui pets da creche na contagem geral
-            const inProgressCount = allGroomingAppointments
-                .filter(a => a.status !== 'Finalizado')
-                .reduce((total, app) => total + getPetCount(app), 0);
-            const finalizedCount = allGroomingAppointments
-                .filter(a => a.status === 'Finalizado')
-                .reduce((total, app) => total + getPetCount(app), 0);
-
+            const inProgressCount = allGroomingAppointments.filter(a => a.status !== 'Finalizado').reduce((total, app) => total + getPetCount(app), 0);
+            const finalizedCount = allGroomingAppointments.filter(a => a.status === 'Finalizado').reduce((total, app) => total + getPetCount(app), 0);
             document.getElementById('pets-in-queue-count').textContent = inProgressCount;
             document.getElementById('pets-finalized-count').textContent = finalizedCount;
 
+            // --- 2. Separação e Agrupamento dos Agendamentos ---
             const crecheAppointments = allGroomingAppointments.filter(app => app.services?.includes('Creche/Hotel'));
             const regularGroomingAppointments = allGroomingAppointments.filter(app => !app.services?.includes('Creche/Hotel'));
 
-            groomingListElement.innerHTML = ''; 
-            groomingListElement.className = ''; 
+            groomingListElement.innerHTML = '';
+            groomingListElement.className = 'space-y-8'; // Espaçamento vertical entre seções
 
             const remessas = {};
             const noRemessa = [];
-            
-            regularGroomingAppointments.forEach(app => { 
+            regularGroomingAppointments.forEach(app => {
                 if (app.remessaId) {
                     if (!remessas[app.remessaId]) {
                         remessas[app.remessaId] = { name: app.remessaName, apps: [], createdAt: app.remessaCreatedAt || app.createdAt, remessaId: app.remessaId, color: app.remessaColor, isFinalized: true };
@@ -1415,86 +1360,92 @@
             });
 
             for (const remessaId in remessas) {
-                remessas[remessaId].apps.sort((a, b) => {
-                    const aHasCheckin = a.checkinTime;
-                    const bHasCheckin = b.checkinTime;
-                    if (aHasCheckin && !bHasCheckin) return -1;
-                    if (!aHasCheckin && bHasCheckin) return 1;
-                    if (aHasCheckin && bHasCheckin) return new Date(a.checkinTime) - new Date(b.checkinTime);
-                    return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
-                });
+                remessas[remessaId].apps.sort((a, b) => (a.remessaOrder ?? 99) - (b.remessaOrder ?? 99));
             }
-            
-            const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
-            const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a,b) => new Date(a.createdAt) - new Date(b.createdAt));
 
-            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => {
-                const aHasCheckin = a.checkinTime;
-                const bHasCheckin = b.checkinTime;
-                if (aHasCheckin && !bHasCheckin) return -1;
-                if (!aHasCheckin && bHasCheckin) return 1;
-                if (aHasCheckin && bHasCheckin) return new Date(a.checkinTime) - new Date(b.checkinTime);
-                return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
-            });
+            const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
+            const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => (a.checkinTime ? new Date(a.checkinTime) : new Date(a.appointmentDatetime)) - (b.checkinTime ? new Date(b.checkinTime) : new Date(b.appointmentDatetime)));
+            const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado').sort((a, b) => new Date(b.finalizedAt) - new Date(a.finalizedAt));
 
-            const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado').sort((a,b) => new Date(b.finalizedAt) - new Date(a.finalizedAt));
+            // --- 3. Definição das Classes da Grade ---
+            const currentView = viewModes[type] || 'grid';
+            let cardsGridClasses = '';
+            const compactViewClassSuffix = `compact_${type.replace('-', '')}`;
+            switch (currentView) {
+                case 'compact': cardsGridClasses = gridLayouts[compactViewClassSuffix]; break;
+                case 'grid': cardsGridClasses = gridLayouts[type]; break;
+                default: cardsGridClasses = 'flex flex-col gap-3'; break;
+            }
 
-            const mainContainer = document.createElement('div');
-            mainContainer.className = 'flex flex-wrap gap-4 items-start';
+            const hasActiveItems = activeRemessas.length > 0 || activeNoRemessa.length > 0;
+            const hasFinalizedItems = finalizedRemessas.length > 0 || finalizedNoRemessa.length > 0;
 
-            if ([...activeRemessas, ...activeNoRemessa, ...finalizedRemessas, ...finalizedNoRemessa].length === 0) {
+            if (!hasActiveItems && !hasFinalizedItems) {
                 groomingListElement.innerHTML = '<p class="text-gray-500 col-span-full text-center">Nenhum agendamento de banho e tosa encontrado.</p>';
-            } else {
-                 const renderRemessa = (remessa, index) => {
-                    const remessaContainer = document.createElement('div');
-                    const borderColor = remessa.color || '#8B5CF6'; 
-                    remessaContainer.className = `p-4 border-2 rounded-lg space-y-2 inline-flex flex-col ${remessa.isFinalized ? 'opacity-50' : ''}`;
-                    remessaContainer.style.borderColor = borderColor;
-                    
-                    const header = document.createElement('div');
-                    header.className = 'flex justify-between items-start mb-2';
-                    header.innerHTML = `
-                        <div class="flex items-center gap-2">
-                             <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa #${index + 1}: ${remessa.name}</h3>
-                        </div>
-                        <div class="flex flex-col gap-1">
-                            <button class="finalize-remessa-btn px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-remessa-id="${remessa.remessaId}">Finalizar Lote</button>
-                            <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}">Editar</button>
-                            <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
-                        </div>`;
-                    
-                    const cardsContainer = document.createElement('div');
-                    const currentView = viewModes[type] || 'grid';
-                    cardsContainer.className = currentView === 'grid' ? gridLayouts[type] : 'flex flex-col gap-3';
-                    cardsContainer.innerHTML = remessa.apps.map(app => createAppointmentCardHTML(app, type)).join('');
-                    
-                    remessaContainer.appendChild(header);
-                    remessaContainer.appendChild(cardsContainer);
-                    mainContainer.appendChild(remessaContainer);
-                }
-                
-                activeRemessas.forEach(renderRemessa);
-                activeNoRemessa.forEach(app => {
-                     const cardWrapper = document.createElement('div');
-                     const currentView = viewModes[type] || 'grid';
-                     if (currentView === 'list') cardWrapper.className = 'w-full';
-                     cardWrapper.innerHTML = createAppointmentCardHTML(app, type);
-                     mainContainer.appendChild(cardWrapper.firstElementChild);
-                });
-                finalizedRemessas.forEach(renderRemessa);
-                finalizedNoRemessa.forEach(app => {
-                     const cardWrapper = document.createElement('div');
-                     const currentView = viewModes[type] || 'grid';
-                     if (currentView === 'list') cardWrapper.className = 'w-full';
-                     cardWrapper.innerHTML = createAppointmentCardHTML(app, type);
-                     mainContainer.appendChild(cardWrapper.firstElementChild);
-                });
-                groomingListElement.appendChild(mainContainer);
             }
 
-            // 3. Renderiza a lista de Creche
-            if (!crecheListElement) return;
+            // --- 4. Renderização das Seções ---
+            const createSection = (title, items, isRemessa, isFinalized = false) => {
+                const section = document.createElement('div');
+                if (isRemessa) {
+                    items.forEach((remessa, index) => {
+                        const remessaContainer = document.createElement('div');
+                        const borderColor = remessa.color || '#8B5CF6';
+                        // REVERTIDO: Removido 'w-max' para o container da remessa voltar a ser full-width.
+                        remessaContainer.className = 'p-4 border-2 rounded-lg space-y-4 bg-white mb-4';
+                        remessaContainer.style.borderColor = borderColor;
 
+                        const header = document.createElement('div');
+                        header.className = 'flex justify-between items-start';
+                        header.innerHTML = `
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xl font-bold" style="color: ${borderColor}">Remessa: ${remessa.name}</h3>
+                            </div>
+                            <div class="flex flex-col gap-1">
+                                ${!isFinalized ? `<button class="finalize-remessa-btn px-3 py-1 text-xs bg-green-500 text-white rounded hover:bg-green-600" data-remessa-id="${remessa.remessaId}">Finalizar Lote</button>` : ''}
+                                <button class="edit-remessa-btn px-3 py-1 text-xs bg-yellow-400 text-gray-800 rounded hover:bg-yellow-500" data-remessa-id="${remessa.remessaId}" data-remessa-name="${remessa.name}">Editar</button>
+                                <button class="undo-remessa-btn px-3 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600" data-remessa-id="${remessa.remessaId}">Desfazer</button>
+                            </div>`;
+                        
+                        const cardsContainer = document.createElement('div');
+                        cardsContainer.className = cardsGridClasses;
+                        cardsContainer.innerHTML = remessa.apps.map(app => createAppointmentCardHTML(app, type)).join('');
+                        
+                        remessaContainer.appendChild(header);
+                        remessaContainer.appendChild(cardsContainer);
+                        section.appendChild(remessaContainer);
+                    });
+                } else if (items.length > 0) {
+                    section.innerHTML += `<h4 class="text-lg font-bold text-gray-500 mb-2">${title}</h4>`;
+                    const cardsContainer = document.createElement('div');
+                    cardsContainer.className = cardsGridClasses;
+                    cardsContainer.innerHTML = items.map(app => createAppointmentCardHTML(app, type)).join('');
+                    section.appendChild(cardsContainer);
+                }
+                return section;
+            };
+
+            if (hasActiveItems) {
+                const activeSection = document.createElement('section');
+                activeSection.appendChild(createSection(null, activeRemessas, true));
+                activeSection.appendChild(createSection('Avulsos na Fila', activeNoRemessa, false));
+                groomingListElement.appendChild(activeSection);
+            }
+
+            if (hasFinalizedItems) {
+                if (hasActiveItems) groomingListElement.innerHTML += `<hr class="my-8 border-t-2 border-gray-200">`;
+                
+                const finalizedSection = document.createElement('section');
+                finalizedSection.className = 'opacity-60';
+                finalizedSection.innerHTML = `<h3 class="text-2xl font-bold text-gray-700 mb-4">Finalizados</h3>`;
+                finalizedSection.appendChild(createSection(null, finalizedRemessas, true, true));
+                finalizedSection.appendChild(createSection('Avulsos Finalizados', finalizedNoRemessa, false, true));
+                groomingListElement.appendChild(finalizedSection);
+            }
+
+            // --- 5. Renderização da Creche (sem alteração) ---
+            if (!crecheListElement) return;
             crecheAppointments.sort((a,b) => {
                 const statusOrder = { 'Chegou': 1, 'Agendado': 2, 'Finalizado': 3 };
                 const statusA = statusOrder[a.status] || 99;
@@ -1502,25 +1453,20 @@
                 if (statusA !== statusB) return statusA - statusB;
                 return new Date(a.appointmentDatetime) - new Date(b.appointmentDatetime);
             });
-
-            const currentView = viewModes[type] || 'grid';
-            let containerClasses = '';
-            const compactGridClass = 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2';
-            const compactViewClassSuffix = `compact_${type.replace('-', '')}`;
-            
+            let crecheContainerClasses = '';
+            const crecheCompactSuffix = `compact_${type.replace('-', '')}`;
             switch (currentView) {
-                case 'compact': containerClasses = (gridLayouts[compactViewClassSuffix] || compactGridClass); break;
-                case 'grid': containerClasses = gridLayouts[type] || gridLayouts['grooming']; break;
-                default: containerClasses = 'flex flex-col gap-3'; break;
+                case 'compact': crecheContainerClasses = (gridLayouts[crecheCompactSuffix] || compactGridClass); break;
+                case 'grid': crecheContainerClasses = gridLayouts[type] || gridLayouts['grooming']; break;
+                default: crecheContainerClasses = 'flex flex-col gap-3'; break;
             }
-            crecheListElement.className = containerClasses;
-
+            crecheListElement.className = crecheContainerClasses;
             crecheListElement.innerHTML = crecheAppointments.length > 0
                 ? crecheAppointments.map(app => createAppointmentCardHTML(app, type)).join('')
                 : '<p class="text-gray-500 col-span-full text-center">Nenhum pet na creche/hotel hoje.</p>';
         }
 
-
+        // MODIFICADO: O botão de seleção agora mostra o número da ordem.
         function createAppointmentCardHTML(app, contextTab) {
             const viewMode = viewModes[contextTab];
             const isCompact = viewMode === 'compact';
@@ -1659,11 +1605,12 @@
             
             let remessaButtonHTML = '';
             if (isRemessaModeActive && (app.status === 'Chegou' || app.status === 'Agendado') && (!currentRemessaId || app.remessaId === currentRemessaId || !app.remessaId)) {
-                const isSelected = selectedForRemessa.includes(app.id);
+                const selectionIndex = selectedForRemessa.indexOf(app.id);
+                const isSelected = selectionIndex > -1;
                 if (isSelected) cardClasses += ' selected-for-remessa';
                 remessaButtonHTML = `
                     <button class="remessa-select-btn absolute top-1 left-1 z-10 h-6 w-6 rounded-full border-2 ${isSelected ? 'bg-teal-500 border-teal-700' : 'bg-white border-gray-400'} flex items-center justify-center" data-id="${app.id}">
-                        ${isSelected ? '<svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-white pointer-events-none" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd" /></svg>' : ''}
+                        ${isSelected ? `<span class="text-white font-bold text-xs">${selectionIndex + 1}</span>` : ''}
                     </button>`;
             }
 
@@ -1919,6 +1866,7 @@
             openConfirmationModal(remessaId, 'remessa_undo');
         }
 
+        // MODIFICADO: A função agora também limpa a ordem da remessa.
         async function undoRemessaAction(remessaId) {
             const appointmentsToUpdate = allAppointments.filter(app => app.remessaId === remessaId);
 
@@ -1927,18 +1875,20 @@
                 return;
             }
             
-            const updates = appointmentsToUpdate.map(app => {
+            const batch = writeBatch(db);
+            appointmentsToUpdate.forEach(app => {
                 const docRef = doc(db, `artifacts/${appId}/public/data/appointments`, app.id);
-                return updateDoc(docRef, {
+                batch.update(docRef, {
                     remessaId: null,
                     remessaName: null,
                     remessaCreatedAt: null,
-                    remessaColor: null
+                    remessaColor: null,
+                    remessaOrder: null // Limpa o campo de ordem
                 });
             });
 
             try {
-                await Promise.all(updates);
+                await batch.commit();
                 showFeedback("Remessa desfeita com sucesso!");
             } catch (error) {
                 showFeedback("Erro ao desfazer a remessa.", "error");
