@@ -176,18 +176,36 @@
             <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] no-print transition-all duration-300">
                 <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2"><i class="ph-bold ph-calendar-plus"></i>Novo Agendamento</h2>
                 <form id="appointment-form" class="space-y-4">
-                    <!-- Tutor and Pet Info -->
-                    <div>
-                        <label for="tutor-name" class="block text-sm font-medium">Nome do Tutor</label>
-                        <input type="text" id="tutor-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 text-gray-900" required>
-                    </div>
+                    <!-- MODIFICADO: Ordem dos campos alterada -->
                     <div>
                         <label for="pet-name" class="block text-sm font-medium">Nome do Pet</label>
                         <input type="text" id="pet-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
                     </div>
                     <div>
+                        <label for="tutor-name" class="block text-sm font-medium">Nome do Tutor</label>
+                        <input type="text" id="tutor-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 text-gray-900" required>
+                    </div>
+                    <div>
+                        <label for="tutor-phone" class="block text-sm font-medium">Telefone do Tutor (com DDD)</label>
+                        <input type="tel" id="tutor-phone" placeholder="(11) 99999-9999" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900">
+                    </div>
+                    <div>
                         <label for="pet-breed" class="block text-sm font-medium">Raça do Pet</label>
                         <input type="text" id="pet-breed" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                    </div>
+                    <!-- ADICIONADO: Campo de Sexo do Pet -->
+                    <div>
+                        <label class="block text-sm font-medium">Sexo do Pet</label>
+                        <div class="mt-2 flex items-center gap-x-6">
+                            <label class="flex items-center">
+                                <input type="radio" name="pet-sex" value="Macho" class="h-4 w-4" checked>
+                                <span class="ml-2 text-sm">Macho</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="pet-sex" value="Femea" class="h-4 w-4">
+                                <span class="ml-2 text-sm">Fêmea</span>
+                            </label>
+                        </div>
                     </div>
                     <div>
                         <label for="appointment-datetime" class="block text-sm font-medium">Data e Hora (para 1º agendamento)</label>
@@ -271,6 +289,18 @@
 
                 <!-- Reception Tab Content -->
                 <div id="reception-tab-content" class="tab-content-panel space-y-8">
+                    <!-- ADICIONADO: Painel do Assistente de Notificações -->
+                    <section id="notification-assistant-section" class="bg-purple-50 p-4 rounded-lg border-2 border-[var(--color-secondary-purple-start)] hidden">
+                        <h3 class="text-xl font-bold text-purple-800 flex items-center gap-2 mb-3"><i class="ph-fill ph-robot"></i>Assistente de Notificações</h3>
+                        <div id="ia-notification-list" class="space-y-2 mb-4">
+                            <!-- Itens pendentes de notificação serão inseridos aqui -->
+                        </div>
+                        <button id="ia-notify-all-btn" class="w-full flex items-center justify-center gap-2 px-4 py-2 bg-green-500 text-white font-bold rounded-md hover:bg-green-600 disabled:bg-gray-400 disabled:cursor-not-allowed">
+                            <i class="ph-fill ph-whatsapp-logo"></i>
+                            <span id="ia-notify-all-btn-text">Avisar Todos</span>
+                        </button>
+                    </section>
+
                     <!-- Daily Appointments Section -->
                     <section>
                         <!-- MODIFICADO: Adicionado wrapper para a barra de controlo fixa -->
@@ -594,12 +624,10 @@
     
     <div id="print-area" class="hidden"></div>
     
-    <!-- Virtual Keyboard -->
     <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full no-print">
         <div id="virtual-keyboard" class="space-y-1"></div>
     </div>
     
-    <!-- Password Modal -->
     <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/4">
             <h3 class="text-xl font-bold mb-4 text-center">Acesso Restrito</h3>
@@ -613,7 +641,6 @@
         </div>
     </div>
 
-    <!-- Finalize Appointment Modal -->
     <div id="finalize-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
             <h3 class="text-xl font-bold mb-4">Identificar Executor</h3>
@@ -626,7 +653,6 @@
         </div>
     </div>
 
-    <!-- P.O.P Modal -->
     <div id="pop-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
             <div class="flex justify-between items-center mb-4 border-b pb-2">
@@ -718,9 +744,10 @@
                 return isNaN(count) ? 1 : count;
             }
             
-            // Verifica se há múltiplos nomes separados por "/"
-            if (petName.includes('/')) {
-                return petName.split('/').filter(name => name.trim() !== '').length;
+            // CORRIGIDO: Verifica se há múltiplos nomes separados por "/" ou "-"
+            if (petName.includes('/') || petName.includes('-')) {
+                // Usa uma expressão regular para dividir por qualquer um dos separadores
+                return petName.split(/[/-]/).filter(name => name.trim() !== '').length;
             }
 
             // Padrão para 1 pet
@@ -1047,6 +1074,17 @@
             document.getElementById('finalize-creche-remessa-btn').addEventListener('click', () => finalizeRemessa('creche'));
             document.getElementById('cancel-creche-remessa-btn').addEventListener('click', () => exitRemessaMode('creche'));
             
+            // ADICIONADO: Listener para o botão do Assistente de Notificação
+            document.getElementById('ia-notify-all-btn').addEventListener('click', handleBatchWhatsAppNotification);
+            // CORRIGIDO: Listener para botões individuais no painel do assistente
+            document.getElementById('ia-notification-list').addEventListener('click', (e) => {
+                if (e.target.closest('.whatsapp-btn')) {
+                    const button = e.target.closest('.whatsapp-btn');
+                    const id = button.dataset.id;
+                    if(id) handleWhatsAppNotification(id);
+                }
+            });
+
             // Password Modal Listeners
             const passwordModal = document.getElementById('password-modal');
             const confirmPasswordBtn = document.getElementById('confirm-password-btn');
@@ -1197,6 +1235,7 @@
         function renderAllContent() {
             if (!hasRealtimeListenersStarted) return;
             ['reception', 'history', 'grooming', 'taxi-dog', 'sala-vip'].forEach(renderAppointmentsList);
+            updateNotificationAssistant(); // ADICIONADO: Atualiza o assistente
         }
         
         // MODIFICADO: Adicionada lógica de busca para a recepção
@@ -1461,7 +1500,8 @@
             }
 
             if (app.status === 'Finalizado') {
-                if (contextTab === 'reception' && !app.notifiedAt) {
+                // MODIFICADO: Lógica de cor para Taxi Dog
+                if (contextTab === 'reception' && !app.notifiedAt && !hasTaxiDog) {
                     cardBgClass = 'attention-orange-bg';
                 } else if (contextTab === 'reception' && !hasTaxiDog) {
                     cardBgClass = 'finalized-dark-green-bg';
@@ -1551,8 +1591,23 @@
             if (contextTab === 'reception') {
                 buttonsHTML += `<button class="edit-btn px-1.5 py-0.5 text-xs bg-yellow-400 text-gray-800 rounded" data-id="${app.id}">Editar</button>`;
                 if (app.status === 'Agendado' && !app.isDischarged) buttonsHTML += `<button class="checkin-btn px-1.5 py-0.5 text-xs bg-blue-500 text-white rounded" data-id="${app.id}">Chegou</button>`;
-                if (app.status === 'Finalizado' && !app.isDischarged && !app.notifiedAt) buttonsHTML += `<button class="notify-btn px-1.5 py-0.5 text-xs bg-cyan-500 text-white rounded" data-id="${app.id}">Avisado</button>`;
-                if (app.status === 'Finalizado' && !app.isDischarged && app.notifiedAt) buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                
+                if (app.status === 'Finalizado' && !app.isDischarged) {
+                    const hasTaxiDogService = app.services?.includes('Taxi Dog');
+                    if (hasTaxiDogService) {
+                        buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                    } else {
+                        if (!app.notifiedAt) {
+                            if (app.tutorPhone) {
+                                buttonsHTML += `<button class="whatsapp-btn flex items-center gap-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded" data-id="${app.id}"><i class="ph ph-whatsapp-logo"></i>Avisar</button>`;
+                            } else {
+                                buttonsHTML += `<button class="notify-btn px-1.5 py-0.5 text-xs bg-cyan-500 text-white rounded" data-id="${app.id}">Avisado</button>`;
+                            }
+                        } else {
+                            buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                        }
+                    }
+                }
                 buttonsHTML += `<button class="delete-btn px-1.5 py-0.5 text-xs bg-red-500 text-white rounded" data-id="${app.id}">Excluir</button>`;
             }
             if (contextTab === 'grooming' || contextTab === 'sala-vip') {
@@ -1578,7 +1633,6 @@
             const currentRemessaState = remessaState[remessaTypeForCard];
             let remessaButtonHTML = '';
 
-            // CORRIGIDO: A condição de elegibilidade agora é dinâmica com base no tipo de serviço
             const isEligibleForRemessa = (remessaTypeForCard === 'creche')
                 ? (app.status !== 'Finalizado')
                 : (app.status === 'Chegou' || app.status === 'Agendado');
@@ -1682,11 +1736,18 @@
             const services = Array.from(form.querySelectorAll('[id^="service-"]:checked')).map(cb => cb.value);
             if (services.includes('Remoção')) services.push(...Array.from(form.querySelectorAll('[id^="sub-service-"]:checked')).map(cb => `Remoção de ${cb.value}`));
             return {
-                tutorName: form.querySelector('[id^="tutor-name"]').value, petName: form.querySelector('[id^="pet-name"]').value, petBreed: form.querySelector('[id^="pet-breed"]').value,
-                appointmentDatetime: form.querySelector('[id^="appointment-datetime"]').value, services: services,
+                petName: form.querySelector('[id^="pet-name"]').value,
+                tutorName: form.querySelector('[id^="tutor-name"]').value,
+                tutorPhone: form.querySelector('[id^="tutor-phone"]').value,
+                petBreed: form.querySelector('[id^="pet-breed"]').value,
+                petSex: form.querySelector('input[name="pet-sex"]:checked')?.value || 'Macho',
+                appointmentDatetime: form.querySelector('[id^="appointment-datetime"]').value,
+                services: services,
                 bathPackageDates: services.includes('Pacote de Banho') ? Array.from(calendarState.selectedDates) : [],
-                pickupTime: form.querySelector('[id^="pickup-time"]').value || null, returnTime: form.querySelector('[id^="return-time"]').value || null,
-                clientRoute: form.querySelector('[id^="client-route"]').value || null, observations: form.querySelector('[id^="observations"]').value || null,
+                pickupTime: form.querySelector('[id^="pickup-time"]').value || null,
+                returnTime: form.querySelector('[id^="return-time"]').value || null,
+                clientRoute: form.querySelector('[id^="client-route"]').value || null,
+                observations: form.querySelector('[id^="observations"]').value || null,
             };
         }
 
@@ -1732,9 +1793,14 @@
             resetFormState(); // Limpa o formulário primeiro
 
             // Preenche os dados
-            form.querySelector('#tutor-name').value = appointmentToReplicate.tutorName || '';
             form.querySelector('#pet-name').value = appointmentToReplicate.petName || '';
+            form.querySelector('#tutor-name').value = appointmentToReplicate.tutorName || '';
+            form.querySelector('#tutor-phone').value = appointmentToReplicate.tutorPhone || '';
             form.querySelector('#pet-breed').value = appointmentToReplicate.petBreed || '';
+            if (appointmentToReplicate.petSex) {
+                const radio = form.querySelector(`input[name="pet-sex"][value="${appointmentToReplicate.petSex}"]`);
+                if(radio) radio.checked = true;
+            }
             form.querySelector('#observations').value = appointmentToReplicate.observations || '';
 
             // Limpa o campo de data/hora
@@ -1833,6 +1899,11 @@
             else if (target.matches('.approve-request-btn')) handleServiceRequestResponse(appointmentId, true);
             else if (target.matches('.deny-request-btn')) handleServiceRequestResponse(appointmentId, false);
             else if (target.matches('.discharge-btn')) handleDischarge(appointmentId);
+            else if (target.closest('.whatsapp-btn')) { // CORRIGIDO: usa closest para capturar o clique no ícone
+                const button = target.closest('.whatsapp-btn');
+                const id = button.dataset.id;
+                if(id) handleWhatsAppNotification(id);
+            }
             else if (target.matches('.notify-btn')) handleNotifyClient(appointmentId);
             else if (target.matches('.replicate-btn')) handleReplicateAppointment(appointmentId);
         }
@@ -1975,6 +2046,42 @@
         
         async function handleRevertFinalization(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { status: 'Chegou', finalizedAt: null, finalizedBy: null }); showFeedback("Status revertido para 'Chegou'."); } catch (e) { showFeedback(`Erro ao reverter: ${e.message}`, "error"); } }
         async function handleDischarge(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { isDischarged: true }); showFeedback("Baixa realizada com sucesso."); } catch (e) { showFeedback(`Erro ao dar baixa: ${e.message}`, "error"); } }
+        
+        // MODIFICADO: Função de notificação via WhatsApp
+        async function handleWhatsAppNotification(id) {
+            const app = allAppointments.find(a => a.id === id);
+            if (!app || !app.tutorPhone) {
+                showFeedback("Número de telefone não encontrado para este cliente.", "error");
+                return;
+            }
+
+            const cleanedPhone = app.tutorPhone.replace(/\D/g, ''); // Remove todos os não-dígitos
+            let petGreeting = "o mocinho(a)";
+            let verb = "finalizou o banho e está";
+            if (app.petName && (app.petName.includes('/') || app.petName.includes('-'))) {
+                petGreeting = "os mocinhos(as)";
+                verb = "finalizaram o banho e estão";
+            } else if (app.petSex === 'Macho') {
+                petGreeting = "o mocinho";
+            } else if (app.petSex === 'Femea') {
+                petGreeting = "a mocinha";
+            }
+            const messageText = `Olá, aqui é a assistente virtual do Empório Pet 😄! Estou passando para avisar que ${petGreeting} já ${verb} aguardando por você! 🥰🥰`;
+            const message = encodeURIComponent(messageText);
+            const whatsappURL = `https://web.whatsapp.com/send?phone=55${cleanedPhone}&text=${message}`;
+            
+            window.open(whatsappURL, '_blank');
+
+            // Marca como notificado após tentar abrir o WhatsApp
+            if (!app.notifiedAt) {
+                try {
+                    await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { notifiedAt: serverTimestamp() });
+                } catch (e) {
+                    console.error("Erro ao atualizar status de notificação:", e);
+                }
+            }
+        }
+
         async function handleNotifyClient(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { notifiedAt: serverTimestamp() }); showFeedback("Cliente notificado."); } catch (e) { showFeedback(`Erro ao notificar: ${e.message}`, "error"); } }
         
         function openEditModal(id) {
@@ -1993,8 +2100,15 @@
         }
 
         function populateFormForEditing(form, data) {
-            form.querySelector('#editing-appointment-id').value = data.id; form.querySelector('#tutor-name').value = data.tutorName;
-            form.querySelector('#pet-name').value = data.petName; form.querySelector('#pet-breed').value = data.petBreed;
+            form.querySelector('#editing-appointment-id').value = data.id;
+            form.querySelector('#pet-name').value = data.petName;
+            form.querySelector('#tutor-name').value = data.tutorName;
+            form.querySelector('#tutor-phone').value = data.tutorPhone || '';
+            form.querySelector('#pet-breed').value = data.petBreed;
+            if (data.petSex) {
+                const radio = form.querySelector(`input[name="pet-sex"][value="${data.petSex}"]`);
+                if(radio) radio.checked = true;
+            }
             const dt = new Date(data.appointmentDatetime); dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
             form.querySelector('#appointment-datetime').value = dt.toISOString().slice(0, 16);
             form.querySelectorAll('[id^="service-"]').forEach(cb => {
@@ -2212,7 +2326,7 @@
             createKeys();
             
             document.addEventListener('focusin', (e) => {
-                if(e.target.matches('input[type="text"], input[type="time"], input[type="datetime-local"], textarea, input[type="date"], input[type="month"]')) {
+                if(e.target.matches('input[type="text"], input[type="tel"], input[type="time"], input[type="datetime-local"], textarea, input[type="date"], input[type="month"]')) {
                     activeInputElement = e.target;
                     keyboardContainer.classList.remove('translate-y-full');
                 }
@@ -2336,6 +2450,62 @@
                 renderFilterCalendar();
             });
         }
+
+        // --- Notification Assistant Functions ---
+        function updateNotificationAssistant() {
+            const assistantSection = document.getElementById('notification-assistant-section');
+            const listEl = document.getElementById('ia-notification-list');
+            const notifyAllBtn = document.getElementById('ia-notify-all-btn');
+            const notifyAllBtnText = document.getElementById('ia-notify-all-btn-text');
+
+            const pendingNotifications = allAppointments.filter(app => 
+                app.status === 'Finalizado' && 
+                !app.notifiedAt && 
+                app.tutorPhone &&
+                !app.services?.includes('Taxi Dog') // Exclui Taxi Dog
+            );
+
+            if (pendingNotifications.length > 0) {
+                listEl.innerHTML = pendingNotifications.map(app => `
+                    <div class="flex justify-between items-center bg-white p-2 rounded-md shadow-sm">
+                        <div>
+                            <p class="font-bold">${app.petName}</p>
+                            <p class="text-sm text-gray-600">${app.tutorName}</p>
+                        </div>
+                        <button class="whatsapp-btn flex items-center gap-1 px-2 py-1 text-xs bg-green-500 text-white rounded" data-id="${app.id}">
+                            <i class="ph ph-whatsapp-logo"></i>Avisar
+                        </button>
+                    </div>
+                `).join('');
+                notifyAllBtnText.textContent = `Avisar Todos (${pendingNotifications.length})`;
+                notifyAllBtn.disabled = false;
+                assistantSection.classList.remove('hidden');
+            } else {
+                listEl.innerHTML = '<p class="text-center text-gray-500">Nenhuma notificação pendente. Tudo em dia!</p>';
+                notifyAllBtnText.textContent = 'Nenhum Tutor para Avisar';
+                notifyAllBtn.disabled = true;
+                assistantSection.classList.add('hidden');
+            }
+        }
+
+        async function handleBatchWhatsAppNotification() {
+            const pendingNotifications = allAppointments.filter(app => 
+                app.status === 'Finalizado' && 
+                !app.notifiedAt && 
+                app.tutorPhone &&
+                !app.services?.includes('Taxi Dog')
+            );
+
+            if (pendingNotifications.length === 0) {
+                showFeedback("Nenhum cliente para notificar.", "info");
+                return;
+            }
+
+            for (const app of pendingNotifications) {
+                await handleWhatsAppNotification(app.id);
+            }
+        }
+
     </script>
 
 </body>
