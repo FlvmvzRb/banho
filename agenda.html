@@ -97,12 +97,6 @@
         .calendar-day.selected { background-color: var(--color-primary-base); color: white; border-radius: 50%; font-weight: bold; }
         .calendar-day:not(.disabled):hover { background-color: var(--color-secondary-purple-start); color: white; border-radius: 50%; }
         
-        /* Virtual Keyboard Styles */
-        #virtual-keyboard-container { transition: transform 0.3s ease-in-out; z-index: 10001; }
-        .keyboard-key { transition: background-color: 0.1s ease; }
-        .keyboard-key:active { background-color: var(--color-primary-base); color: white; }
-        .keyboard-key.active-special { background-color: var(--color-secondary-purple-start); color: white; }
-        
         /* Remessa (Batch) Selection Styles */
         .selected-for-remessa { border-color: var(--color-primary-base) !important; background-color: var(--color-primary-light); box-shadow: 0 0 0 2px var(--color-primary-base); }
         
@@ -133,7 +127,7 @@
         /* Sticky header styles */
         .sticky-header {
             position: sticky; top: -1px; z-index: 20; background-color: rgba(255, 255, 255, 0.75);
-            backdrop-filter: blur(8px); padding-top: 1.5rem; padding-bottom: 1.5rem;
+            backdrop-filter: blur(8px); padding-top: 0.75rem; padding-bottom: 0.75rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             margin-left: -1.5rem; margin-right: -1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;
         }
@@ -364,10 +358,14 @@
                 <div id="grooming-tab-content" class="tab-content-panel hidden space-y-6">
                     <!-- MODIFICADO: Adicionado wrapper para a barra de controlo fixa -->
                     <div class="sticky-header">
-                        <div class="flex flex-wrap justify-between items-center gap-4">
-                            <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-scissors"></i>Agenda Banho e Tosa</h3>
-                            <div id="digital-clock" class="text-5xl font-bold text-gray-700"></div>
-                            <div class="flex items-center gap-4">
+                        <div class="flex flex-col items-center gap-2">
+                            <!-- Top Row: Title and Clock -->
+                            <div class="flex justify-between items-center w-full">
+                                <h3 class="text-2xl font-bold text-gray-700 flex items-center gap-2"><i class="ph-bold ph-scissors"></i>Agenda Banho e Tosa</h3>
+                                <div id="digital-clock" class="text-5xl font-bold text-gray-700"></div>
+                            </div>
+                            <!-- Bottom Row: Filters -->
+                            <div class="flex items-center flex-wrap justify-center gap-x-4 gap-y-2 w-full pt-2">
                                 <div class="flex items-center gap-2">
                                     <label for="grooming-service-filter" class="text-sm font-medium">Filtrar por serviço:</label>
                                     <select id="grooming-service-filter" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-sm">
@@ -578,10 +576,6 @@
     </div>
     
     <div id="print-area" class="hidden"></div>
-    
-    <div id="virtual-keyboard-container" class="fixed bottom-0 left-0 w-full bg-gray-200 p-2 rounded-t-lg shadow-lg z-60 transform translate-y-full no-print">
-        <div id="virtual-keyboard" class="space-y-1"></div>
-    </div>
     
     <div id="password-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/4">
@@ -1032,8 +1026,6 @@
                     document.getElementById('confirm-finalize-btn').click();
                 }
             });
-
-            setupVirtualKeyboard();
         }
         
         function handleTabClick(targetTabId) {
