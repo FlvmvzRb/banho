@@ -46,15 +46,14 @@
 
         /* Apply the main font and color to the entire application */
         body {
-            font-family: 'Inter', sans-serif; /* Fonte padrão revertida para Inter */
-            background-color: #F7FAFC; /* Gray-100 */
-            color: #4A5568; /* Cor do texto principal revertida para cinza */
+            font-family: 'Inter', sans-serif;
+            background-color: #F7FAFC;
+            color: #4A5568; 
         }
 
-        /* MODIFICADO: Estilo específico para o título principal */
         h1.page-title {
-            font-family: 'Nunito', sans-serif; /* Fonte arredondada apenas para o título */
-            color: var(--color-secondary-purple-end); /* Cor roxa para o título */
+            font-family: 'Nunito', sans-serif;
+            color: var(--color-secondary-purple-end);
         }
         
         /* Custom scrollbar styling for a more integrated look */
@@ -133,7 +132,7 @@
         
         /* Sticky header styles */
         .sticky-header {
-            position: sticky; top: -1px; z-index: 20; background-color: rgba(255, 255, 255, 0.9);
+            position: sticky; top: -1px; z-index: 20; background-color: rgba(255, 255, 255, 0.75);
             backdrop-filter: blur(8px); padding-top: 1.5rem; padding-bottom: 1.5rem;
             box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
             margin-left: -1.5rem; margin-right: -1.5rem; padding-left: 1.5rem; padding-right: 1.5rem;
@@ -156,16 +155,15 @@
         
         <!-- Header -->
         <header class="text-center mb-6">
-            <!-- MODIFICADO: Adicionada classe 'page-title' para aplicar estilo específico -->
             <h1 class="page-title text-4xl font-extrabold">Agenda: Banho e Tosa</h1>
             <p id="user-id-display" class="text-sm text-gray-500 mt-1"></p>
         </header>
 
         <!-- Tab Navigation -->
         <nav class="flex justify-center flex-wrap gap-2 mb-6 no-print">
-            <button id="reception-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)]" data-tab="reception-tab-content"><i class="ph-bold ph-desktop"></i>Recepção</button>
-            <button id="grooming-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="grooming-tab-content"><i class="ph-bold ph-scissors"></i>Banho e Tosa</button>
-            <button id="taxi-dog-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[var(--color-primary-base)]" data-tab="taxi-dog-monitoring-tab-content"><i class="ph-bold ph-car"></i>Taxi Dog</button>
+            <button id="reception-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 gradient-purple-to-dark-purple border-2 border-[#7DFABE]" data-tab="reception-tab-content"><i class="ph-bold ph-desktop"></i>Recepção</button>
+            <button id="grooming-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[#7DFABE]" data-tab="grooming-tab-content"><i class="ph-bold ph-scissors"></i>Banho e Tosa</button>
+            <button id="taxi-dog-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md text-white font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 bg-gray-400 border-2 border-[#7DFABE]" data-tab="taxi-dog-monitoring-tab-content"><i class="ph-bold ph-car"></i>Taxi Dog</button>
             <button id="sala-vip-tab-btn" class="tab-button flex items-center gap-2 px-6 py-2 rounded-md bg-amber-50 font-semibold shadow-md transform transition-transform duration-200 hover:scale-105 border-2" data-tab="sala-vip-tab-content"><i class="ph-bold ph-crown"></i>Sala VIP</button>
         </nav>
         
@@ -173,7 +171,7 @@
         <main class="flex flex-col lg:flex-row gap-6">
 
             <!-- Left Sidebar: New Appointment Form -->
-            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[var(--color-primary-base)] no-print transition-all duration-300">
+            <aside id="appointment-aside" class="w-full lg:w-1/3 p-6 rounded-lg shadow-lg text-white gradient-purple-to-dark-purple border-2 border-[#7DFABE] no-print transition-all duration-300">
                 <h2 class="text-2xl font-bold mb-4 border-b pb-2 flex items-center gap-2"><i class="ph-bold ph-calendar-plus"></i>Novo Agendamento</h2>
                 <form id="appointment-form" class="space-y-4">
                     <!-- MODIFICADO: Ordem dos campos alterada -->
@@ -183,7 +181,7 @@
                     </div>
                     <div>
                         <label for="tutor-name" class="block text-sm font-medium">Nome do Tutor</label>
-                        <input type="text" id="tutor-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:ring-teal-500 focus:border-teal-500 text-gray-900" required>
+                        <input type="text" id="tutor-name" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
                     </div>
                     <div>
                         <label for="tutor-phone" class="block text-sm font-medium">Telefone do Tutor (com DDD)</label>
@@ -191,7 +189,7 @@
                     </div>
                     <div>
                         <label for="pet-breed" class="block text-sm font-medium">Raça do Pet</label>
-                        <input type="text" id="pet-breed" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900" required>
+                        <input type="text" id="pet-breed" class="mt-1 block w-full px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm text-gray-900">
                     </div>
                     <!-- ADICIONADO: Campo de Sexo do Pet -->
                     <div>
@@ -217,7 +215,7 @@
                         <div class="pt-2">
                             <label class="block text-sm font-bold mb-2">Serviços Solicitados</label>
                             <div id="services-checkboxes" class="grid grid-cols-2 gap-x-4 gap-y-2">
-                                <div class="flex items-center"><input type="checkbox" id="service-banho" value="Banho" class="h-4 w-4 rounded"><label for="service-banho" class="ml-2 whitespace-nowrap text-xs">Banho</label></div>
+                                <div class="flex items-center"><input type="checkbox" id="service-banho" value="Banho" class="h-4 w-4 rounded" checked disabled><label for="service-banho" class="ml-2 whitespace-nowrap text-xs">Banho</label></div>
                                 <div class="flex items-center"><input type="checkbox" id="service-tosa-higienica" value="Tosa Higiênica" class="h-4 w-4 rounded"><label for="service-tosa-higienica" class="ml-2 whitespace-nowrap text-xs">Tosa Higiênica</label></div>
                                 <div class="flex items-center"><input type="checkbox" id="service-tosa-geral" value="Tosa" class="h-4 w-4 rounded"><label for="service-tosa-geral" class="ml-2 whitespace-nowrap text-xs">Tosa</label></div>
                                 <div class="flex items-center"><input type="checkbox" id="service-hidratacao" value="Hidratação" class="h-4 w-4 rounded"><label for="service-hidratacao" class="ml-2 whitespace-nowrap text-xs">Hidratação</label></div>
@@ -402,7 +400,6 @@
                     <div class="flex justify-between items-center mb-4 pt-4">
                         <div id="remessa-controls-wrapper" class="flex flex-wrap gap-2">
                             <button id="start-remessa-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Criar Remessa</button>
-                            <button id="remocao-control-btn" class="px-4 py-2 bg-purple-600 text-white rounded-md hover:bg-purple-700">Controle de Remoção</button>
                             <div id="active-remessa-controls" class="hidden flex items-center gap-2">
                                 <input type="text" id="remessa-name-input" placeholder="Nome da Remessa" class="px-3 py-1.5 border border-gray-300 rounded-md shadow-sm text-gray-800">
                                 <button id="finalize-remessa-btn" class="px-4 py-2 bg-green-500 text-white rounded-md hover:bg-green-600">Finalizar</button>
@@ -522,10 +519,9 @@
     </div>
 
     <!-- Generic Feedback Modal -->
-    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+    <div id="feedback-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50 pointer-events-none">
         <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-1/3 text-center">
             <p id="feedback-message" class="text-lg"></p>
-            <button onclick="document.getElementById('feedback-modal').classList.add('hidden')" class="mt-4 px-4 py-2 bg-teal-500 text-white rounded-md">Fechar</button>
         </div>
     </div>
     
@@ -577,47 +573,6 @@
             <div class="flex justify-center gap-4">
                 <button id="confirm-delete-btn" class="px-6 py-2 bg-red-600 text-white rounded-md hover:bg-red-700">Confirmar</button>
                 <button id="cancel-delete-btn" class="px-6 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400">Cancelar</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Removal Control Modal -->
-    <div id="remocao-control-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
-        <div class="bg-white rounded-lg shadow-xl p-6 w-11/12 md:w-2/3 max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-xl font-bold text-gray-800">Controle de Remoção</h3>
-                <button id="close-remocao-modal-btn" class="text-gray-500 hover:text-gray-800">&times;</button>
-            </div>
-            <div class="space-y-6">
-                <!-- Registration Form -->
-                <form id="remocao-form" class="p-4 border rounded-lg space-y-4">
-                    <h4 class="font-semibold text-lg">Registar Novo Serviço</h4>
-                    <div>
-                        <label for="remocao-date" class="block text-sm font-medium">Data</label>
-                        <button id="remocao-date" type="button" class="date-filter-btn mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
-                    </div>
-                    <div>
-                        <label for="remocao-handler-name" class="block text-sm font-medium">Executor</label>
-                        <input type="text" id="remocao-handler-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
-                    </div>
-                     <div>
-                        <label for="remocao-pet-name" class="block text-sm font-medium">Nome do Pet</label>
-                        <input type="text" id="remocao-pet-name" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm text-gray-900" required>
-                    </div>
-                    <button type="submit" class="w-full bg-teal-500 hover:bg-teal-600 text-white font-bold py-2 px-4 rounded-lg">Salvar</button>
-                </form>
-
-                <!-- History Section -->
-                <div class="p-4 border rounded-lg">
-                    <h4 class="font-semibold text-lg mb-4">Histórico de Remoções</h4>
-                    <div class="flex gap-4 mb-4">
-                        <button id="remocao-day-filter" class="date-filter-btn flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm bg-white text-left"></button>
-                        <input type="month" id="remocao-month-filter" class="flex-1 px-3 py-2 border border-gray-300 rounded-md shadow-sm">
-                    </div>
-                    <div id="remocao-list" class="space-y-2 max-h-64 overflow-y-auto">
-                        <!-- History items will be injected here -->
-                    </div>
-                </div>
             </div>
         </div>
     </div>
@@ -679,7 +634,6 @@
         // --- GLOBAL VARIABLES & STATE ---
         let db, auth, userId, appId;
         let allAppointments = [];
-        let allRemovals = [];
         let hasRealtimeListenersStarted = false;
         let calendarState = {
             currentMonth: new Date().getMonth(),
@@ -726,9 +680,14 @@
         // --- FUNCTION DEFINITIONS (Organized for clarity and to prevent ReferenceError) ---
 
         function showFeedback(message, type = 'success') {
-            const modal = document.getElementById('feedback-modal'), p = document.getElementById('feedback-message');
-            p.textContent = message; p.className = type==='success'?'text-green-700':'text-red-700';
-            modal.classList.remove('hidden'); setTimeout(() => modal.classList.add('hidden'), 3000);
+            const modal = document.getElementById('feedback-modal');
+            const p = document.getElementById('feedback-message');
+            p.textContent = message;
+            p.className = type === 'success' ? 'text-green-700' : 'text-red-700';
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 2000); // MODIFICADO: Tempo alterado para 2 segundos
         }
 
         // ADICIONADO: Função para contagem avançada de pets
@@ -870,79 +829,6 @@
             }
         }
 
-        // --- REMOÇÃO FUNCTIONS ---
-        function openRemocaoModal() {
-            document.getElementById('remocao-control-modal').classList.remove('hidden');
-            renderRemocaoHistory();
-        }
-        
-        async function handleRemocaoFormSubmit(e) {
-            e.preventDefault();
-            const form = e.target;
-            const dateButton = form.querySelector('#remocao-date');
-            const date = dateButton ? dateButton.dataset.date : '';
-            const handlerName = form.querySelector('#remocao-handler-name').value;
-            const petName = form.querySelector('#remocao-pet-name').value;
-
-            if (!date || !handlerName || !petName) {
-                showFeedback('Por favor, preencha todos os campos.', 'error');
-                return;
-            }
-
-            const removalData = {
-                date,
-                handlerName,
-                petName,
-                createdAt: serverTimestamp()
-            };
-
-            try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/removals`), removalData);
-                showFeedback('Registo de remoção salvo com sucesso!');
-                form.reset();
-                initDateFilters();
-            } catch (error) {
-                showFeedback(`Erro ao salvar: ${error.message}`, 'error');
-                console.error("Error saving removal record: ", error);
-            }
-        }
-        
-        function renderRemocaoHistory() {
-             const listEl = document.getElementById('remocao-list');
-             const dayFilterBtn = document.getElementById('remocao-day-filter');
-             const dayFilter = dayFilterBtn ? dayFilterBtn.dataset.date : '';
-             const monthFilter = document.getElementById('remocao-month-filter').value;
-
-            let filteredRemovals = allRemovals;
-
-            if (dayFilter) {
-                filteredRemovals = filteredRemovals.filter(r => r.date === dayFilter);
-            } else if (monthFilter) {
-                filteredRemovals = filteredRemovals.filter(r => r.date && r.date.startsWith(monthFilter));
-            }
-
-            filteredRemovals.sort((a,b) => {
-                const dateA = a.createdAt?.toDate ? a.createdAt.toDate() : new Date(0);
-                const dateB = b.createdAt?.toDate ? b.createdAt.toDate() : new Date(0);
-                return dateB - dateA;
-            });
-
-            if(filteredRemovals.length === 0) {
-                listEl.innerHTML = `<p class="text-gray-500 text-center">Nenhum registo encontrado.</p>`;
-                return;
-            }
-
-            listEl.innerHTML = filteredRemovals.map(removal => `
-                <div class="flex justify-between items-center bg-gray-100 p-2 rounded">
-                    <div>
-                        <p class="font-semibold">${removal.petName} - <span class="font-normal">${new Date(removal.date + 'T00:00:00').toLocaleDateString('pt-BR')}</span></p>
-                        <p class="text-sm text-gray-600">Executor: ${removal.handlerName}</p>
-                    </div>
-                    <button data-id="${removal.id}" data-type="remocao" class="delete-remocao-btn text-red-500 hover:text-red-700 font-bold px-2">&times;</button>
-                </div>
-            `).join('');
-        }
-
         // --- INITIALIZATION ---
         document.addEventListener('DOMContentLoaded', () => {
             initializeAppAndAuth();
@@ -1044,7 +930,7 @@
                 btn.addEventListener('click', () => openFilterCalendar(btn.id));
             });
 
-            ['reception-service-filter', 'grooming-service-filter', 'grooming-route-filter', 'salavip-date-filter', 'taxidog-route-filter', 'remocao-month-filter'].forEach(id => {
+            ['reception-service-filter', 'grooming-service-filter', 'grooming-route-filter', 'salavip-date-filter', 'taxidog-route-filter'].forEach(id => {
                 const element = document.getElementById(id);
                 if (element) {
                     element.addEventListener('change', renderAllContent);
@@ -1116,11 +1002,6 @@
             // Confirmation Modal Listeners
             document.getElementById('cancel-delete-btn').addEventListener('click', () => document.getElementById('confirmation-modal').classList.add('hidden'));
             
-            // Remoção Modal Listeners
-            document.getElementById('remocao-control-btn').addEventListener('click', openRemocaoModal);
-            document.getElementById('close-remocao-modal-btn').addEventListener('click', () => document.getElementById('remocao-control-modal').classList.add('hidden'));
-            document.getElementById('remocao-form').addEventListener('submit', handleRemocaoFormSubmit);
-            
             // Finalize Modal Listeners
             const finalizeModal = document.getElementById('finalize-modal');
             const finalizeInput = document.getElementById('finalize-handler-input');
@@ -1182,11 +1063,6 @@
                 populateServiceFilters();
                 renderAllContent();
             }, (error) => console.error("Error with appointments listener:", error));
-
-            onSnapshot(query(collection(db, `artifacts/${appId}/public/data/removals`)), (snapshot) => {
-                 allRemovals = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-                 renderRemocaoHistory();
-            }, (error) => console.error("Error with removals listener:", error));
         }
         
         function switchTab(tabId, bypassPassword = false) {
@@ -1514,7 +1390,7 @@
                 cardBgClass = 'requested-red-bg';
             }
 
-            let cardClasses = `relative p-4 rounded-lg border shadow-md flex flex-col justify-between gap-2 card-servico transition-all duration-200 ${cardBgClass}`;
+            let cardClasses = `relative p-4 rounded-lg border-2 shadow-md flex flex-col justify-between gap-2 card-servico transition-all duration-200 ${cardBgClass}`;
 
             if (isCompact) {
                 cardClasses += ' compact-card flex-col justify-center items-center text-center';
@@ -1754,15 +1630,17 @@
         function resetFormState() {
             const form = document.getElementById('appointment-form');
             form.reset();
+            
+            // Re-check e disable o serviço de banho, que é obrigatório
+            const banhoCheckbox = form.querySelector('#service-banho');
+            if(banhoCheckbox) {
+                banhoCheckbox.checked = true;
+                banhoCheckbox.disabled = true;
+            }
 
             form.querySelector('#remocao-sub-services').classList.add('hidden');
             form.querySelector('#bath-package-calendar-container').classList.add('hidden');
             form.querySelector('#taxi-dog-details-container').classList.add('hidden');
-
-            const banhoCheckbox = form.querySelector('#service-banho');
-            if (banhoCheckbox) {
-                banhoCheckbox.disabled = false;
-            }
             
             // CORRIGIDO: Reseta completamente o estado do calendário para o mês atual
             calendarState.selectedDates.clear();
@@ -1809,7 +1687,10 @@
             // Seleciona os serviços
             const allServices = appointmentToReplicate.services || [];
             form.querySelectorAll('#services-checkboxes input[type="checkbox"]').forEach(cb => {
-                cb.checked = allServices.includes(cb.value);
+                // Banho é sempre checado e desabilitado, então tratamos separadamente
+                if (cb.id !== 'service-banho') {
+                    cb.checked = allServices.includes(cb.value);
+                }
                 cb.dispatchEvent(new Event('change', { bubbles: true }));
             });
             
@@ -2112,8 +1993,11 @@
             const dt = new Date(data.appointmentDatetime); dt.setMinutes(dt.getMinutes() - dt.getTimezoneOffset());
             form.querySelector('#appointment-datetime').value = dt.toISOString().slice(0, 16);
             form.querySelectorAll('[id^="service-"]').forEach(cb => {
-                cb.checked = data.services.some(s => s.startsWith(cb.value));
-                ['pacote', 'remocao', 'taxi'].forEach(type => { if (cb.id.includes(type)) cb.dispatchEvent(new Event('change', { bubbles: true }))});
+                // Banho é sempre checado e desabilitado, então tratamos separadamente
+                if (cb.id !== 'service-banho') {
+                    cb.checked = data.services.some(s => s.startsWith(cb.value));
+                }
+                cb.dispatchEvent(new Event('change', { bubbles: true }));
             });
             if (data.services.includes('Remoção')) form.querySelectorAll('[id^="sub-service-"]').forEach(cb => { cb.checked = data.services.includes(`Remoção de ${cb.value}`); });
             if (data.services.includes('Taxi Dog')) { form.querySelector('#pickup-time').value = data.pickupTime || ''; form.querySelector('#return-time').value = data.returnTime || ''; form.querySelector('#client-route').value = data.clientRoute || ''; }
@@ -2424,11 +2308,7 @@
                     targetButton.dataset.date = newDate;
                     targetButton.textContent = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' });
                     document.getElementById('calendar-modal').classList.add('hidden');
-                    if (activeFilterId.startsWith('remocao-')) {
-                        renderRemocaoHistory();
-                    } else {
-                        renderAllContent();
-                    }
+                    renderAllContent();
                 });
             });
 
