@@ -652,9 +652,9 @@
             'sala-vip': 'grid'
         };
         const gridLayouts = {
-            reception: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
+            reception: 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4',
+            history: 'grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4',
             compact_reception: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start',
-            history: 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4',
             grooming: 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 place-content-start',
             compact_grooming: 'grid grid-cols-2 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-7 gap-2 place-content-start',
             'taxi-dog': 'grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 place-content-start',
@@ -2149,103 +2149,6 @@
             populate(groomingFilter, groomingFilter ? groomingFilter.value : "");
         }
 
-        function setupVirtualKeyboard() {
-            let activeInputElement = null;
-            let capsLock = false;
-            const keyboardContainer = document.getElementById('virtual-keyboard-container');
-            const keyboard = document.getElementById('virtual-keyboard');
-            
-            const keysLayout = [
-                ["1", "2", "3", "4", "5", "6", "7", "8", "9", "0"],
-                ["q", "w", "e", "r", "t", "y", "u", "i", "o", "p"],
-                ["a", "s", "d", "f", "g", "h", "j", "k", "l", "ç"],
-                ["caps", "z", "x", "c", "v", "b", "n", "m", "backspace"],
-                ["space"]
-            ];
-            
-            function createKeys() {
-                keyboard.innerHTML = '';
-                keyboard.className = 'space-y-1';
-                keysLayout.forEach(row => {
-                    const rowDiv = document.createElement('div');
-                    rowDiv.className = 'flex justify-center gap-1';
-                    row.forEach(key => {
-                        const keyElement = document.createElement('button');
-                        keyElement.type = 'button';
-                        keyElement.className = 'keyboard-key py-2 px-3 bg-white rounded-md shadow-sm font-semibold flex items-center justify-center border border-gray-300 flex-grow';
-                        keyElement.setAttribute('data-key', key);
-
-                        switch(key) {
-                            case "backspace":
-                                keyElement.innerHTML = '&#9003;';
-                                keyElement.classList.add('flex-grow-[1.5]');
-                                break;
-                            case "caps":
-                                keyElement.innerHTML = 'Caps';
-                                keyElement.classList.add('flex-grow-[1.5]');
-                                if(capsLock) keyElement.classList.add('active-special');
-                                break;
-                            case "space":
-                                keyElement.innerHTML = ' ';
-                                keyElement.classList.add('flex-grow-[8]');
-                                break;
-                            default:
-                                keyElement.textContent = capsLock ? key.toUpperCase() : key.toLowerCase();
-                                break;
-                        }
-                        rowDiv.appendChild(keyElement);
-                    });
-                    keyboard.appendChild(rowDiv);
-                });
-            }
-
-            createKeys();
-            
-            document.addEventListener('focusin', (e) => {
-                if(e.target.matches('input[type="text"], input[type="tel"], input[type="time"], input[type="datetime-local"], textarea, input[type="date"], input[type="month"]')) {
-                    activeInputElement = e.target;
-                    keyboardContainer.classList.remove('translate-y-full');
-                }
-            });
-
-            document.addEventListener('focusout', (e) => {
-                setTimeout(() => {
-                    if (!document.activeElement.closest('#virtual-keyboard-container')) {
-                         keyboardContainer.classList.add('translate-y-full');
-                         activeInputElement = null;
-                    }
-                }, 100);
-            });
-
-            keyboard.addEventListener('click', (e) => {
-                if(!activeInputElement) return;
-                
-                const key = e.target.closest('.keyboard-key')?.dataset.key;
-                if (!key) return;
-
-                switch(key) {
-                    case "backspace":
-                        activeInputElement.value = activeInputElement.value.slice(0, -1);
-                        break;
-                    case "caps":
-                        capsLock = !capsLock;
-                        createKeys();
-                        break;
-                    case "space":
-                        activeInputElement.value += ' ';
-                        break;
-                    default:
-                        activeInputElement.value += capsLock ? key.toUpperCase() : key.toLowerCase();
-                        break;
-                }
-                activeInputElement.focus();
-            });
-            
-            keyboardContainer.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-            });
-        }
-        
         // --- FUNÇÕES DO CALENDÁRIO E RELÓGIO ---
 
         function updateClock() {
