@@ -37,8 +37,8 @@
             --color-attention-orange-border: #FB923C; /* Orange-400 */
             --color-tosa-bg: #FFFFCC; /* Amarelo-Bege (Custom) */
             --color-tosa-border: #F0E68C; /* Khaki (Borda correspondente) */
-            --color-taxidog-bg: #D1D5DB; /* Gray-300 */
-            --color-taxidog-border: #9CA3AF; /* Gray-400 */
+            --color-taxidog-bg: #E5E7EB; /* Gray-200 (Mais claro) */
+            --color-taxidog-border: #D1D5DB; /* Gray-300 (Mais claro) */
             --color-accent-gold: #F59E0B; /* Amber-500 */
             --color-approved-border: #22C55E; /* green-500 */
             --color-denied-border: #EF4444; /* red-500 */
@@ -962,7 +962,7 @@
             document.getElementById('finalize-creche-remessa-btn').addEventListener('click', () => finalizeRemessa('creche'));
             document.getElementById('cancel-creche-remessa-btn').addEventListener('click', () => exitRemessaMode('creche'));
             
-            // ADICIONADO: Listener para o botão do Assistente de Notificações
+            // ADICIONADO: Listener para o botão do Assistente de Notificação
             document.getElementById('ia-notify-all-btn').addEventListener('click', handleBatchWhatsAppNotification);
             // CORRIGIDO: Listener para botões individuais no painel do assistente
             document.getElementById('ia-notification-list').addEventListener('click', (e) => {
@@ -1960,7 +1960,7 @@
             } else if (app.petSex === 'Femea') {
                 petGreeting = "a mocinha";
             }
-            const messageText = `Olá, aqui é a assistente virtual do Empório Pet 😄! Estou passando para avisar que ${petGreeting} já ${verb} aguardando por você! 🥰�`;
+            const messageText = `Olá, aqui é a assistente virtual do Empório Pet 😄! Estou passando para avisar que ${petGreeting} já ${verb} aguardando por você! 🥰🥰`;
             const message = encodeURIComponent(messageText);
             const whatsappURL = `https://web.whatsapp.com/send?phone=55${cleanedPhone}&text=${message}`;
             
@@ -2306,4 +2306,3 @@
 
 </body>
 </html>
-�
