@@ -404,13 +404,21 @@
                                 <button id="cancel-remessa-btn" class="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600">Cancelar</button>
                             </div>
                         </div>
-                        <div class="grid grid-cols-2 gap-4">
-                            <div class="bg-blue-100 p-4 rounded-lg text-center">
-                                <p class="text-sm font-medium text-blue-800">Pets na Fila</p>
-                                <p id="pets-in-queue-count" class="text-3xl font-bold text-blue-600">0</p>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                            <div class="bg-gray-100 p-3 rounded-lg text-center">
+                                <p class="text-sm font-medium text-gray-800">Agendados</p>
+                                <p id="pets-scheduled-count" class="text-3xl font-bold text-gray-600">0</p>
                             </div>
-                            <div class="bg-green-100 p-4 rounded-lg text-center">
-                                <p class="text-sm font-medium text-green-800">Pets Finalizados</p>
+                            <div class="bg-blue-100 p-3 rounded-lg text-center">
+                                <p class="text-sm font-medium text-blue-800">Chegaram</p>
+                                <p id="pets-arrived-count" class="text-3xl font-bold text-blue-600">0</p>
+                            </div>
+                            <div class="bg-orange-100 p-3 rounded-lg text-center">
+                                <p class="text-sm font-medium text-orange-800">Aguardando</p>
+                                <p id="pets-requesting-service-count" class="text-3xl font-bold text-orange-600">0</p>
+                            </div>
+                            <div class="bg-green-100 p-3 rounded-lg text-center">
+                                <p class="text-sm font-medium text-green-800">Finalizados</p>
                                 <p id="pets-finalized-count" class="text-3xl font-bold text-green-600">0</p>
                             </div>
                         </div>
@@ -954,7 +962,7 @@
             document.getElementById('finalize-creche-remessa-btn').addEventListener('click', () => finalizeRemessa('creche'));
             document.getElementById('cancel-creche-remessa-btn').addEventListener('click', () => exitRemessaMode('creche'));
             
-            // ADICIONADO: Listener para o botão do Assistente de Notificação
+            // ADICIONADO: Listener para o botão do Assistente de Notificações
             document.getElementById('ia-notify-all-btn').addEventListener('click', handleBatchWhatsAppNotification);
             // CORRIGIDO: Listener para botões individuais no painel do assistente
             document.getElementById('ia-notification-list').addEventListener('click', (e) => {
@@ -1237,10 +1245,16 @@
             arrivedRegularPets.forEach(pet => { pet.arrivalNumber = arrivalCounter++; });
             arrivedCrechePets.forEach(pet => { pet.arrivalNumber = arrivalCounter++; });
 
-            const inProgressCount = allGroomingAppointments.filter(a => a.status !== 'Finalizado').reduce((total, app) => total + getPetCount(app), 0);
+            const scheduledCount = allGroomingAppointments.filter(a => a.status === 'Agendado').reduce((total, app) => total + getPetCount(app), 0);
+            const arrivedCount = allGroomingAppointments.filter(a => a.status === 'Chegou').reduce((total, app) => total + getPetCount(app), 0);
+            const requestingServiceCount = allGroomingAppointments.filter(a => a.serviceRequest?.status === 'Pending').reduce((total, app) => total + getPetCount(app), 0);
             const finalizedCount = allGroomingAppointments.filter(a => a.status === 'Finalizado').reduce((total, app) => total + getPetCount(app), 0);
-            document.getElementById('pets-in-queue-count').textContent = inProgressCount;
+
+            document.getElementById('pets-scheduled-count').textContent = scheduledCount;
+            document.getElementById('pets-arrived-count').textContent = arrivedCount;
+            document.getElementById('pets-requesting-service-count').textContent = requestingServiceCount;
             document.getElementById('pets-finalized-count').textContent = finalizedCount;
+
 
             // --- 2. Separação dos Agendamentos ---
             const crecheAppointments = allGroomingAppointments.filter(app => app.services?.includes('Creche/Hotel'));
@@ -1400,6 +1414,12 @@
 
             const statusStyles = { 'Agendado': 'bg-gray-400 text-white', 'Chegou': 'bg-blue-500 text-white', 'Finalizado': 'bg-green-600 text-white' };
             
+            const statusDisplayMap = {
+                'Agendado': 'Agen.',
+                'Chegou': 'Chegou',
+                'Finalizado': 'Finalizado'
+            };
+
             let statusBubbleHTML;
             let pulseClass = '';
             if (contextTab === 'reception' && app.status === 'Finalizado' && !app.notifiedAt) {
@@ -1407,9 +1427,10 @@
             }
 
             if (app.serviceRequest?.status === 'Pending') {
-                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-red-500 text-white animate-pulse">Solicitado</span>`;
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full bg-red-500 text-white animate-pulse">Solicitação</span>`;
             } else {
-                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'} ${pulseClass}">${app.status}</span>`;
+                const statusText = statusDisplayMap[app.status] || app.status;
+                statusBubbleHTML = `<span class="absolute top-2 right-2 text-xs font-bold px-2 py-1 rounded-full ${statusStyles[app.status] || 'bg-gray-400'} ${pulseClass}">${statusText}</span>`;
             }
 
             let displayServices = app.services || [];
@@ -1939,7 +1960,7 @@
             } else if (app.petSex === 'Femea') {
                 petGreeting = "a mocinha";
             }
-            const messageText = `Olá, aqui é a assistente virtual do Empório Pet 😄! Estou passando para avisar que ${petGreeting} já ${verb} aguardando por você! 🥰🥰`;
+            const messageText = `Olá, aqui é a assistente virtual do Empório Pet 😄! Estou passando para avisar que ${petGreeting} já ${verb} aguardando por você! 🥰�`;
             const message = encodeURIComponent(messageText);
             const whatsappURL = `https://web.whatsapp.com/send?phone=55${cleanedPhone}&text=${message}`;
             
@@ -2285,3 +2306,4 @@
 
 </body>
 </html>
+�
