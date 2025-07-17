@@ -29,6 +29,8 @@
             --color-finalized-border: #6EE7B7; /* Green-300 */
             --color-finalized-dark-bg: #A7F3D0; /* Green-200 */
             --color-finalized-dark-border: #34D399; /* Green-400 */
+            --color-launched-bg: #E9D5FF; /* Purple-200 */
+            --color-launched-border: #C084FC; /* Purple-400 */
             --color-arrived-bg: #E0F2FE; /* Sky-100 */
             --color-arrived-border: #7DD3FC; /* Sky-300 */
             --color-requested-bg: #FEE2E2; /* Red-100 */
@@ -86,6 +88,7 @@
         /* Background for cards based on status */
         .finalized-green-bg { background-color: var(--color-finalized-bg); border-color: var(--color-finalized-border); }
         .finalized-dark-green-bg { background-color: var(--color-finalized-dark-bg); border-color: var(--color-finalized-dark-border); }
+        .launched-purple-bg { background-color: var(--color-launched-bg); border-color: var(--color-launched-border); }
         .arrived-blue-bg { background-color: var(--color-arrived-bg); border-color: var(--color-arrived-border); }
         .requested-red-bg { background-color: var(--color-requested-bg); border-color: var(--color-requested-border); }
         .attention-orange-bg { background-color: var(--color-attention-orange-bg); border-color: var(--color-attention-orange-border); }
@@ -861,7 +864,10 @@
                 onAuthStateChanged(auth, async (user) => {
                     if (user) {
                         userId = user.uid;
-                        document.getElementById('user-id-display').textContent = `ID de Sessão: ${userId}`;
+                        const userIdDisplay = document.getElementById('user-id-display');
+                        if (userIdDisplay) {
+                            userIdDisplay.textContent = `ID de Sessão: ${userId}`;
+                        }
                         if (!hasRealtimeListenersStarted) {
                             setupRealtimeListeners();
                         }
@@ -962,7 +968,7 @@
             document.getElementById('finalize-creche-remessa-btn').addEventListener('click', () => finalizeRemessa('creche'));
             document.getElementById('cancel-creche-remessa-btn').addEventListener('click', () => exitRemessaMode('creche'));
             
-            // ADICIONADO: Listener para o botão do Assistente de Notificação
+            // ADICIONADO: Listener para o botão do Assistente de Notificações
             document.getElementById('ia-notify-all-btn').addEventListener('click', handleBatchWhatsAppNotification);
             // CORRIGIDO: Listener para botões individuais no painel do assistente
             document.getElementById('ia-notification-list').addEventListener('click', (e) => {
@@ -1190,8 +1196,8 @@
                 const getStatusScore = (app) => {
                     if (app.isDischarged) return 99; // Itens com baixa vão para o final
                     if (app.serviceRequest?.status === 'Pending') return 0;
-                    if (app.status === 'Finalizado' && !app.notifiedAt) return 1;
-                    if (app.status === 'Finalizado') return 2;
+                    if (app.status === 'Finalizado' && !app.isLaunched) return 1; // Lançamento pendente
+                    if (app.status === 'Finalizado' && app.isLaunched) return 2; // Pronto para baixa
                     if (app.status === 'Chegou') return 3;
                     if (app.status === 'Agendado') return 4;
                     return 5;
@@ -1289,7 +1295,30 @@
             
             const activeRemessas = Object.values(remessas).filter(r => !r.isFinalized).sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt));
             const finalizedRemessas = Object.values(remessas).filter(r => r.isFinalized).sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
-            const activeNoRemessa = noRemessa.filter(a => a.status !== 'Finalizado').sort((a, b) => (a.checkinTime ? new Date(a.checkinTime) : new Date(a.appointmentDatetime)) - (b.checkinTime ? new Date(b.checkinTime) : new Date(b.appointmentDatetime)));
+            
+            const getGroomingStatusScore = (app) => {
+                if (app.serviceRequest?.status === 'Pending') return 0; // Highest priority
+                if (app.status === 'Chegou') return 1;
+                if (app.status === 'Agendado') return 2;
+                return 3; // Default for any other status
+            };
+
+            const activeNoRemessa = noRemessa
+                .filter(a => a.status !== 'Finalizado')
+                .sort((a, b) => {
+                    const scoreA = getGroomingStatusScore(a);
+                    const scoreB = getGroomingStatusScore(b);
+
+                    if (scoreA !== scoreB) {
+                        return scoreA - scoreB;
+                    }
+
+                    // If scores are the same, sort by time
+                    const timeA = a.checkinTime || a.appointmentDatetime;
+                    const timeB = b.checkinTime || b.appointmentDatetime;
+                    return new Date(timeA) - new Date(timeB);
+                });
+
             const finalizedNoRemessa = noRemessa.filter(a => a.status === 'Finalizado').sort((a, b) => new Date(b.finalizedAt) - new Date(a.finalizedAt));
 
             const currentView = viewModes.grooming; // Both sections use the same view mode for now
@@ -1371,7 +1400,9 @@
 
             let cardBgClass = 'bg-white'; // Default color
 
-            if (hasTaxiDog) {
+            if (app.isLaunched) {
+                cardBgClass = 'launched-purple-bg';
+            } else if (hasTaxiDog) {
                 cardBgClass = 'taxidog-dark-bg';
             } else if (hasTosa) {
                 cardBgClass = 'tosa-yellow-bg';
@@ -1381,8 +1412,7 @@
                 cardBgClass = 'arrived-blue-bg';
             }
 
-            if (app.status === 'Finalizado') {
-                // MODIFICADO: Lógica de cor para Taxi Dog
+            if (app.status === 'Finalizado' && !app.isLaunched) {
                 if (contextTab === 'reception' && !app.notifiedAt && !hasTaxiDog) {
                     cardBgClass = 'attention-orange-bg';
                 } else if (contextTab === 'reception' && !hasTaxiDog) {
@@ -1483,15 +1513,24 @@
                 
                 if (app.status === 'Finalizado' && !app.isDischarged) {
                     const hasTaxiDogService = app.services?.includes('Taxi Dog');
+                    
                     if (hasTaxiDogService) {
-                        buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                        // Fluxo para Taxi Dog: Lançado -> Baixa
+                        if (app.isLaunched) {
+                            buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
+                        } else {
+                            buttonsHTML += `<button class="launch-btn px-1.5 py-0.5 text-xs bg-purple-500 text-white rounded" data-id="${app.id}">Lançado</button>`;
+                        }
                     } else {
+                        // Fluxo Padrão: Avisado -> Lançado -> Baixa
                         if (!app.notifiedAt) {
                             if (app.tutorPhone) {
                                 buttonsHTML += `<button class="whatsapp-btn flex items-center gap-1 px-1.5 py-0.5 text-xs bg-green-500 text-white rounded" data-id="${app.id}"><i class="ph ph-whatsapp-logo"></i>Avisar</button>`;
                             } else {
                                 buttonsHTML += `<button class="notify-btn px-1.5 py-0.5 text-xs bg-cyan-500 text-white rounded" data-id="${app.id}">Avisado</button>`;
                             }
+                        } else if (!app.isLaunched) {
+                            buttonsHTML += `<button class="launch-btn px-1.5 py-0.5 text-xs bg-purple-500 text-white rounded" data-id="${app.id}">Lançado</button>`;
                         } else {
                             buttonsHTML += `<button class="discharge-btn px-1.5 py-0.5 text-xs bg-emerald-500 text-white rounded" data-id="${app.id}">Baixa</button>`;
                         }
@@ -1531,7 +1570,7 @@
                 const canBeSelected = isEditing 
                     ? (!app.remessaId || app.remessaId === currentRemessaState.currentId) 
                     : !app.remessaId;
-
+                
                 if (canBeSelected) {
                     const selectionIndex = currentRemessaState.selectedIds.indexOf(app.id);
                     const isSelected = selectionIndex > -1;
@@ -1793,6 +1832,7 @@
             else if (target.matches('.approve-request-btn')) handleServiceRequestResponse(appointmentId, true);
             else if (target.matches('.deny-request-btn')) handleServiceRequestResponse(appointmentId, false);
             else if (target.matches('.discharge-btn')) handleDischarge(appointmentId);
+            else if (target.matches('.launch-btn')) handleLaunch(appointmentId);
             else if (target.closest('.whatsapp-btn')) { // CORRIGIDO: usa closest para capturar o clique no ícone
                 const button = target.closest('.whatsapp-btn');
                 const id = button.dataset.id;
@@ -1940,6 +1980,7 @@
         
         async function handleRevertFinalization(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { status: 'Chegou', finalizedAt: null, finalizedBy: null }); showFeedback("Status revertido para 'Chegou'."); } catch (e) { showFeedback(`Erro ao reverter: ${e.message}`, "error"); } }
         async function handleDischarge(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { isDischarged: true }); showFeedback("Baixa realizada com sucesso."); } catch (e) { showFeedback(`Erro ao dar baixa: ${e.message}`, "error"); } }
+        async function handleLaunch(id) { try { await updateDoc(doc(db, `artifacts/${appId}/public/data/appointments`, id), { isLaunched: true, launchedAt: serverTimestamp() }); showFeedback("Lançado no caixa com sucesso!"); } catch (e) { showFeedback(`Erro ao lançar: ${e.message}`, "error"); } }
         
         // MODIFICADO: Função de notificação via WhatsApp
         async function handleWhatsAppNotification(id) {
